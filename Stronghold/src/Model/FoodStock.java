@@ -6,6 +6,8 @@ public class FoodStock {
     private double cheese;
     private double bread;
 
+    private double freeCapacityFoodStock;
+
     public double getMeat() {
         return meat;
     }
@@ -36,6 +38,14 @@ public class FoodStock {
 
     public void addBread(double bread) {
         this.bread += bread;
+    }
+
+    public void addFreeCapacityFoodStock(int amount) {
+        this.freeCapacityFoodStock += amount;
+    }
+
+    public double getFreeCapacityFoodStock() {
+        return freeCapacityFoodStock;
     }
 
     public void addFood(String name, double amount) {

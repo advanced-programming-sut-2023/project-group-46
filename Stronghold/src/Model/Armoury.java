@@ -10,7 +10,7 @@ Armoury {
     private int sword;
     private int leatherArmor;
     private int metalArmor;
-    private int cow;
+    private int freeCapacityArmoury;
 
     public boolean isArmouryType(String name) {
         return name.equals("bow") || name.equals("crossbow") || name.equals("spear") || name.equals("pike") || name.equals("mace") || name.equals("sword") ||
@@ -53,14 +53,6 @@ Armoury {
         this.bow += bow;
     }
 
-    public void addCow(int cow) {
-        this.cow += cow;
-    }
-
-    public int getCow() {
-        return cow;
-    }
-
     public void addCrossbow(int crossbow) {
         this.crossbow += crossbow;
     }
@@ -87,6 +79,14 @@ Armoury {
 
     public void addMetalArmor(int metalArmor) {
         this.metalArmor += metalArmor;
+    }
+
+    public void addFreeCapacityStockpile(int amount) {
+        this.freeCapacityArmoury += amount;
+    }
+
+    public int getFreeCapacityArmoury() {
+        return freeCapacityArmoury;
     }
 
     public void addArmoury(String name, int amount) {

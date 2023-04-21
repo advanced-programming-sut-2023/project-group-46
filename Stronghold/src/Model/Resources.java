@@ -10,6 +10,8 @@ public class Resources {
     private int iron;
     private int wood;
     private int pitch;
+    private int freeCapacityStockpile;
+
     public int getGold() {
         return gold;
     }
@@ -80,6 +82,14 @@ public class Resources {
 
     public void addPitch(int pitch) {
         this.pitch += pitch;
+    }
+
+    public void addFreeCapacityStockpile(int amount) {
+        this.freeCapacityStockpile += amount;
+    }
+
+    public int getFreeCapacityStockpile() {
+        return freeCapacityStockpile;
     }
 
     public void addResource(String name, int amount) {

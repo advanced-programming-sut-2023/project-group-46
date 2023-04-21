@@ -46,4 +46,8 @@ public class Building {
     public int getFreeCapacity() {
         return freeCapacity;
     }
+
+    public void addFreeCapacity(int amount) {
+        this.freeCapacity += amount;
+    }
 }
