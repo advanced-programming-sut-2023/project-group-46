@@ -13,9 +13,8 @@ Armoury {
     private int cow;
 
     public boolean isArmouryType(String name) {
-        if (name.equals("bow") || name.equals("crossbow") || name.equals("spear") || name.equals("pike") || name.equals("mace") || name.equals("sword") ||
-                name.equals("leatherArmor") || name.equals("metalArmor")) return true;
-        else return false;
+        return name.equals("bow") || name.equals("crossbow") || name.equals("spear") || name.equals("pike") || name.equals("mace") || name.equals("sword") ||
+                name.equals("leatherArmor") || name.equals("metalArmor");
     }
 
     public int getBow() {

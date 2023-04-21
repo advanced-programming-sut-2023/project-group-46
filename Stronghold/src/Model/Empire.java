@@ -9,8 +9,6 @@ public class Empire {
     private int empireId;//this is equal to index of the arraylist of empires in the Game
     private int unemployedPeople;
     private int employedPeople;
-    private HashMap<String, Integer> foods;
-    private int foodCount;
     private int foodRate;
     private int taxRate;
     private int fearRate;
@@ -21,6 +19,7 @@ public class Empire {
     private int relogionPopularity;
     private Resources resources;// it should be given to empires in start of the game
     private Armoury armoury;
+    private FoodStock foodStock;
     private ArrayList<Trade> availableTrades;
     private ArrayList<Trade> historyTrades;
     private ArrayList<Building> buildings;
@@ -30,7 +29,6 @@ public class Empire {
         this.user = user;
         this.unemployedPeople = unemployedPeople;
         this.employedPeople = 0;
-        this.foodCount = foodCount;
         this.foodRate = foodRate;
         this.taxRate = taxRate;
         this.fearRate = fearRate;
@@ -43,6 +41,10 @@ public class Empire {
 
     public int getReligion() {
         return religion;
+    }
+
+    public FoodStock getFoodStock() {
+        return foodStock;
     }
 
     public ArrayList<Trade> getAvailableTrades() {
@@ -72,15 +74,6 @@ public class Empire {
     public int getEmployedPeople() {
         return employedPeople;
     }
-
-    public HashMap<String, Integer> getFoods() {
-        return foods;
-    }
-
-    public int getFoodCount() {
-        return foodCount;
-    }
-
     public int getFoodRate() {
         return foodRate;
     }
@@ -129,14 +122,6 @@ public class Empire {
         this.employedPeople = employedPeople;
     }
 
-    public void setFoods(HashMap<String, Integer> foods) {
-        this.foods = foods;
-    }
-
-    public void setFoodCount(int foodCount) {
-        this.foodCount = foodCount;
-    }
-
     public void setFoodRate(int foodRate) {
         this.foodRate = foodRate;
     }
@@ -164,9 +149,9 @@ public class Empire {
     public ArrayList<Building> getBuildings() {
         return buildings;
     }
-    public Building getBuildingByName(String username) {
+    public Building getBuildingByName(String name) {
         for (Building building : buildings) {
-            if (building.getBuildingType().getName().equals(username))
+            if (building.getBuildingType().getName().equals(name))
                 return building;
         }
         return null;

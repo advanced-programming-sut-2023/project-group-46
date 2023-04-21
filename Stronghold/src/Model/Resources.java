@@ -4,13 +4,12 @@ public class Resources {
     private int gold;
     private int wheat;
     private int flour;
-    private int hops;
+    private int hop;
     private int ale;
     private int stone;
     private int iron;
     private int wood;
     private int pitch;
-
     public int getGold() {
         return gold;
     }
@@ -23,8 +22,8 @@ public class Resources {
         return flour;
     }
 
-    public int getHops() {
-        return hops;
+    public int getHop() {
+        return hop;
     }
 
     public int getAle() {
@@ -59,8 +58,8 @@ public class Resources {
         this.flour += flour;
     }
 
-    public void addHops(int hops) {
-        this.hops += hops;
+    public void addHop(int hops) {
+        this.hop += hops;
     }
 
     public void addAle(int ale) {
@@ -88,7 +87,7 @@ public class Resources {
             case "gold" -> this.addGold(amount);
             case "wheat" -> this.addWheat(amount);
             case "flour" -> this.addFlour(amount);
-            case "hops" -> this.addHops(amount);
+            case "hop" -> this.addHop(amount);
             case "ale" -> this.addAle(amount);
             case "stone" -> this.addStone(amount);
             case "iron" -> this.addIron(amount);
@@ -99,9 +98,10 @@ public class Resources {
 
     public int getResourceAmount(String name) {
         return switch (name) {
+            case "gold" -> this.getGold();
             case "wheat" -> this.getWheat();
             case "flour" -> this.getFlour();
-            case "hops" -> this.getHops();
+            case "hop" -> this.getHop();
             case "ale" -> this.getAle();
             case "stone" -> this.getStone();
             case "iron" -> this.getIron();
@@ -109,5 +109,10 @@ public class Resources {
             case "pitch" -> this.getPitch();
             default -> -1;
         };
+    }
+
+    public boolean isResourceType(String name) {
+        return name.equals("wheat") || name.equals("flour") || name.equals("hop") || name.equals("ale") || name.equals("stone") || name.equals("iron")
+                || name.equals("wood") || name.equals("pitch");
     }
 }

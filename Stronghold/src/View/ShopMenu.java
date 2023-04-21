@@ -20,7 +20,7 @@ public class ShopMenu {
                 System.out.println(shopMenuController.showPriceList());
             } else if ((matcher = Menu.getMatcher(command, "(?=.* -i (?<name>\\S+))(?=.* -a (?<amount>\\S+))^buy( *\\-[ai] \\S+){2}$")) != null) {
                 System.out.println(shopMenuController.buy(matcher));
-            } else if ((matcher = Menu.getMatcher(command, "^(?=.* -i (?<name>\\S+))(?=.* -a (?<amount>\\S+))^sell( *\\-[ai] \\S+){2}$")) != null) {
+            } else if ((matcher = Menu.getMatcher(command, "(?=.* -i (?<name>\\S+))(?=.* -a (?<amount>\\S+))^sell( *\\-[ai] \\S+){2}$")) != null) {
                 System.out.println(shopMenuController.sell(matcher));
             } else if (command.matches("back")) {
                 return;
