@@ -4,9 +4,9 @@
 .gitignore
 .idea
 .name
-workspace.xml
-modules.xml
-uiDesigner.xml
-misc.xml
-vcs.xml
+.workspace.xml
+.modules.xml
+.uiDesigner.xml
+.misc.xml
+.vcs.xml
 
