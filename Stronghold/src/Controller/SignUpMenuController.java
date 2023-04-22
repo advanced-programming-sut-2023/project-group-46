@@ -1,8 +1,6 @@
 package Controller;
 
 import Model.User;
-import Model.PreBuiltSecurityQuestions;
-import Model.PreBuiltSlogans;
 import View.SignupMenu;
 
 import java.util.regex.Matcher;

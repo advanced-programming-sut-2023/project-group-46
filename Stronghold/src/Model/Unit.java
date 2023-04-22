@@ -1,11 +1,13 @@
 package Model;
 
+import Enums.UnitType;
+
 public class Unit {
     private int hp;
     private String name;
     private String mode;
-    private UnitType unitType;
-    private Empire owner;
+    private final UnitType unitType;
+    private final Empire owner;
 
     public Unit(UnitType unitType, Empire owner) {
         this.owner = owner;

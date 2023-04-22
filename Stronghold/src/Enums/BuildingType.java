@@ -1,4 +1,4 @@
-package Model;
+package Enums;
 
 public enum BuildingType {//fireRange will boost the range of the archers  || capacity is equal to the amount that in one time the worker bring to the storages
     SMALL_STONE_GATEHOUSE(10000, "SmallStoneGatehouse", 0, 0, 0, 0, 20, "CastleBuildings", 25, 0, 10),

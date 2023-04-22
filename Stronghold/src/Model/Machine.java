@@ -1,11 +1,13 @@
 package Model;
 
+
+import Enums.MachineType;
+
 public class Machine {
     private int hp;
     private String name;
-    private Empire owner;
-    private int engineerNumber;
-    private MachineType machineType;
+    private final Empire owner;
+    private final MachineType machineType;
 
     public Machine(MachineType machineType, Empire owner) {
         this.owner = owner;
@@ -28,15 +30,8 @@ public class Machine {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Empire getOwner() {
         return owner;
     }
 
-    public int getEngineerNumber() {
-        return engineerNumber;
-    }
 }

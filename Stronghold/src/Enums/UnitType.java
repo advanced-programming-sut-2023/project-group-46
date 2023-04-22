@@ -1,4 +1,4 @@
-package Model;
+package Enums;
 
 public enum UnitType {
     ARCHER("Archer",  "Bow", null, 40, 200, "high", 12, 10),

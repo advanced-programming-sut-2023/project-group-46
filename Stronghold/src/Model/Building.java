@@ -1,11 +1,13 @@
 package Model;
 
+import Enums.BuildingType;
+
 public class Building {
     private int hp;
     private String name;
     private int freeCapacity;
-    private BuildingType buildingType;
-    private Empire owner;
+    private final BuildingType buildingType;
+    private final Empire owner;
 
     public Building(BuildingType buildingType, Empire owner) {
         this.owner = owner;
