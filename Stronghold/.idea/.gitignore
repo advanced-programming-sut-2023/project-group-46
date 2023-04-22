@@ -2,11 +2,5 @@
 /shelf/
 /workspace.xml
 .gitignore
-.idea
+*.xml
 .name
-.workspace.xml
-.modules.xml
-.uiDesigner.xml
-.misc.xml
-.vcs.xml
-
