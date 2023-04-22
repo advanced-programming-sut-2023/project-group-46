@@ -1,6 +1,6 @@
 package Model;
 
-public enum UnitType {
+public enum UnitType {//TODO name of the weapons should be started with small letter and name of the troops should be changed
     ARCHER("Bow", null, "archer", "low", "low", "low", "defensive", 5, 5, 0, 0);
 
     UnitType(String weapon, String armor, String name, String speed, String attackPower, String defencePower, String mode, int cost, int hp, int defendRange, int attackRange) {

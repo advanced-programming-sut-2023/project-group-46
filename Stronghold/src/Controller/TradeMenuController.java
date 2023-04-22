@@ -53,7 +53,7 @@ public class TradeMenuController {
             int wantedResourceAmount = GameMenuController.getGame().getAvailableTrades().get(i).getWantedResourceAmount();
             int givenResourceAmount = GameMenuController.getGame().getAvailableTrades().get(i).getGivenResourceAmount();
             int senderId = GameMenuController.getGame().getAvailableTrades().get(i).getSenderEmpire().getEmpireId();
-            output.append("id-> ").append(i).append(" | wanted : ").append(wantedResource).append("->").append(wantedResourceAmount).append(" | given : ").append(givenResource).append("->").append(givenResourceAmount).append(" | sender'sID->").append(senderId);
+            output.append("id-> ").append(i).append(" | wanted : ").append(wantedResource).append("->").append(wantedResourceAmount).append(" | given : ").append(givenResource).append("->").append(givenResourceAmount).append(" | sender'sID->").append(senderId).append('\n');
         }
         return output.toString();
     }
@@ -125,7 +125,7 @@ public class TradeMenuController {
             int givenResourceAmount = GameMenuController.getGame().getHistoryTrades().get(i).getGivenResourceAmount();
             int senderId = GameMenuController.getGame().getHistoryTrades().get(i).getSenderEmpire().getEmpireId();
             int getterId = GameMenuController.getGame().getHistoryTrades().get(i).getGetterEmpire().getEmpireId();
-            output.append("id-> ").append(i).append(" | wanted : ").append(wantedResource).append("->").append(wantedResourceAmount).append(" | given : ").append(givenResource).append("->").append(givenResourceAmount).append(" | sender'sID->").append(senderId).append(" | getter'sID->").append(getterId);
+            output.append("id-> ").append(i).append(" | wanted : ").append(wantedResource).append("->").append(wantedResourceAmount).append(" | given : ").append(givenResource).append("->").append(givenResourceAmount).append(" | sender'sID->").append(senderId).append(" | getter'sID->").append(getterId).append('\n');
         }
         return output.toString();
     }

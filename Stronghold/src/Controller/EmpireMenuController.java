@@ -31,11 +31,14 @@ public class EmpireMenuController {
 
     public String showFoodList() {
         StringBuilder output = new StringBuilder();
-        for (Map.Entry<String, Integer> entry : GameMenuController.getCurrentEmpire().getFoods().entrySet()) {
-            String key = entry.getKey();
-            Integer value = entry.getValue();
-            output.append(key).append("  ").append(value).append('\n');
-        }
+        int bread = (int) GameMenuController.getCurrentEmpire().getFoodStock().getBread();
+        int meat = (int) GameMenuController.getCurrentEmpire().getFoodStock().getMeat();
+        int apple = (int) GameMenuController.getCurrentEmpire().getFoodStock().getApple();
+        int cheese = (int) GameMenuController.getCurrentEmpire().getFoodStock().getCheese();
+        output.append("bread->").append(bread).append('\n');
+        output.append("meat->").append(meat).append('\n');
+        output.append("apple->").append(apple).append('\n');
+        output.append("cheese->").append(cheese).append('\n');
         return output.toString();
     }
 
