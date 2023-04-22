@@ -46,11 +46,9 @@ public class User {
     public String getSlogan() {
         return slogan;
     }
-
     public int getHighScore() {
         return highScore;
     }
-
     public void setUsername(String username){this.username = username;}
 
     public void setPassword(String password) {
@@ -72,7 +70,6 @@ public class User {
     public void setHighScore(int highScore) {
         this.highScore = highScore;
     }
-
     public void setNumberOfSecurityQuestion(int numberOfSecurityQuestion) {
         this.numberOfSecurityQuestion = numberOfSecurityQuestion;
     }

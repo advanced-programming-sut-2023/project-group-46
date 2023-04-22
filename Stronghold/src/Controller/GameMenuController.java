@@ -11,25 +11,12 @@ public class GameMenuController {
     private Building selectedBuilding;
     private Unit selectedUnit;
     private Machine selectedMachine;
-   // private final GameMenu gameMenu;
 
-   // public GameMenuController() {
-      //  gameMenu = new GameMenu(this);
-    ///}
-
-    public void run() {
-
-    }
 
     private void startANewGame(Matcher matcher) {
-        game = new Game(Map.getMap1());
-        game.getEmpires().add(new Empire(User.getUserByUsername("a"), 0, 0, 0, 0, 0, 0, 0));
     }
 
     private void dropBuilding(Matcher matcher) {
-     /*   Map.getMap().get(0).setBuilding(new Building(BuildingType.getBuildingByName(type),CurrentEmpire));
-        Map.getMap().get(0).getBuilding().getBuildingType().getGold();
-        game.getMapGame().getMap()[0][0].getBuilding().getBuildingType().getCapacity(*/
     }
 
     private Building selectBuilding(Matcher matcher) {
@@ -83,9 +70,11 @@ public class GameMenuController {
         return null;
     }
 
+
     private String nextTurn() {
         return null;
     }
+
 
     private void checkFightUnits() {
     }

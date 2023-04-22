@@ -5,16 +5,55 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74b3c774-5b32-4713-a79f-91b59a717302" name="Changes" comment="commit">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Stronghold/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Stronghold/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Stronghold/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Stronghold/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Stronghold/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Stronghold/out/production/Stronghold/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Ap-Project.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/project-group-46.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Controller/EditMapMenuController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Controller/EmpireMenuController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Controller/GameMenuController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Controller/LoginMenuController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Controller/MapMenuController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Controller/ProfileMenuController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Controller/RunnerController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Controller/ShopMenuController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Controller/SignUpMenuController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Controller/TradeMenuController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Enums/EmpireMenuCommands.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Enums/ShopMenuCommands.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Enums/TradeMenuCommands.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Stronghold/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Model/Armoury.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Model/Building.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Model/BuildingType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Model/Cell.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Model/Empire.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Model/FoodStock.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Model/Game.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Model/Machine.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Model/MachineType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Model/Map.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Model/PreBuiltSecurityQuestions.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Model/PreBuiltSlogans.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Model/Resources.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Model/Trade.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Model/Unit.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Model/UnitType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/Model/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/View/EditMapMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/View/EmpireMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/View/GameMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/View/LoginMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/View/MainMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/View/MapMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/View/Menu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/View/ProfileMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/View/ShopMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/View/SignupMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stronghold/src/View/TradeMenu.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,13 +76,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Ap-Project" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="Ap-Project" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

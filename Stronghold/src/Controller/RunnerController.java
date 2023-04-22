@@ -27,9 +27,7 @@ public class RunnerController {
         tradeMenu = new TradeMenu(new TradeMenuController());
     }
 
-    public void run(){
-        if(loginMenu.run().equals("logged in")){
-            
-        }
+    public void run() {
+//TODO sync controller
     }
 }

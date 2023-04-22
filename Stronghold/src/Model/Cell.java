@@ -40,4 +40,12 @@ public class Cell {
     public void setEnvironmentName(String environmentName) {
         this.environmentName = environmentName;
     }
+
+    public void setUnits(ArrayList<Unit> units) {
+        this.units = units;
+    }
+
+    public void setMachines(ArrayList<Machine> machines) {
+        this.machines = machines;
+    }
 }
