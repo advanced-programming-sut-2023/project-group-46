@@ -81,7 +81,7 @@ Armoury {
         this.metalArmor += metalArmor;
     }
 
-    public void addFreeCapacityStockpile(int amount) {
+    public void addFreeCapacityArmoury(int amount) {
         this.freeCapacityArmoury += amount;
     }
 

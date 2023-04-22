@@ -20,8 +20,6 @@ public class Empire {
     private Resources resources;// it should be given to empires in start of the game
     private Armoury armoury;
     private FoodStock foodStock;
-    private ArrayList<Trade> availableTrades;
-    private ArrayList<Trade> historyTrades;
     private ArrayList<Building> buildings;
     private int kingHp;
 
@@ -33,8 +31,6 @@ public class Empire {
         this.taxRate = taxRate;
         this.fearRate = fearRate;
         this.religion = religion;
-        this.historyTrades = new ArrayList<>();
-        this.availableTrades = new ArrayList<>();
         this.buildings = new ArrayList<>();
         this.empireId = empireId;
     }
@@ -45,14 +41,6 @@ public class Empire {
 
     public FoodStock getFoodStock() {
         return foodStock;
-    }
-
-    public ArrayList<Trade> getAvailableTrades() {
-        return availableTrades;
-    }
-
-    public ArrayList<Trade> getHistoryTrades() {
-        return historyTrades;
     }
 
     public User getUser() {

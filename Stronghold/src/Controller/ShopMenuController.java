@@ -30,6 +30,9 @@ public class ShopMenuController {
     public String buy(Matcher matcher) {
         String name = matcher.group("name");
         int amount = Integer.parseInt(matcher.group("amount"));
+        if (!GameMenuController.getCurrentEmpire().getResources().isResourceType(name) && !GameMenuController.getCurrentEmpire().getArmoury().isArmouryType(name) && !GameMenuController.getCurrentEmpire().getFoodStock().isFoodType(name)) {
+            return "invalid item";
+        }
         if (GameMenuController.getCurrentEmpire().getResources().getGold() < Game.getShopItems().get(name) * amount) {
             return "Not enough gold!";
         }
@@ -42,7 +45,7 @@ public class ShopMenuController {
             if (GameMenuController.getCurrentEmpire().getArmoury().getFreeCapacityArmoury() < amount) {
                 return "not enough space in the armoury";
             }
-            GameMenuController.getCurrentEmpire().getArmoury().addFreeCapacityStockpile(-1 * amount);
+            GameMenuController.getCurrentEmpire().getArmoury().addFreeCapacityArmoury(-1 * amount);
         } else if (GameMenuController.getCurrentEmpire().getFoodStock().isFoodType(name)) {
             if (GameMenuController.getCurrentEmpire().getFoodStock().getFreeCapacityFoodStock() < amount) {
                 return "not enough space in the foodStock";
@@ -59,8 +62,8 @@ public class ShopMenuController {
     public String sell(Matcher matcher) {
         String name = matcher.group("name");
         int amount = Integer.parseInt(matcher.group("amount"));
-        if (GameMenuController.getCurrentEmpire().getResources().isResourceType(name) || GameMenuController.getCurrentEmpire().getArmoury().isArmouryType(name) || GameMenuController.getCurrentEmpire().getFoodStock().isFoodType(name)) {
-            return "invalid name for item";
+        if (!GameMenuController.getCurrentEmpire().getResources().isResourceType(name) && !GameMenuController.getCurrentEmpire().getArmoury().isArmouryType(name) && !GameMenuController.getCurrentEmpire().getFoodStock().isFoodType(name)) {
+            return "invalid item";
         }
         if (GameMenuController.getCurrentEmpire().getResources().isResourceType(name) && GameMenuController.getCurrentEmpire().getResources().getResourceAmount(name) < amount) {
             return "not enough resource in the stockpile";
@@ -74,7 +77,7 @@ public class ShopMenuController {
             GameMenuController.getCurrentEmpire().getResources().addResource(name, -1 * amount);
         } else if (GameMenuController.getCurrentEmpire().getArmoury().isArmouryType(name)) {
             GameMenuController.getCurrentEmpire().getArmoury().addArmoury(name, -1 * amount);
-            GameMenuController.getCurrentEmpire().getArmoury().addFreeCapacityStockpile(amount);
+            GameMenuController.getCurrentEmpire().getArmoury().addFreeCapacityArmoury(amount);
         } else if (GameMenuController.getCurrentEmpire().getFoodStock().isFoodType(name)) {
             GameMenuController.getCurrentEmpire().getFoodStock().addFood(name, -1 * amount);
             GameMenuController.getCurrentEmpire().getFoodStock().addFreeCapacityFoodStock(amount);
