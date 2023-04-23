@@ -68,6 +68,14 @@
       <option name="presentableId" value="Default" />
       <updated>1682120297489</updated>
     </task>
+    <task id="LOCAL-00001" summary="finish-&gt;MachineType">
+      <created>1682206297697</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1682206297697</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -83,6 +91,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="merge ~ amir's branch ~ with ~ mohammad's branch ~" />
-    <option name="LAST_COMMIT_MESSAGE" value="merge ~ amir's branch ~ with ~ mohammad's branch ~" />
+    <MESSAGE value="finish-&gt;MachineType" />
+    <option name="LAST_COMMIT_MESSAGE" value="finish-&gt;MachineType" />
   </component>
 </project>
