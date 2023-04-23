@@ -1,7 +1,7 @@
 package View;
 
 import Controller.ShopMenuController;
-import Enums.ShopMenuCommands;
+import Enums.Commands.ShopMenuCommands;
 
 import java.util.regex.Matcher;
 

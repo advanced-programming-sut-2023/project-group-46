@@ -6,6 +6,7 @@ public class Unit {
     private int hp;
     private String name;
     private String mode;
+    private int attackPower;
     private final UnitType unitType;
     private final Empire owner;
 
@@ -14,6 +15,7 @@ public class Unit {
         this.name = unitType.getName();
         this.hp = unitType.getDefencePower();
         this.unitType = unitType;
+        this.attackPower = (int) (unitType.getAttackPower() * (1 + (owner.getFearRate() * 0.1)));
     }
 
     public void setHp(int hp) {
@@ -42,5 +44,13 @@ public class Unit {
 
     public Empire getOwner() {
         return owner;
+    }
+
+    public int getAttackPower() {
+        return attackPower;
+    }
+
+    public void setAttackPower(int attackPower) {
+        this.attackPower = attackPower;
     }
 }

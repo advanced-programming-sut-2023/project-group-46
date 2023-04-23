@@ -1,7 +1,7 @@
 package View;
 
 import Controller.EditMapMenuController;
-import Model.EditMapMenuCommands;
+import Enums.Commands.EditMapMenuCommands;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;

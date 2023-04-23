@@ -5,6 +5,7 @@ import Enums.BuildingType;
 public class Building {
     private int hp;
     private String name;
+    private int rate;
     private int freeCapacity;
     private final BuildingType buildingType;
     private final Empire owner;
@@ -15,6 +16,13 @@ public class Building {
         this.hp = buildingType.getHp();
         this.freeCapacity = buildingType.getCapacity();
         this.buildingType = buildingType;
+        this.rate = buildingType.getRate() + (int) (-0.5 * owner.getFearRate());
+        if (buildingType.getName().equals("Church") || buildingType.getName().equals("Cathedral")) {
+            owner.addReligionPopularity(2);
+        }
+        if (buildingType.getName().equals("Hovel")) {
+            owner.addUnemployedPeople(8);
+        }
     }
 
     public void setHp(int hp) {
@@ -51,5 +59,13 @@ public class Building {
 
     public void addFreeCapacity(int amount) {
         this.freeCapacity += amount;
+    }
+
+    public void setRate(int rate) {
+        this.rate = rate;
+    }
+
+    public int getRate() {
+        return rate;
     }
 }

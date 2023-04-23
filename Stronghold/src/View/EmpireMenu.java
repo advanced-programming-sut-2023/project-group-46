@@ -1,7 +1,7 @@
 package View;
 
 import Controller.EmpireMenuController;
-import Enums.EmpireMenuCommands;
+import Enums.Commands.EmpireMenuCommands;
 
 import java.util.regex.Matcher;
 

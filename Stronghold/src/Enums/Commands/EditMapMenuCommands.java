@@ -1,4 +1,4 @@
-package Model;
+package Enums.Commands;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,7 +12,7 @@ public enum EditMapMenuCommands {
     REGEX6("^dropbuilding \\-x (?<x>\\d+) \\-y (?<y>\\d+) \\-t (?<type>\\S+)$"),
     REGEX7("^dropunit \\-x (?<x>\\d+) \\-y (?<y>\\d+) \\-t (?<type>\\S+) \\-c (?<count>\\S+)$");
 
-    private String regex;
+    private final String regex;
 
     private EditMapMenuCommands(String regex) {
         this.regex = regex;

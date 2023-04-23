@@ -34,7 +34,7 @@ public enum BuildingType {//fireRange will boost the range of the archers  || ca
     PITCH_DITCH(0, "PitchDitch", 0, 0, 0, 0, 0, "CastleBuildings", 0, 0, 0),//1 pitch for 4 pitchDitch
     CAGED_WAR_DOGS(100, "CagedWarDogs", 0, 100, 10, 0, 0, "CastleBuildings", 0, 0, 0),
     SIEGE_TENT(50, "SiegeTent", 0, 0, 0, 0, 0, "CastleBuildings", 0, 0, 0),
-    STABLE(250, "Stable", 0, 400, 20, 0, 0, "CastleBuildings", 6, 0, 0),
+    STABLE(250, "Stable", 0, 400, 20, 0, 0, "CastleBuildings", 4, 0, 0),
     APPLE_ORCHARD(120, "AppleOrchard", 1, 0, 5, 0, 0, "FarmBuildings", 4, 3, 0),
     DAIRY_ّFARM(120, "DairyFarm", 1, 0, 10, 0, 0, "FarmBuildings", 4, 3, 0),
     HOPS_FARM(120, "HopsFarm", 1, 0, 15, 0, 0, "FarmBuildings", 4, 3, 0),

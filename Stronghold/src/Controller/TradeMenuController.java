@@ -1,9 +1,6 @@
 package Controller;
 
-import Model.Game;
 import Model.Trade;
-import View.GameMenu;
-import View.TradeMenu;
 
 import java.util.regex.Matcher;
 

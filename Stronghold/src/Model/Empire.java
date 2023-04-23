@@ -1,5 +1,9 @@
 package Model;
 
+import Model.Goods.Armoury;
+import Model.Goods.FoodStock;
+import Model.Goods.Resources;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,32 +16,30 @@ public class Empire {
     private int foodRate;
     private int taxRate;
     private int fearRate;
-    private int religion;
     private int foodPopularity;
     private int fearPopularity;
     private int taxPopularity;
-    private int relogionPopularity;
+    private int religionPopularity;
     private Resources resources;// it should be given to empires in start of the game
     private Armoury armoury;
     private FoodStock foodStock;
-    private ArrayList<Building> buildings;
+    private final ArrayList<Building> buildings;
+    private final ArrayList<Unit> units;
     private int kingHp;
 
-    public Empire(User user, int unemployedPeople, int foodCount, int foodRate, int taxRate, int fearRate, int religion, int empireId) {//TODO double check
+    public Empire(User user, int unemployedPeople, int foodRate, int taxRate, int fearRate, int religion, int empireId) {//TODO double check what should we give empires in the start of the game
         this.user = user;
         this.unemployedPeople = unemployedPeople;
         this.employedPeople = 0;
         this.foodRate = foodRate;
         this.taxRate = taxRate;
         this.fearRate = fearRate;
-        this.religion = religion;
         this.buildings = new ArrayList<>();
+        this.units = new ArrayList<>();
         this.empireId = empireId;
+        this.religionPopularity = 0;
     }
 
-    public int getReligion() {
-        return religion;
-    }
 
     public FoodStock getFoodStock() {
         return foodStock;
@@ -47,14 +49,6 @@ public class Empire {
         return user;
     }
 
-    public void setRelegious(int religion) {
-        this.religion = religion;
-    }
-
-    public int getRelegious() {
-        return religion;
-    }
-
     public int getUnemployedPeople() {
         return unemployedPeople;
     }
@@ -62,12 +56,20 @@ public class Empire {
     public int getEmployedPeople() {
         return employedPeople;
     }
+
     public int getFoodRate() {
         return foodRate;
     }
 
     public int getFoodPopularity() {
-        return foodPopularity;
+        int counter = 0;
+        if (foodStock.getApple() > 0) counter++;
+        if (foodStock.getBread() > 0) counter++;
+        if (foodStock.getCheese() > 0) counter++;
+        if (foodStock.getMeat() > 0) counter++;
+        if (counter == 0)
+            return -8;
+        return this.foodPopularity + counter - 1;
     }
 
     public int getFearPopularity() {
@@ -79,7 +81,7 @@ public class Empire {
     }
 
     public int getReligionPopularity() {
-        return relogionPopularity;
+        return religionPopularity;
     }
 
     public int getTaxRate() {
@@ -102,12 +104,12 @@ public class Empire {
         return resources;
     }
 
-    public void setUnemployedPeople(int unemployedPeople) {
-        this.unemployedPeople = unemployedPeople;
+    public void addUnemployedPeople(int unemployedPeople) {
+        this.unemployedPeople += unemployedPeople;
     }
 
-    public void setEmployedPeople(int employedPeople) {
-        this.employedPeople = employedPeople;
+    public void addEmployedPeople(int employedPeople) {
+        this.employedPeople += employedPeople;
     }
 
     public void setFoodRate(int foodRate) {
@@ -134,14 +136,35 @@ public class Empire {
         return kingHp;
     }
 
+    public void setFoodPopularity(int foodPopularity) {
+        this.foodPopularity = foodPopularity;
+    }
+
+    public void setFearPopularity(int fearPopularity) {
+        this.fearPopularity = fearPopularity;
+    }
+
+    public void setTaxPopularity(int taxPopularity) {
+        this.taxPopularity = taxPopularity;
+    }
+
+    public void addReligionPopularity(int religionPopularity) {
+        this.religionPopularity += religionPopularity;
+    }
+
     public ArrayList<Building> getBuildings() {
         return buildings;
     }
+
     public Building getBuildingByName(String name) {
         for (Building building : buildings) {
             if (building.getBuildingType().getName().equals(name))
                 return building;
         }
         return null;
+    }
+
+    public ArrayList<Unit> getUnits() {
+        return units;
     }
 }

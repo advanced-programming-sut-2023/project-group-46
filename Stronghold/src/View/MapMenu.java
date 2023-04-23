@@ -2,8 +2,7 @@ package View;
 
 import Controller.MapMenuController;
 import Controller.ShopMenuController;
-import Model.EditMapMenuCommands;
-import Model.MapMenuCommands;
+import Enums.Commands.MapMenuCommands;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;

@@ -1,4 +1,4 @@
-package Model;
+package Model.Goods;
 
 public class
 Armoury {

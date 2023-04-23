@@ -1,4 +1,4 @@
-package Model;
+package Enums.Commands;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -8,7 +8,7 @@ public enum MapMenuCommands {
     REGEX2("^map ((up||left||down||right)\\s\\d+*)+$"),
     REGEX3("^show details \\-x (?<x>\\d+) \\-y (?<y>\\d+)$");
 
-    private String regex;
+    private final String regex;
 
     private MapMenuCommands(String regex) {
         this.regex = regex;

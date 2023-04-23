@@ -4,11 +4,41 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06e5fda0-a3b1-4711-b1df-4b381d4f38a0" name="Changes" comment="finish-&gt;MachineType" />
+    <list default="true" id="06e5fda0-a3b1-4711-b1df-4b381d4f38a0" name="Changes" comment="some changes on packages">
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/EmpireMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/EmpireMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ShopMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ShopMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/TradeMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TradeMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Enums/BuildingType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enums/BuildingType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Enums/Commands/EditMapMenuCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enums/Commands/EditMapMenuCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Enums/Commands/EmpireMenuCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enums/Commands/EmpireMenuCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Enums/Commands/ShopMenuCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enums/Commands/ShopMenuCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Enums/Commands/TradeMenuCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enums/Commands/TradeMenuCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Enums/MapMenuCommands.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/Building.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/Building.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/Empire.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/Empire.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/Goods/Armoury.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/Goods/Armoury.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/Goods/FoodStock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/Goods/FoodStock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/Goods/Resources.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/Goods/Resources.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/Unit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/Unit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/View/EditMapMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/View/EditMapMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/View/EmpireMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/View/EmpireMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/View/MapMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/View/MapMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/View/ShopMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/View/ShopMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/View/TradeMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/View/TradeMenu.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -75,7 +105,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682206297697</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="some changes on packages">
+      <created>1682237225301</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1682237225301</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -92,6 +129,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="merge ~ amir's branch ~ with ~ mohammad's branch ~" />
     <MESSAGE value="finish-&gt;MachineType" />
-    <option name="LAST_COMMIT_MESSAGE" value="finish-&gt;MachineType" />
+    <MESSAGE value="some changes on packages" />
+    <option name="LAST_COMMIT_MESSAGE" value="some changes on packages" />
   </component>
 </project>
