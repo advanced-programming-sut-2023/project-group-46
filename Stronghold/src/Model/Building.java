@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.GameMenuController;
 import Enums.BuildingType;
 
 public class Building {
@@ -32,6 +33,18 @@ public class Building {
         }
         if (buildingType.getName().equals("PoleTurner")) {
             this.mode = "spear";
+        }
+        if (buildingType.getName().equals("Armoury")) {
+            GameMenuController.getCurrentEmpire().getArmoury().addFreeCapacityArmoury(50);
+        }
+        if (buildingType.getName().equals("FoodStock")) {
+            GameMenuController.getCurrentEmpire().getFoodStock().addFreeCapacityFoodStock(250);
+        }
+        if (buildingType.getName().equals("Stockpile")) {
+            GameMenuController.getCurrentEmpire().getResources().addFreeCapacityStockpile(190);
+        }
+        if(buildingType.getName().equals("Inn")){
+            //TODO check for the change of popularity
         }
     }
 
