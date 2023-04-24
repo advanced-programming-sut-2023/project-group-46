@@ -9,6 +9,7 @@ public class Building {
     private int freeCapacity;
     private final BuildingType buildingType;
     private final Empire owner;
+    private String mode;//this is for the buildings like armourers that can produce different things
 
     public Building(BuildingType buildingType, Empire owner) {
         this.owner = owner;
@@ -22,6 +23,15 @@ public class Building {
         }
         if (buildingType.getName().equals("Hovel")) {
             owner.addUnemployedPeople(8);
+        }
+        if (buildingType.getName().equals("Fletcher")) {
+            this.mode = "bow";
+        }
+        if (buildingType.getName().equals("BlackSmith")) {
+            this.mode = "sword";
+        }
+        if (buildingType.getName().equals("PoleTurner")) {
+            this.mode = "spear";
         }
     }
 
@@ -67,5 +77,13 @@ public class Building {
 
     public int getRate() {
         return rate;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+    public String getMode() {
+        return mode;
     }
 }

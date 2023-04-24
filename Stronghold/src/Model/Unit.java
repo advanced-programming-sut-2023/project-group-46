@@ -15,6 +15,7 @@ public class Unit {
         this.name = unitType.getName();
         this.hp = unitType.getDefencePower();
         this.unitType = unitType;
+        this.mode = "standing";
         this.attackPower = (int) (unitType.getAttackPower() * (1 + (owner.getFearRate() * 0.1)));
     }
 

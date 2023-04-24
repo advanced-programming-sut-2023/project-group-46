@@ -51,8 +51,7 @@ public class GameMenuController {
     private void pourOil(Matcher matcher) {
     }// به این صورت که در arraylist سربازا ها فور زده بشه و همه مهندسا برن نفتشونو بریزن
 
-    private void burnOil(Matcher matcher)
-    {
+    private void burnOil(Matcher matcher) {
 
     }
 
@@ -82,7 +81,77 @@ public class GameMenuController {
     private void checkFightMachines() {
     }
 
-    private void checkProductiveBuildings() {
+    public void checkFoodProductiveBuildings() {// each building produces if there is enough free space in the foodStock
+        for (int i = 0; i < currentEmpire.getBuildings().size(); i++) {
+            int rate = currentEmpire.getBuildings().get(i).getRate();
+            int productEachRate = currentEmpire.getBuildings().get(i).getBuildingType().getCapacity();
+            if (currentEmpire.getFoodStock().getFreeCapacityFoodStock() < productEachRate * rate) {
+                continue;//Not Enough space in the FoodStock
+            }
+            switch (currentEmpire.getBuildings().get(i).getName()) {
+                case "AppleOrchard" -> {
+                    currentEmpire.getFoodStock().addFood("apple", productEachRate * rate);
+                }
+                case "HuntingPost" -> {
+                    currentEmpire.getFoodStock().addFood("meat", productEachRate * rate);
+                }
+                case "Bakery" -> {
+                    if (currentEmpire.getResources().getFlour() >= rate) {
+                        currentEmpire.getResources().addResource("flour", -1 * rate);
+                        currentEmpire.getFoodStock().addFood("bread", productEachRate * rate);
+                    }
+                }
+                case "DairyFarm" -> {
+                    currentEmpire.getFoodStock().addFood("cheese", productEachRate * rate);
+                }
+            }
+        }
+    }
+
+    public void checkArmourProductiveBuildings() {// each armour producer , produce 1 item in 1 turn
+        for (int i = 0; i < currentEmpire.getBuildings().size(); i++) {
+            if (currentEmpire.getArmoury().getFreeCapacityArmoury() < 1) {
+                continue;
+            }
+            switch (currentEmpire.getBuildings().get(i).getName()) {
+                case "Fletcher" -> {
+                    if (currentEmpire.getResources().getWood() >= 1) {
+                        currentEmpire.getResources().addResource("wood", -1);
+                        if (currentEmpire.getBuildings().get(i).getMode().equals("bow")) {
+                            currentEmpire.getArmoury().addArmoury("bow", 1);
+                        } else {
+                            currentEmpire.getArmoury().addArmoury("crossbow", 1);
+                        }
+                    }
+                }
+                case "DairyFarm" -> {
+                    currentEmpire.getArmoury().addArmoury("leatherArmor", 1);
+                }
+                case "BlackSmith" -> {
+                    if (currentEmpire.getResources().getIron() >= 1) {
+                        currentEmpire.getResources().addResource("iron", -1);
+                        if (currentEmpire.getBuildings().get(i).getMode().equals("sword")) {
+                            currentEmpire.getArmoury().addArmoury("sword", 1);
+                        } else {
+                            currentEmpire.getArmoury().addArmoury("mace", 1);
+                        }
+                    }
+                }
+                case "PoleTurner" -> {
+                    if (currentEmpire.getResources().getWood() >= 1) {
+                        currentEmpire.getResources().addResource("wood", -1);
+                        if (currentEmpire.getBuildings().get(i).getMode().equals("spear")) {
+                            currentEmpire.getArmoury().addArmoury("spear", 1);
+                        } else {
+                            currentEmpire.getArmoury().addArmoury("pike", 1);
+                        }
+                    }
+                }
+                case "Armourer" -> {
+                    currentEmpire.getArmoury().addArmoury("metalArmor", 1);
+                }
+            }
+        }
     }
 
     private void removeDestroyedThings() {

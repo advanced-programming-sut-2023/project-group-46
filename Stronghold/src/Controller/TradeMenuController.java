@@ -29,14 +29,11 @@ public class TradeMenuController {
             return "you don't have enough amount of this item";
         }
         if (givenResourceType) {
-            GameMenuController.getCurrentEmpire().getResources().addFreeCapacityStockpile(givenAmount);
             GameMenuController.getCurrentEmpire().getResources().addResource(givenResource, -1 * givenAmount);
         } else if (givenArmouryType) {
             GameMenuController.getCurrentEmpire().getArmoury().addArmoury(givenResource, -1 * givenAmount);
-            GameMenuController.getCurrentEmpire().getArmoury().addFreeCapacityArmoury(givenAmount);
         } else if (givenFoodType) {
             GameMenuController.getCurrentEmpire().getFoodStock().addFood(givenResource, -1 * givenAmount);
-            GameMenuController.getCurrentEmpire().getFoodStock().addFreeCapacityFoodStock(givenAmount);
         }
         GameMenuController.getGame().getAvailableTrades().add(new Trade(wantedResource, wantedAmount, givenResource, givenAmount, message, GameMenuController.getCurrentEmpire()));
         return "success";
@@ -77,35 +74,26 @@ public class TradeMenuController {
                 return "you don't have enough resource to complete the trade";
             }
             GameMenuController.getCurrentEmpire().getResources().addResource(wantedResource, -1 * wantedResourceAmount);
-            GameMenuController.getCurrentEmpire().getResources().addFreeCapacityStockpile(wantedResourceAmount);
             GameMenuController.getGame().getEmpires().get(senderId).getResources().addResource(wantedResource, wantedResourceAmount);
-            GameMenuController.getGame().getEmpires().get(senderId).getResources().addFreeCapacityStockpile(-1 * wantedResourceAmount);
         } else if (wantedArmouryType) {
             if (GameMenuController.getCurrentEmpire().getArmoury().getArmouryAmount(wantedResource) < wantedResourceAmount) {
                 return "you don't have enough armour to complete the trade";
             }
             GameMenuController.getCurrentEmpire().getArmoury().addArmoury(wantedResource, -1 * wantedResourceAmount);
-            GameMenuController.getCurrentEmpire().getArmoury().addFreeCapacityArmoury(wantedResourceAmount);
             GameMenuController.getGame().getEmpires().get(senderId).getArmoury().addArmoury(wantedResource, wantedResourceAmount);
-            GameMenuController.getGame().getEmpires().get(senderId).getArmoury().addFreeCapacityArmoury(-1 * wantedResourceAmount);
         } else if (wantedFoodType) {
             if (GameMenuController.getCurrentEmpire().getFoodStock().getFoodAmount(wantedResource) < wantedResourceAmount) {
                 return "you don't have enough food to complete the trade";
             }
             GameMenuController.getCurrentEmpire().getFoodStock().addFood(wantedResource, -1 * wantedResourceAmount);
-            GameMenuController.getCurrentEmpire().getFoodStock().addFreeCapacityFoodStock(wantedResourceAmount);
             GameMenuController.getGame().getEmpires().get(senderId).getFoodStock().addFood(wantedResource, wantedResourceAmount);
-            GameMenuController.getGame().getEmpires().get(senderId).getFoodStock().addFreeCapacityFoodStock(-1 * wantedResourceAmount);
         }
         if (givenResourceType) {
             GameMenuController.getCurrentEmpire().getResources().addResource(givenResource, givenResourceAmount);
-            GameMenuController.getCurrentEmpire().getResources().addFreeCapacityStockpile(-1 * givenResourceAmount);
         } else if (givenArmouryType) {
             GameMenuController.getCurrentEmpire().getArmoury().addArmoury(givenResource, givenResourceAmount);
-            GameMenuController.getCurrentEmpire().getArmoury().addFreeCapacityArmoury(-1 * givenResourceAmount);
         } else if (givenFoodType) {
             GameMenuController.getCurrentEmpire().getFoodStock().addFood(givenResource, givenResourceAmount);
-            GameMenuController.getCurrentEmpire().getFoodStock().addFreeCapacityFoodStock(-1 * givenResourceAmount);
         }
         GameMenuController.getGame().getAvailableTrades().remove(tradeId);
         GameMenuController.getGame().getHistoryTrades().add(new Trade(wantedResource, wantedResourceAmount, givenResource, givenResourceAmount, message, GameMenuController.getGame().getEmpires().get(senderId)));

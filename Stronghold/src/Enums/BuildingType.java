@@ -42,6 +42,9 @@ public enum BuildingType {//fireRange will boost the range of the archers  || ca
     WHEAT_FARM(120, "WheatFarm", 1, 0, 15, 0, 0, "FarmBuildings", 2, 2, 0),
     BAKERY(300, "Bakery", 1, 0, 10, 0, 0, "FoodProcessingBuildings", 8, 2, 0),
     BREWERY(300, "Brewery", 1, 0, 10, 0, 0, "FoodProcessingBuildings", 1, 2, 0),
+    SHORT_WALL(400, "ShortWall", 0, 0, 0, 0, 1, "CastleBuildings", 1, 0, 0),
+    TALL_WALL(600, "TallWall", 0, 0, 0, 0, 2, "CastleBuildings", 1, 0, 0),
+    STAIRS(400, "Stairs", 0, 0, 0, 0, 3, "CastleBuildings", 1, 0, 0),
     FOOD_STOCK(250, "FoodStock", 0, 0, 5, 0, 0, "FoodProcessingBuildings", 250, 0, 0);
 
 

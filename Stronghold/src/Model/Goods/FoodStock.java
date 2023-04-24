@@ -50,10 +50,22 @@ public class FoodStock {
 
     public void addFood(String name, double amount) {
         switch (name) {
-            case "meat" -> this.addMeat(amount);
-            case "apple" -> this.addApple(amount);
-            case "cheese" -> this.addCheese(amount);
-            case "bread" -> this.addBread(amount);
+            case "meat" -> {
+                this.addMeat(amount);
+                this.addFreeCapacityFoodStock((int) (-1 * amount));
+            }
+            case "apple" -> {
+                this.addApple(amount);
+                this.addFreeCapacityFoodStock((int) (-1 * amount));
+            }
+            case "cheese" -> {
+                this.addCheese(amount);
+                this.addFreeCapacityFoodStock((int) (-1 * amount));
+            }
+            case "bread" -> {
+                this.addBread(amount);
+                this.addFreeCapacityFoodStock((int) (-1 * amount));
+            }
         }
     }
 

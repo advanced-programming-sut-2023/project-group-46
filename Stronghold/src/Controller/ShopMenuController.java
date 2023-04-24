@@ -38,17 +38,14 @@ public class ShopMenuController {
             if (GameMenuController.getCurrentEmpire().getResources().getFreeCapacityStockpile() < amount) {
                 return "not enough space in the stockpile";
             }
-            GameMenuController.getCurrentEmpire().getResources().addFreeCapacityStockpile(-1 * amount);
         } else if (GameMenuController.getCurrentEmpire().getArmoury().isArmouryType(name)) {
             if (GameMenuController.getCurrentEmpire().getArmoury().getFreeCapacityArmoury() < amount) {
                 return "not enough space in the armoury";
             }
-            GameMenuController.getCurrentEmpire().getArmoury().addFreeCapacityArmoury(-1 * amount);
         } else if (GameMenuController.getCurrentEmpire().getFoodStock().isFoodType(name)) {
             if (GameMenuController.getCurrentEmpire().getFoodStock().getFreeCapacityFoodStock() < amount) {
                 return "not enough space in the foodStock";
             }
-            GameMenuController.getCurrentEmpire().getFoodStock().addFreeCapacityFoodStock(-1 * amount);
         }
         GameMenuController.getCurrentEmpire().getResources().addResource("gold", -1 * Game.getShopItems().get(name) * amount);
         GameMenuController.getCurrentEmpire().getResources().addResource(name, amount);
@@ -71,14 +68,11 @@ public class ShopMenuController {
             return "not enough food in the foodStock";
         }
         if (GameMenuController.getCurrentEmpire().getResources().isResourceType(name)) {
-            GameMenuController.getCurrentEmpire().getResources().addFreeCapacityStockpile(amount);
             GameMenuController.getCurrentEmpire().getResources().addResource(name, -1 * amount);
         } else if (GameMenuController.getCurrentEmpire().getArmoury().isArmouryType(name)) {
             GameMenuController.getCurrentEmpire().getArmoury().addArmoury(name, -1 * amount);
-            GameMenuController.getCurrentEmpire().getArmoury().addFreeCapacityArmoury(amount);
         } else if (GameMenuController.getCurrentEmpire().getFoodStock().isFoodType(name)) {
             GameMenuController.getCurrentEmpire().getFoodStock().addFood(name, -1 * amount);
-            GameMenuController.getCurrentEmpire().getFoodStock().addFreeCapacityFoodStock(amount);
         }
         GameMenuController.getCurrentEmpire().getResources().addResource("gold", (int) (amount * Game.getShopItems().get(name) * 0.8));
         return "success";

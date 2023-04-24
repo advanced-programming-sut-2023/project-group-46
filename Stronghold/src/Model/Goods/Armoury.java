@@ -91,14 +91,38 @@ Armoury {
 
     public void addArmoury(String name, int amount) {
         switch (name) {
-            case "bow" -> this.addBow(amount);
-            case "crossbow" -> this.addCrossbow(amount);
-            case "spear" -> this.addSpear(amount);
-            case "pike" -> this.addPike(amount);
-            case "mace" -> this.addMace(amount);
-            case "sword" -> this.addSword(amount);
-            case "leatherArmor" -> this.addLeatherArmor(amount);
-            case "metalArmor" -> this.addMetalArmor(amount);
+            case "bow" -> {
+                this.addBow(amount);
+                this.addFreeCapacityArmoury(-1 * amount);
+            }
+            case "crossbow" -> {
+                this.addCrossbow(amount);
+                this.addFreeCapacityArmoury(-1 * amount);
+            }
+            case "spear" -> {
+                this.addSpear(amount);
+                this.addFreeCapacityArmoury(-1 * amount);
+            }
+            case "pike" -> {
+                this.addPike(amount);
+                this.addFreeCapacityArmoury(-1 * amount);
+            }
+            case "mace" -> {
+                this.addMace(amount);
+                this.addFreeCapacityArmoury(-1 * amount);
+            }
+            case "sword" -> {
+                this.addSword(amount);
+                this.addFreeCapacityArmoury(-1 * amount);
+            }
+            case "leatherArmor" -> {
+                this.addLeatherArmor(amount);
+                this.addFreeCapacityArmoury(-1 * amount);
+            }
+            case "metalArmor" -> {
+                this.addMetalArmor(amount);
+                this.addFreeCapacityArmoury(-1 * amount);
+            }
         }
     }
 

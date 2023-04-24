@@ -95,14 +95,38 @@ public class Resources {
     public void addResource(String name, int amount) {
         switch (name) {
             case "gold" -> this.addGold(amount);
-            case "wheat" -> this.addWheat(amount);
-            case "flour" -> this.addFlour(amount);
-            case "hop" -> this.addHop(amount);
-            case "ale" -> this.addAle(amount);
-            case "stone" -> this.addStone(amount);
-            case "iron" -> this.addIron(amount);
-            case "wood" -> this.addWood(amount);
-            case "pitch" -> this.addPitch(amount);
+            case "wheat" -> {
+                this.addWheat(amount);
+                this.addFreeCapacityStockpile(-1 * amount);
+            }
+            case "flour" -> {
+                this.addFlour(amount);
+                this.addFreeCapacityStockpile(-1 * amount);
+            }
+            case "hop" -> {
+                this.addHop(amount);
+                this.addFreeCapacityStockpile(-1 * amount);
+            }
+            case "ale" -> {
+                this.addAle(amount);
+                this.addFreeCapacityStockpile(-1 * amount);
+            }
+            case "stone" -> {
+                this.addStone(amount);
+                this.addFreeCapacityStockpile(-1 * amount);
+            }
+            case "iron" -> {
+                this.addIron(amount);
+                this.addFreeCapacityStockpile(-1 * amount);
+            }
+            case "wood" -> {
+                this.addWood(amount);
+                this.addFreeCapacityStockpile(-1 * amount);
+            }
+            case "pitch" -> {
+                this.addPitch(amount);
+                this.addFreeCapacityStockpile(-1 * amount);
+            }
         }
     }
 
