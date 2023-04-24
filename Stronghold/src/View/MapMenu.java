@@ -20,11 +20,11 @@ public class MapMenu {
         Scanner scanner = new Scanner(System.in);
         String command = scanner.nextLine();
         while (!command.equals("back")) {
-            if ((matcher = MapMenuCommands.getMatcher(command, MapMenuCommands.REGEX1)) != null) {
+            if ((matcher = MapMenuCommands.getMatcher(command, MapMenuCommands.SHOW_MAP)) != null) {
                 System.out.println(mapMenuController.showMap(matcher));
-            } else if ((matcher = MapMenuCommands.getMatcher(command, MapMenuCommands.REGEX2)) != null) {
+            } else if ((matcher = MapMenuCommands.getMatcher(command, MapMenuCommands.MOVE_IN_MAP)) != null) {
                 System.out.println(mapMenuController.moveInMap(matcher));
-            } else if ((matcher = MapMenuCommands.getMatcher(command, MapMenuCommands.REGEX3)) != null) {
+            } else if ((matcher = MapMenuCommands.getMatcher(command, MapMenuCommands.SHOW_DETAILS)) != null) {
                 System.out.println(mapMenuController.showDetail(matcher));
             } else System.out.println("Invalid command!");
             command = scanner.nextLine();

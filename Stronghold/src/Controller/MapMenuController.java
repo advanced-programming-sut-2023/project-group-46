@@ -4,6 +4,7 @@ import Model.*;
 import View.MapMenu;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
@@ -14,6 +15,7 @@ public class MapMenuController {
     private Map map;
     private int x;
     private int y;
+    private final String Reset = "\033[0m";
 
     public MapMenuController() {
         mapMenu = new MapMenu(this);
@@ -25,14 +27,13 @@ public class MapMenuController {
         return makeOutputInStandard(getPartOfMap());
     }
 
-    private ArrayList<ArrayList<String>> getPartOfMap(){
-        ArrayList<ArrayList<String>> partOfMap = new ArrayList<>();
+    private String[][] getPartOfMap() {
         int x1 = cornersRow()[0], x2 = cornersRow()[1];
         int y1 = cornersColumn()[0], y2 = cornersColumn()[1];
-        for (int i = x1; i < x2; i++) {
-            partOfMap.add(new ArrayList<>());
-            for (int j = y1; j < y2; j++)
-                partOfMap.get(i).add(cellForShow(map.getMap()[i][j]));
+        String[][] partOfMap = new String[x2 - x1][y2 - y1];
+        for (int i = 0; i < x2 - x1; i++) {
+            for (int j = 0; j < y2 - y1; j++)
+                partOfMap[i][j] = cellForShow(map.getMap()[i][j]);
         }
         return partOfMap;
     }
@@ -68,16 +69,18 @@ public class MapMenuController {
     }
 
     private String cellForShow(Cell cell) {
+        String stringCellForShow = EnvironmentType.getEnvironmentTypeByName(cell.getType()).getColor();
         if (cell.getUnits() != null)
-            return "S";
+            stringCellForShow += "S\n";
         if (cell.getBuilding() != null)
-            return "B";
+            stringCellForShow += "B\n";
         if (cell.getEnvironmentName() != null && !cell.getEnvironmentName().equals("rock"))
-            return "T";
-        return "";
+            stringCellForShow += "T";
+        stringCellForShow += Reset;
+        return stringCellForShow;
     }
 
-    private String makeOutputInStandard(ArrayList<ArrayList<String>> partOfMap){
+    private String makeOutputInStandard(String[][] partOfMap) {
         String stringMakeOutputInStandard = new String();
         for (int i = 0; i <= 16; i++) {
             if (i % 4 == 0) {
@@ -90,8 +93,8 @@ public class MapMenuController {
                     else {
                         int row = i / 4;
                         int column = j / 6;
-                        if (i % 4 == 2 && j % 6 == 3 && !partOfMap.get(row).get(column).equals("")) {
-                            stringMakeOutputInStandard += (partOfMap.get(row).get(column));
+                        if (i % 4 == 2 && j % 6 == 3 && !partOfMap[row][column].equals("")) {
+                            stringMakeOutputInStandard += (partOfMap[row][column]);
                         } else
                             stringMakeOutputInStandard += "#";
                     }
@@ -103,20 +106,20 @@ public class MapMenuController {
     }
 
     private String splitRowsForIn() {
-        int length= 25;
+        int length = 25;
         String stringSplitRowsForIn = new String();
-            length -= 2;
+        length -= 2;
         stringSplitRowsForIn += "|";
-            while (length > 0) {
-                stringSplitRowsForIn += "-";
-                length--;
-            }
+        while (length > 0) {
+            stringSplitRowsForIn += "-";
+            length--;
+        }
         stringSplitRowsForIn += "|\n";
         return stringSplitRowsForIn;
     }
 
     private String splitRowsForEnd() {
-        int length= 25;
+        int length = 25;
         String stringSplitRowsForEnd = new String();
         while (length > 0) {
             stringSplitRowsForEnd += "-";
@@ -128,17 +131,26 @@ public class MapMenuController {
 
 
     public String moveInMap(Matcher matcher) {
-        int x= 0;
-        int y= 0;
+        int x = 0;
+        int y = 0;
         while (matcher.find()) {
             String type = matcher.group("type");
             int count = Integer.parseInt(matcher.group("count"));
-            if(type.equals("up")) y += count;
-            else if(type.equals("down")) y -= count;
-            else if(type.equals("right")) x += count;
-            else if(type.equals("left")) x -= count;
+            if (type.equals("up")) y += count;
+            else if (type.equals("down")) y -= count;
+            else if (type.equals("right")) x += count;
+            else if (type.equals("left")) x -= count;
         }
-        return "Success";
+        if (!checkMove(x, y)) return "Invalid move";
+        this.x += x;
+        this.y += y;
+        return makeOutputInStandard(getPartOfMap());
+    }
+
+    private boolean checkMove(int x, int y) {
+        if (this.x + x < 0 || this.x + x >= map.getSize()) return false;
+        if (this.y + y < 0 || this.y + y >= map.getSize()) return false;
+        return true;
     }
 
     public String showDetail(Matcher matcher) {
@@ -146,14 +158,18 @@ public class MapMenuController {
         int y = Integer.parseInt(matcher.group("y"));
         String stringShowDetail = "type : " + map.getMap()[x][y].getType();
         if (map.getMap()[x][y].getBuilding() != null)
-            stringShowDetail += "building : " + map.getMap()[x][y].getBuilding().getName();
+            stringShowDetail += "\nbuilding : " + map.getMap()[x][y].getBuilding().getName();
         for (Unit unit : map.getMap()[x][y].getUnits()) {
-            if (unit != null) stringShowDetail += "Unit : " + unit.getName();
+            if (unit != null) stringShowDetail += "\nUnit : " + unit.getName();
         }
         for (Machine machine : map.getMap()[x][y].getMachines()) {
-            if (machine != null) stringShowDetail += "machine : " + machine.getName();
+            if (machine != null) stringShowDetail += "\nmachine : " + machine.getName();
         }
-        //TODO resource
+        if (map.getMap()[x][y].getEnvironmentName() != null && !map.getMap()[x][y].getEnvironmentName().equals("rock"))
+            stringShowDetail += "\nrecourse : wood";
+        if(map.getMap()[x][y].getType().equals("rockTexture")) stringShowDetail += "\nrecourse : stone";
+        if(map.getMap()[x][y].getType().equals("oil")) stringShowDetail += "\nrecourse : pitch";
+        if(map.getMap()[x][y].getType().equals("ironTexture")) stringShowDetail += "\nrecourse : iron";
         return stringShowDetail;
     }
 }

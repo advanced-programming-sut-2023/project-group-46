@@ -4,9 +4,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum MapMenuCommands {
-    REGEX1("^show  map \\-x (?<x>\\d+) \\-y (?<y>\\d+)$"),
-    REGEX2("^map ((up||left||down||right)\\s\\d+*)+$"),
-    REGEX3("^show details \\-x (?<x>\\d+) \\-y (?<y>\\d+)$");
+    SHOW_MAP("^show  map \\-x (?<x>\\d+) \\-y (?<y>\\d+)$"),
+    MOVE_IN_MAP("^map ((up||left||down||right)\\s\\d+*)+$"),
+    SHOW_DETAILS("^show details \\-x (?<x>\\d+) \\-y (?<y>\\d+)$");
 
     private String regex;
 

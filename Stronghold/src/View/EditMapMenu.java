@@ -18,19 +18,19 @@ public class EditMapMenu {
         Scanner scanner = new Scanner(System.in);
         String command = scanner.nextLine();
         while (!command.equals("back")) {
-            if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.REGEX1)) != null) {
+            if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.SET_TEXTURE)) != null) {
                 System.out.println(editMapMenuController.setTexture(matcher));
-            } else if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.REGEX2)) != null) {
+            } else if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.SET_TEXTURE_RECTANGLE)) != null) {
                 System.out.println(editMapMenuController.setTextureRectangle(matcher));
-            } else if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.REGEX3)) != null) {
+            } else if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.CLEAR)) != null) {
                 System.out.println(editMapMenuController.clear(matcher));
-            } else if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.REGEX4)) != null) {
+            } else if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.DROP_ROCK)) != null) {
                 System.out.println(editMapMenuController.dropRock(matcher));
-            } else if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.REGEX5)) != null) {
+            } else if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.DROP_TREE)) != null) {
                 System.out.println(editMapMenuController.dropTree(matcher));
-            } else if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.REGEX6)) != null) {
+            } else if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.DROP_BUILDING)) != null) {
                 System.out.println(editMapMenuController.dropBuilding(matcher));
-            } else if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.REGEX7)) != null) {
+            } else if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.DROP_UNIT)) != null) {
                 System.out.println(editMapMenuController.dropUnit(matcher));
             } else System.out.println("Invalid command!");
             command = scanner.nextLine();

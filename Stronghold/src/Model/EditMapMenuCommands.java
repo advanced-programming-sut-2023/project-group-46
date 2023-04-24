@@ -4,13 +4,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum EditMapMenuCommands {
-    REGEX1("^settexture \\-x (?<x>\\d+) \\-y (?<y>\\d+) \\-t (?<type>\\S+)$"),
-    REGEX2("^settexture \\-x1 (?<x1>\\d+) \\-y1 (?<y1>\\d+) \\-x2 (?<x2>\\d+) \\-y2 (?<y2>\\d+) \\-t (?<type>\\S+)$"),
-    REGEX3("^clear \\-x (?<x>\\d+) \\-y (?<y>\\d+)$"),
-    REGEX4("^droprock \\-x (?<x>\\d+) \\-y (?<y>\\d+) \\-d (?<direction>\\S+)$"),
-    REGEX5("^droptree \\-x (?<x>\\d+) \\-y (?<y>\\d+) \\-t (?<type>\\S+)$"),
-    REGEX6("^dropbuilding \\-x (?<x>\\d+) \\-y (?<y>\\d+) \\-t (?<type>\\S+)$"),
-    REGEX7("^dropunit \\-x (?<x>\\d+) \\-y (?<y>\\d+) \\-t (?<type>\\S+) \\-c (?<count>\\S+)$");
+    SET_TEXTURE("^settexture \\-x (?<x>\\d+) \\-y (?<y>\\d+) \\-t (?<type>\\S+)$"),
+    SET_TEXTURE_RECTANGLE("^settexture \\-x1 (?<x1>\\d+) \\-y1 (?<y1>\\d+) \\-x2 (?<x2>\\d+) \\-y2 (?<y2>\\d+) \\-t (?<type>\\S+)$"),
+    CLEAR("^clear \\-x (?<x>\\d+) \\-y (?<y>\\d+)$"),
+    DROP_ROCK("^droprock \\-x (?<x>\\d+) \\-y (?<y>\\d+) \\-d (?<direction>\\S+)$"),
+    DROP_TREE("^droptree \\-x (?<x>\\d+) \\-y (?<y>\\d+) \\-t (?<type>\\S+)$"),
+    DROP_BUILDING("^dropbuilding \\-x (?<x>\\d+) \\-y (?<y>\\d+) \\-t (?<type>\\S+)$"),
+    DROP_UNIT("^dropunit \\-x (?<x>\\d+) \\-y (?<y>\\d+) \\-t (?<type>\\S+) \\-c (?<count>\\S+)$");
 
     private String regex;
 
