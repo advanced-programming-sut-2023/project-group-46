@@ -10,8 +10,7 @@ public class Unit {
     public Unit(UnitType unitType, Empire owner) {
         this.owner = owner;
         this.name = unitType.getName();
-        this.hp = unitType.getHp();
-        this.mode = unitType.getMode();
+        this.hp = unitType.getDefencePower();
         this.unitType = unitType;
     }
 
