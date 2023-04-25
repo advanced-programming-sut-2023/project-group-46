@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Phase1 - Stronghold" />
         <module name="Phase 1 - Stronghold" />
+        <module name="GsonWorkshop" />
       </profile>
     </annotationProcessing>
   </component>

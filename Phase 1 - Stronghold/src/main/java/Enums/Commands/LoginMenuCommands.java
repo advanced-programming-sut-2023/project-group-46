@@ -8,7 +8,8 @@ public enum LoginMenuCommands {
     FORGOT_PASSWORD("^forgot my password \\-u (?<username>.+)$"),
     ;
     private final String regex;
-    private LoginMenuCommands(String regex) {
+
+    LoginMenuCommands(String regex) {
         this.regex = regex;
     }
 

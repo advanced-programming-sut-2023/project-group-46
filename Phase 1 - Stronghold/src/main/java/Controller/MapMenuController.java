@@ -1,21 +1,20 @@
 package Controller;
 
-import Model.*;
+import Enums.EnvironmentType;
+import Model.Cell;
+import Model.Machine;
+import Model.Map;
+import Model.Unit;
 import View.MapMenu;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class MapMenuController {
 
     private final MapMenu mapMenu;
-
     private Map map;
     private int x;
     private int y;
-    private final String Reset = "\033[0m";
 
     public MapMenuController() {
         mapMenu = new MapMenu(this);
@@ -76,12 +75,13 @@ public class MapMenuController {
             stringCellForShow += "B\n";
         if (cell.getEnvironmentName() != null && !cell.getEnvironmentName().equals("rock"))
             stringCellForShow += "T";
-        stringCellForShow += Reset;
+        String reset = "\033[0m";
+        stringCellForShow += reset;
         return stringCellForShow;
     }
 
     private String makeOutputInStandard(String[][] partOfMap) {
-        String stringMakeOutputInStandard = new String();
+        String stringMakeOutputInStandard = "";
         for (int i = 0; i <= 16; i++) {
             if (i % 4 == 0) {
                 if (i != 0 && i != (16)) stringMakeOutputInStandard += splitRowsForIn();
@@ -107,7 +107,7 @@ public class MapMenuController {
 
     private String splitRowsForIn() {
         int length = 25;
-        String stringSplitRowsForIn = new String();
+        String stringSplitRowsForIn = "";
         length -= 2;
         stringSplitRowsForIn += "|";
         while (length > 0) {
@@ -120,7 +120,7 @@ public class MapMenuController {
 
     private String splitRowsForEnd() {
         int length = 25;
-        String stringSplitRowsForEnd = new String();
+        String stringSplitRowsForEnd = "";
         while (length > 0) {
             stringSplitRowsForEnd += "-";
             length--;
@@ -149,8 +149,7 @@ public class MapMenuController {
 
     private boolean checkMove(int x, int y) {
         if (this.x + x < 0 || this.x + x >= map.getSize()) return false;
-        if (this.y + y < 0 || this.y + y >= map.getSize()) return false;
-        return true;
+        return this.y + y >= 0 && this.y + y < map.getSize();
     }
 
     public String showDetail(Matcher matcher) {
@@ -167,9 +166,9 @@ public class MapMenuController {
         }
         if (map.getMap()[x][y].getEnvironmentName() != null && !map.getMap()[x][y].getEnvironmentName().equals("rock"))
             stringShowDetail += "\nrecourse : wood";
-        if(map.getMap()[x][y].getType().equals("rockTexture")) stringShowDetail += "\nrecourse : stone";
-        if(map.getMap()[x][y].getType().equals("oil")) stringShowDetail += "\nrecourse : pitch";
-        if(map.getMap()[x][y].getType().equals("ironTexture")) stringShowDetail += "\nrecourse : iron";
+        if (map.getMap()[x][y].getType().equals("rockTexture")) stringShowDetail += "\nrecourse : stone";
+        if (map.getMap()[x][y].getType().equals("oil")) stringShowDetail += "\nrecourse : pitch";
+        if (map.getMap()[x][y].getType().equals("ironTexture")) stringShowDetail += "\nrecourse : iron";
         return stringShowDetail;
     }
 }

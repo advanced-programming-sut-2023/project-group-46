@@ -1,16 +1,18 @@
 package Model;
 
+import Enums.EmpireColors;
 import Model.Goods.Armoury;
 import Model.Goods.FoodStock;
 import Model.Goods.Resources;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Empire {
 
-    private User user;
-    private int empireId;//this is equal to index of the arraylist of empires in the Game
+    private final ArrayList<Building> buildings;
+    private final ArrayList<Unit> units;
+    private final User user;
+    private final int empireId;//this is equal to index of the arraylist of empires in the Game
     private int unemployedPeople;
     private int employedPeople;
     private int foodRate;
@@ -23,11 +25,10 @@ public class Empire {
     private Resources resources;// it should be given to empires in start of the game
     private Armoury armoury;
     private FoodStock foodStock;
-    private final ArrayList<Building> buildings;
-    private final ArrayList<Unit> units;
     private int kingHp;
+    private final String color;
 
-    public Empire(User user, int unemployedPeople, int foodRate, int taxRate, int fearRate, int religion, int empireId) {//TODO double check what should we give empires in the start of the game
+    public Empire(User user, int unemployedPeople, int foodRate, int taxRate, int fearRate, int empireId) {//TODO double check what should we give empires in the start of the game
         this.user = user;
         this.unemployedPeople = unemployedPeople;
         this.employedPeople = 0;
@@ -38,6 +39,7 @@ public class Empire {
         this.units = new ArrayList<>();
         this.empireId = empireId;
         this.religionPopularity = 0;
+        this.color = EmpireColors.getEmpireColorByNumber(empireId).getName();
     }
 
 
@@ -61,6 +63,10 @@ public class Empire {
         return foodRate;
     }
 
+    public void setFoodRate(int foodRate) {
+        this.foodRate = foodRate;
+    }
+
     public int getFoodPopularity() {
         int counter = 0;
         if (foodStock.getApple() > 0) counter++;
@@ -72,12 +78,24 @@ public class Empire {
         return this.foodPopularity + counter - 1;
     }
 
+    public void setFoodPopularity(int foodPopularity) {
+        this.foodPopularity = foodPopularity;
+    }
+
     public int getFearPopularity() {
         return fearPopularity;
     }
 
+    public void setFearPopularity(int fearPopularity) {
+        this.fearPopularity = fearPopularity;
+    }
+
     public int getTaxPopularity() {
         return taxPopularity;
+    }
+
+    public void setTaxPopularity(int taxPopularity) {
+        this.taxPopularity = taxPopularity;
     }
 
     public int getReligionPopularity() {
@@ -88,8 +106,16 @@ public class Empire {
         return taxRate;
     }
 
+    public void setTaxRate(int taxRate) {
+        this.taxRate = taxRate;
+    }
+
     public int getFearRate() {
         return fearRate;
+    }
+
+    public void setFearRate(int fearRate) {
+        this.fearRate = fearRate;
     }
 
     public int getEmpireId() {
@@ -104,6 +130,10 @@ public class Empire {
         return resources;
     }
 
+    public void setResources(Resources resources) {
+        this.resources = resources;
+    }
+
     public void addUnemployedPeople(int unemployedPeople) {
         this.unemployedPeople += unemployedPeople;
     }
@@ -112,40 +142,12 @@ public class Empire {
         this.employedPeople += employedPeople;
     }
 
-    public void setFoodRate(int foodRate) {
-        this.foodRate = foodRate;
-    }
-
-    public void setTaxRate(int taxRate) {
-        this.taxRate = taxRate;
-    }
-
-    public void setFearRate(int fearRate) {
-        this.fearRate = fearRate;
-    }
-
-    public void setResources(Resources resources) {
-        this.resources = resources;
-    }
-
-    public void setKingHp(int kingHp) {
-        this.kingHp = kingHp;
-    }
-
     public int getKingHp() {
         return kingHp;
     }
 
-    public void setFoodPopularity(int foodPopularity) {
-        this.foodPopularity = foodPopularity;
-    }
-
-    public void setFearPopularity(int fearPopularity) {
-        this.fearPopularity = fearPopularity;
-    }
-
-    public void setTaxPopularity(int taxPopularity) {
-        this.taxPopularity = taxPopularity;
+    public void setKingHp(int kingHp) {
+        this.kingHp = kingHp;
     }
 
     public void addReligionPopularity(int religionPopularity) {

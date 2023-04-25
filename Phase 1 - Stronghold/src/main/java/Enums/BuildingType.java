@@ -44,8 +44,21 @@ public enum BuildingType {//fireRange will boost the range of the archers  || ca
     SHORT_WALL(400, "ShortWall", 0, 0, 0, 0, 1, "CastleBuildings", 1, 0, 0),
     TALL_WALL(600, "TallWall", 0, 0, 0, 0, 2, "CastleBuildings", 1, 0, 0),
     STAIRS(400, "Stairs", 0, 0, 0, 0, 3, "CastleBuildings", 1, 0, 0),
+    KEEP(0, "Keep", 0, 0, 0, 0, 0, "CastleBuildings", 40, 0, 15),
     FOOD_STOCK(250, "FoodStock", 0, 0, 5, 0, 0, "FoodProcessingBuildings", 250, 0, 0);
 
+
+    private final int hp;
+    private final String name;
+    private final int Workers;
+    private final int gold;
+    private final int wood;
+    private final int Iron;
+    private final int stone;
+    private final String type;
+    private final int rate;
+    private final int capacity;
+    private final int fireRange;
 
     BuildingType(int hp, String name, int workers, int gold, int wood, int iron, int stone, String type, int capacity, int rate, int fireRange) {
         this.hp = hp;
@@ -61,21 +74,17 @@ public enum BuildingType {//fireRange will boost the range of the archers  || ca
         this.fireRange = fireRange;
     }
 
+    public static BuildingType getBuildingByName(String name) {
+        for (BuildingType building : BuildingType.values()) {
+            if (name.equalsIgnoreCase(building.name))
+                return building;
+        }
+        return null;
+    }
+
     public int getRate() {
         return rate;
     }
-
-    private final int hp;
-    private final String name;
-    private final int Workers;
-    private final int gold;
-    private final int wood;
-    private final int Iron;
-    private final int stone;
-    private final String type;
-    private final int rate;
-    private final int capacity;
-    private int fireRange;
 
     public int getCapacity() {
         return capacity;
@@ -115,13 +124,5 @@ public enum BuildingType {//fireRange will boost the range of the archers  || ca
 
     public int getFireRange() {
         return fireRange;
-    }
-
-    public static BuildingType getBuildingByName(String name) {
-        for (BuildingType building : BuildingType.values()) {
-            if (name.equalsIgnoreCase(building.name))
-                return building;
-        }
-        return null;
     }
 }

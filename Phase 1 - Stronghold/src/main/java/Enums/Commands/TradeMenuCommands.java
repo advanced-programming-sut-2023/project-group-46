@@ -9,7 +9,7 @@ public enum TradeMenuCommands {
     ;//trade -m salam -w ale -g mace -wa 5 -ga 2(wa:wanted amount)(ga:given amount)
     private final String regex;
 
-    private TradeMenuCommands(String regex) {
+    TradeMenuCommands(String regex) {
         this.regex = regex;
     }
 

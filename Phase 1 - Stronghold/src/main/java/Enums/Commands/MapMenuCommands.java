@@ -8,9 +8,9 @@ public enum MapMenuCommands {
     MOVE_IN_MAP("^map ((up||left||down||right)\\s\\d+*)+$"),
     SHOW_DETAILS("^show details \\-x (?<x>\\d+) \\-y (?<y>\\d+)$");
 
-    private String regex;
+    private final String regex;
 
-    private MapMenuCommands(String regex) {
+    MapMenuCommands(String regex) {
         this.regex = regex;
     }
 

@@ -13,6 +13,10 @@ public class Cell {
         return building;
     }
 
+    public void setBuilding(Building building) {
+        this.building = building;
+    }
+
     public ArrayList<Machine> getMachines() {
         return machines;
     }
@@ -25,27 +29,23 @@ public class Cell {
         return type;
     }
 
-    public String getEnvironmentName() {
-        return environmentName;
-    }
-
-    public void setBuilding(Building building) {
-        this.building = building;
-    }
-
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getEnvironmentName() {
+        return environmentName;
     }
 
     public void setEnvironmentName(String environmentName) {
         this.environmentName = environmentName;
     }
 
-    public void setUnits(ArrayList<Unit> units) {
-        this.units = units;
+    public void addUnit(Unit unit) {
+        units.add(unit);
     }
 
-    public void setMachines(ArrayList<Machine> machines) {
-        this.machines = machines;
+    public void addMachine(Machine machine) {
+        machines.add(machine);
     }
 }

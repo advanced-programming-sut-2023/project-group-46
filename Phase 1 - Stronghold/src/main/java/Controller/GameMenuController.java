@@ -1,7 +1,6 @@
 package Controller;
 
 import Model.*;
-import View.GameMenu;
 
 import java.util.regex.Matcher;
 
@@ -12,6 +11,13 @@ public class GameMenuController {
     private Unit selectedUnit;
     private Machine selectedMachine;
 
+    public static Empire getCurrentEmpire() {
+        return currentEmpire;
+    }
+
+    public static Game getGame() {
+        return game;
+    }
 
     private void startANewGame(Matcher matcher) {
     }
@@ -49,17 +55,15 @@ public class GameMenuController {
     }
 
     private void pourOil(Matcher matcher) {
-    }// به این صورت که در arraylist سربازا ها فور زده بشه و همه مهندسا برن نفتشونو بریزن
+    }
 
     private void burnOil(Matcher matcher) {
-
     }
 
     private void digTunnel(Matcher matcher) {
     }
 
     private void buildEquipment(Matcher matcher) {
-
     }
 
     private void disbandUnit() {
@@ -69,11 +73,9 @@ public class GameMenuController {
         return null;
     }
 
-
     private String nextTurn() {
         return null;
     }
-
 
     private void checkFightUnits() {
     }
@@ -227,13 +229,5 @@ public class GameMenuController {
     }
 
     private void checkEndOfTheGame() {
-    }
-
-    public static Empire getCurrentEmpire() {
-        return currentEmpire;
-    }
-
-    public static Game getGame() {
-        return game;
     }
 }

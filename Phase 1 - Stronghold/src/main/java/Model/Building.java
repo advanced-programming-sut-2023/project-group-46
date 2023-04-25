@@ -4,12 +4,12 @@ import Controller.GameMenuController;
 import Enums.BuildingType;
 
 public class Building {
+    private final BuildingType buildingType;
+    private final Empire owner;
     private int hp;
     private String name;
     private int rate;
     private int freeCapacity;
-    private final BuildingType buildingType;
-    private final Empire owner;
     private String mode;//this is for the buildings like armourers that can produce different things
 
     public Building(BuildingType buildingType, Empire owner) {
@@ -48,20 +48,20 @@ public class Building {
         }
     }
 
-    public void setHp(int hp) {
-        this.hp = hp;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getHp() {
         return hp;
     }
 
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public BuildingType getBuildingType() {
@@ -72,31 +72,31 @@ public class Building {
         return owner;
     }
 
-    public void setFreeCapacity(int freeCapacity) {
-        this.freeCapacity = freeCapacity;
-    }
-
     public int getFreeCapacity() {
         return freeCapacity;
+    }
+
+    public void setFreeCapacity(int freeCapacity) {
+        this.freeCapacity = freeCapacity;
     }
 
     public void addFreeCapacity(int amount) {
         this.freeCapacity += amount;
     }
 
-    public void setRate(int rate) {
-        this.rate = rate;
-    }
-
     public int getRate() {
         return rate;
     }
 
-    public void setMode(String mode) {
-        this.mode = mode;
+    public void setRate(int rate) {
+        this.rate = rate;
     }
 
     public String getMode() {
         return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
     }
 }

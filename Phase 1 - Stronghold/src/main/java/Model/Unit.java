@@ -3,12 +3,12 @@ package Model;
 import Enums.UnitType;
 
 public class Unit {
-    private int hp;
-    private String name;
-    private String mode;
-    private int attackPower;
     private final UnitType unitType;
     private final Empire owner;
+    private int hp;
+    private final String name;
+    private String mode;
+    private int attackPower;
 
     public Unit(UnitType unitType, Empire owner) {
         this.owner = owner;
@@ -19,16 +19,12 @@ public class Unit {
         this.attackPower = (int) (unitType.getAttackPower() * (1 + (owner.getFearRate() * 0.1)));
     }
 
-    public void setHp(int hp) {
-        this.hp = hp;
-    }
-
-    public void setMode(String mode) {
-        this.mode = mode;
-    }
-
     public int getHp() {
         return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
     }
 
     public String getName() {
@@ -37,6 +33,10 @@ public class Unit {
 
     public String getMode() {
         return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
     }
 
     public UnitType getUnitType() {

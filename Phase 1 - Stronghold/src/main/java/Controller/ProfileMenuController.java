@@ -2,7 +2,6 @@ package Controller;
 
 import Enums.PreBuiltSecurityQuestions;
 import Model.User;
-import View.ProfileMenu;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,17 +14,19 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 
 public class ProfileMenuController {
-    private final ProfileMenu profileMenu;
-    public ProfileMenuController(){
-        profileMenu = new ProfileMenu(this);
-    }
 
     public String changeUsername(Matcher matcher) throws IOException {
         String newUsername = matcher.group("username");
 
-        if(newUsername.matches(".*[^a-zA-Z0-9|_].*"))
+        if (newUsername.matches(".*[^a-zA-Z0-9|_].*"))
             return "Invalid username format! Username is only consisted of English letters, numbers and underline character.";
 
+        changeUsernameAction(newUsername);
+
+        return "Username was changed successfully.";
+    }
+
+    public void changeUsernameAction(String newUsername) throws IOException {
         // get the currently logged in user
         User loggedInUser = LoginMenuController.getLoggedInUser();
 
@@ -55,12 +56,16 @@ public class ProfileMenuController {
 
         // write the updated contents of the JSONArray back to the users.json file
         Files.write(Paths.get("users.json"), usersArray.toString().getBytes());
-
-        return "Username was changed successfully.";
     }
 
     public String changeNickname(Matcher matcher) throws IOException {
         String newNickname = matcher.group("nickname");
+
+        changeNicknameAction(newNickname);
+        return "Nickname was changed successfully.";
+    }
+
+    public void changeNicknameAction(String newNickname) throws IOException {
 
         // get the currently logged in user
         User loggedInUser = LoginMenuController.getLoggedInUser();
@@ -92,56 +97,55 @@ public class ProfileMenuController {
         // write the updated contents of the JSONArray back to the users.json file
         Files.write(Paths.get("users.json"), usersArray.toString().getBytes());
 
-        return "Nickname was changed successfully.";
     }
 
     public String changePassword(Matcher matcher) throws IOException {
         String oldPassword = matcher.group("oldPassword");
         String newPassword = matcher.group("newPassword");
 
-
         newPassword = newPassword.trim();
-        if(newPassword.matches("^-n\\s.*$"))
-        {
+        if (newPassword.matches("^-n\\s.*$")) {
             newPassword = newPassword.substring(3);
-            while (newPassword.matches("^\\s.*$"))
-            {
+            while (newPassword.matches("^\\s.*$")) {
                 newPassword = newPassword.substring(1);
             }
         }
 
         oldPassword = oldPassword.trim();
-        if(oldPassword.matches("^-n\\s.*$"))
-        {
+        if (oldPassword.matches("^-o\\s.*$")) {
             oldPassword = oldPassword.substring(3);
-            while (oldPassword.matches("^\\s.*$"))
-            {
+            while (oldPassword.matches("^\\s.*$")) {
                 oldPassword = oldPassword.substring(1);
             }
         }
 
-        if(!LoginMenuController.getLoggedInUser().isPasswordCorrect(oldPassword))
+        if (!LoginMenuController.getLoggedInUser().isPasswordCorrect(oldPassword))
             return "Current password is incorrect!";
 
-        if(Objects.equals(oldPassword, newPassword))
+        if (Objects.equals(oldPassword, newPassword))
             return "Please enter a new password!";
 
-        if(newPassword.length() < 6)
+        if (newPassword.length() < 6)
             return "Weak password! Password length should be more than 5.";
 
-        if(!newPassword.matches(".*[a-z].*"))
+        if (!newPassword.matches(".*[a-z].*"))
             return "Weak password! Password should have at least one small English letter.";
 
-        if(!newPassword.matches(".*[A-Z].*"))
+        if (!newPassword.matches(".*[A-Z].*"))
             return "Weak password! Password should have at least one capital English letter.";
 
-        if(!newPassword.matches(".*[0-9].*"))
+        if (!newPassword.matches(".*[0-9].*"))
             return "Weak password! Password should have at least one digit.";
 
-        if(!newPassword.matches(".*[^a-zA-Z0-9|_].*"))
+        if (!newPassword.matches(".*[^a-zA-Z0-9|_].*"))
             return "Weak password! Password should have at least one character except english letters and digits.";
 
+        changePasswordAction(newPassword);
 
+        return "Password was changed successfully.";
+    }
+
+    public void changePasswordAction(String newPassword) throws IOException {
         // get the currently logged in user
         User loggedInUser = LoginMenuController.getLoggedInUser();
 
@@ -171,23 +175,24 @@ public class ProfileMenuController {
 
         // write the updated contents of the JSONArray back to the users.json file
         Files.write(Paths.get("users.json"), usersArray.toString().getBytes());
-
-        return "Password was changed successfully.";
     }
 
     public String changeEmail(Matcher matcher) throws Exception {
         String newEmail = matcher.group("email");
 
-        for(User user : User.getUsersFromJsonFile())
-        {
-            if(Objects.equals(user.getEmail(), newEmail))
+        for (User user : User.getUsersFromJsonFile()) {
+            if (Objects.equals(user.getEmail(), newEmail))
                 return "This email is already taken!";
         }
 
-        if(!newEmail.matches("^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$"))
+        if (!newEmail.matches("^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$"))
             return "Invalid email format!";
 
+        changeEmailAction(newEmail);
+        return "Email was changed successfully.";
+    }
 
+    public void changeEmailAction(String newEmail) throws IOException {
         // get the currently logged in user
         User loggedInUser = LoginMenuController.getLoggedInUser();
 
@@ -217,13 +222,16 @@ public class ProfileMenuController {
 
         // write the updated contents of the JSONArray back to the users.json file
         Files.write(Paths.get("users.json"), usersArray.toString().getBytes());
-
-        return "Email was changed successfully.";
     }
 
     public String changeSlogan(Matcher matcher) throws IOException {
         String newSlogan = matcher.group("slogan");
+        changeSloganAction(newSlogan);
 
+        return "Slogan was changed successfully.";
+    }
+
+    public void changeSloganAction(String newSlogan) throws IOException {
         // get the currently logged in user
         User loggedInUser = LoginMenuController.getLoggedInUser();
 
@@ -253,14 +261,12 @@ public class ProfileMenuController {
 
         // write the updated contents of the JSONArray back to the users.json file
         Files.write(Paths.get("users.json"), usersArray.toString().getBytes());
-
-        return "Slogan was changed successfully.";
     }
 
     public String removeSlogan() throws IOException {
         User loggedInUser = LoginMenuController.getLoggedInUser();
 
-        if(Objects.equals(loggedInUser.getSlogan(), ""))
+        if (Objects.equals(loggedInUser.getSlogan(), ""))
             return "You don't have a slogan to remove it!";
 
         // read the existing contents of the users.json file into a JSONArray
@@ -291,8 +297,7 @@ public class ProfileMenuController {
         return "Removed slogan successfully!";
     }
 
-    public String showUserHighScore()
-    {
+    public String showUserHighScore() {
         return "Highscore: " + LoginMenuController.getLoggedInUser().getHighScore();
     }
 
@@ -309,10 +314,8 @@ public class ProfileMenuController {
 
         int rank = 1;
 
-        for(int i = 1 ; i <= sortedUsers.size() ; i++)
-        {
-            if(sortedUsers.get(i-1) == LoginMenuController.getLoggedInUser())
-            {
+        for (int i = 1; i <= sortedUsers.size(); i++) {
+            if (sortedUsers.get(i - 1) == LoginMenuController.getLoggedInUser()) {
                 rank = i;
                 break;
             }
@@ -321,18 +324,16 @@ public class ProfileMenuController {
         return "Rank: " + rank;
     }
 
-    public String showUserSlogan()
-    {
+    public String showUserSlogan() {
         User loggedInUser = LoginMenuController.getLoggedInUser();
 
-        if(Objects.equals(loggedInUser.getSlogan(), ""))
+        if (Objects.equals(loggedInUser.getSlogan(), ""))
             return "Slogan is empty!";
 
         else return "Slogan: " + loggedInUser.getSlogan();
     }
 
-    public String showProfileInfo()
-    {
+    public String showProfileInfo() {
         User loggedInUser = LoginMenuController.getLoggedInUser();
 
         String info = "Username: ";
@@ -344,10 +345,10 @@ public class ProfileMenuController {
 
         info += "Email: " + loggedInUser.getEmail() + "\n";
 
-        info += "Security question: " + PreBuiltSecurityQuestions.getSecurityQuestionByNumber( loggedInUser.getNumberOfSecurityQuestion()) + "\n";
+        info += "Security question: " + PreBuiltSecurityQuestions.getSecurityQuestionByNumber(loggedInUser.getNumberOfSecurityQuestion()) + "\n";
         info += "Answer to security question: " + loggedInUser.getAnswerToSecurityQuestion();
 
-        if(Objects.equals(loggedInUser.getSlogan(), ""))
+        if (Objects.equals(loggedInUser.getSlogan(), ""))
             return info;
 
         else

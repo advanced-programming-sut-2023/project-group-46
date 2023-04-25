@@ -1,6 +1,7 @@
 package View;
 
 import Controller.GameMenuController;
+
 public class GameMenu {
     private final GameMenuController gameMenuController;
 

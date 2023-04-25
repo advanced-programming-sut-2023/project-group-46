@@ -1,7 +1,5 @@
 package Model;
 
-import java.util.ArrayList;
-
 public class Trade {
     private final String wantedResource;
     private final int wantedResourceAmount;

@@ -1,7 +1,6 @@
 package View;
 
 import Controller.MapMenuController;
-import Controller.ShopMenuController;
 import Enums.Commands.MapMenuCommands;
 
 import java.util.Scanner;

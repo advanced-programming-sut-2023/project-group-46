@@ -7,6 +7,14 @@ public enum MachineType {
     SIEGE_TOWER("medium", 0, 3300, "SiegeTower", 4, 150, 0),
     CATAPULT("medium", 650, 150, "Catapult", 2, 150, 30),
     FIRE_BALLISTA("medium", 100, 150, "FireBallista", 2, 150, 30);
+
+    private final String speed;
+    private final int attackPower;
+    private final int defencePower;
+    private final String name;
+    private final int engineerNumber;
+    private final int gold;
+    private final int attackRange;
     MachineType(String speed, int attackPower, int defencePower, String name, int engineerNumber, int gold, int attackRange) {
         this.speed = speed;
         this.attackPower = attackPower;
@@ -17,13 +25,13 @@ public enum MachineType {
         this.attackRange = attackRange;
     }
 
-    private final String speed;
-    private final int attackPower;
-    private final int defencePower;
-    private final String name;
-    private final int engineerNumber;
-    private final int gold;
-    private final int attackRange;
+    public static MachineType getMachineByName(String name) {
+        for (MachineType machine : MachineType.values()) {
+            if (name.equalsIgnoreCase(machine.name))
+                return machine;
+        }
+        return null;
+    }
 
     public int getAttackRange() {
         return attackRange;
@@ -51,13 +59,5 @@ public enum MachineType {
 
     public int getGold() {
         return gold;
-    }
-
-    public static MachineType getMachineByName(String name) {
-        for (MachineType machine : MachineType.values()) {
-            if (name.equalsIgnoreCase(machine.name))
-                return machine;
-        }
-        return null;
     }
 }
