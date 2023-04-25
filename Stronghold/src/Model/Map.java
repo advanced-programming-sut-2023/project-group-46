@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Map {
 
+    private ArrayList<int[]> empireCoordinates= new ArrayList<>();
     private int size;
     private String name;
     private int numberOfPlayers;
@@ -16,8 +17,8 @@ public class Map {
         map= new Cell[size][size];
     }
 
-    {
-        //TODO define the maps
+    public ArrayList<int[]> getEmpireCoordinates() {
+        return empireCoordinates;
     }
 
     public int getSize() {

@@ -1,9 +1,7 @@
 package Controller;
 
-import Model.EditMapMenuCommands;
-import Model.EnvironmentType;
+import Model.*;
 import View.EditMapMenu;
-import Model.Map;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -75,9 +73,44 @@ public class EditMapMenuController {
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         if ((x < 0 && y < 0) || (x >= map.getSize() && y >= map.getSize())) return "Invalid coordinate";
-        if(!EnvironmentType.getEnvironmentTypeByName(map.getMap()[x][y].getType()).isDropTree()) return "Invalid cell type";
+        if (!EnvironmentType.getEnvironmentTypeByName(map.getMap()[x][y].getType()).isDropTree())
+            return "Invalid cell type";
         String type = matcher.group("type");
         map.getMap()[x][y].setEnvironmentName(type);
         return "Success";
+    }
+
+    public String dropBuilding(Matcher matcher) {
+        int x = Integer.parseInt(matcher.group("x"));
+        int y = Integer.parseInt(matcher.group("y"));
+        if ((x < 0 && y < 0) || (x >= map.getSize() && y >= map.getSize())) return "Invalid coordinate";
+        if (map.getMap()[x][y].getBuilding() != null) return "Not empty";
+        String type = matcher.group("type");
+        if (!EnvironmentType.getEnvironmentTypeByName(map.getMap()[x][y].getType()).isDropBuilding())
+            return "Invalid cell type";
+        if(type.equals("Keep") && map.getEmpireCoordinates().size() == 8) return "Too much keepBuilding";
+        Building building = new Building(BuildingType.getBuildingByName(type), null);
+        map.getMap()[x][y].setBuilding(building);
+        int[] coordinates= {x, y};
+        map.getEmpireCoordinates().add(coordinates);
+        return "Success";
+    }
+
+    public String dropUnit(Matcher matcher) {
+        int x = Integer.parseInt(matcher.group("x"));
+        int y = Integer.parseInt(matcher.group("y"));
+        if ((x < 0 && y < 0) || (x >= map.getSize() && y >= map.getSize())) return "Invalid coordinate";
+        String type = matcher.group("type");
+        int count = Integer.parseInt(matcher.group("count"));
+        Unit unit = new Unit(UnitType.getUnitByName(type), null);
+        for (int i = 0; i < count; i++) {
+            map.getMap()[x][y].addUnit(unit);
+        }
+        return "success";
+    }
+
+    public String checkCountEmpires(){
+        if(map.getEmpireCoordinates().size() < 2) return "Need more keepBuilding";
+        return "";
     }
 }

@@ -41,11 +41,11 @@ public class Cell {
         this.environmentName = environmentName;
     }
 
-    public void setUnits(ArrayList<Unit> units) {
-        this.units = units;
+    public void addUnit(Unit unit) {
+        units.add(unit);
     }
 
-    public void setMachines(ArrayList<Machine> machines) {
-        this.machines = machines;
+    public void addMachine(Machine machine) {
+        machines.add(machine);
     }
 }
