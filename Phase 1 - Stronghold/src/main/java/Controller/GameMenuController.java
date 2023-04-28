@@ -19,62 +19,53 @@ public class GameMenuController {
         return game;
     }
 
-    private void startANewGame(Matcher matcher) {
-    }
-
-    private void dropBuilding(Matcher matcher) {
-    }
-
-    private Building selectBuilding(Matcher matcher) {
+    public String startANewGame(String command) {
         return null;
     }
 
-    private void createUnit(Matcher matcher) {
+    public void dropBuilding(Matcher matcher) {
     }
 
-    private void repair() {
+    public void selectBuilding(Matcher matcher) {
     }
 
-    private Unit selectUnit(Matcher matcher) {
-        return null;
+    public void repair() {
     }
 
-    private void moveUnit(Matcher matcher) {
+    public void selectUnit(Matcher matcher) {
     }
 
-    private void patrolUnit(Matcher matcher) {
+    public void moveUnit(Matcher matcher) {
     }
 
-    private void setUnitMode(Matcher matcher) {
+    public void patrolUnit(Matcher matcher) {
     }
 
-    private void attackEnemy(Matcher matcher) {
+    public void setUnitMode(Matcher matcher) {
     }
 
-    private void attackLocation(Matcher matcher) {
+    public void attackEnemy(Matcher matcher) {
     }
 
-    private void pourOil(Matcher matcher) {
+    public void attackLocation(Matcher matcher) {
     }
 
-    private void burnOil(Matcher matcher) {
+    public void pourOil(Matcher matcher) {
     }
 
-    private void digTunnel(Matcher matcher) {
+    public void burnOil(Matcher matcher) {
     }
 
-    private void buildEquipment(Matcher matcher) {
+    public void digTunnel(Matcher matcher) {
     }
 
-    private void disbandUnit() {
+    public void buildEquipment(Matcher matcher) {
     }
 
-    private String dropUnit(Matcher matcher) {
-        return null;
+    public void disbandUnit() {
     }
 
-    private String nextTurn() {
-        return null;
+    public void nextTurn() {
     }
 
     private void checkFightUnits() {

@@ -15,8 +15,8 @@ public class LoginMenu {
     private final SignUpMenuController signUpMenuController = new SignUpMenuController();
     private final SignupMenu signupMenu = new SignupMenu(signUpMenuController);
 
-    public LoginMenu(LoginMenuController empireMenuController) {
-        this.loginMenuController = empireMenuController;
+    public LoginMenu(LoginMenuController loginMenuController) {
+        this.loginMenuController = loginMenuController;
     }
 
     public void run() throws Exception {
@@ -35,12 +35,8 @@ public class LoginMenu {
             } else if ((matcher = LoginMenuCommands.getMatcher(command, LoginMenuCommands.LOGGING_IN)) != null) {
                 result = loginMenuController.login(matcher);
                 System.out.println(result);
-
-                //TODO
-                //change this part when main menu is completed
-                ProfileMenu profileMenu = new ProfileMenu(new ProfileMenuController());
                 if (Objects.equals(result, "user logged in successfully!"))
-                    profileMenu.run();
+                    mainMenu.run();
 
             } else if ((matcher = LoginMenuCommands.getMatcher(command, LoginMenuCommands.FORGOT_PASSWORD)) != null) {
                 result = loginMenuController.forgetPassword(matcher);

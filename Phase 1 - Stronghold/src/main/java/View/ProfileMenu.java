@@ -13,7 +13,6 @@ public class ProfileMenu {
     }
 
     public void run() throws Exception {
-
         Matcher matcher;
         String command;
 
