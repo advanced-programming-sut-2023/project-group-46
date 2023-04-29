@@ -232,10 +232,10 @@ public class GameMenuController {
         }
     }
 
-    public void moveUnit(Matcher matcher) {
+    public void moveUnit(Matcher matcher) {//amir
     }
 
-    public void patrolUnit(Matcher matcher) {
+    public void patrolUnit(Matcher matcher) {//amir
     }
 
     public void setUnitMode(Matcher matcher) {
@@ -248,13 +248,13 @@ public class GameMenuController {
         }
     }
 
-    public void attackEnemy(Matcher matcher) {
+    public void attackEnemy(Matcher matcher) {//mohammad.h
     }
 
-    public void attackLocation(Matcher matcher) {
+    public void attackLocation(Matcher matcher) {//mohammad.h
     }
 
-    public void pourOil(Matcher matcher) {
+    public void pourOil(Matcher matcher) {//mohammad.h
     }
 
     public String createUnit(Matcher matcher) {
