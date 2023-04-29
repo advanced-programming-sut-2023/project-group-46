@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class Cell {
     private Building building;
     private ArrayList<Unit> units;
-    private ArrayList<Machine> machines;
     private String type;
     private String environmentName;
 
@@ -15,10 +14,6 @@ public class Cell {
 
     public void setBuilding(Building building) {
         this.building = building;
-    }
-
-    public ArrayList<Machine> getMachines() {
-        return machines;
     }
 
     public ArrayList<Unit> getUnits() {
@@ -45,7 +40,4 @@ public class Cell {
         units.add(unit);
     }
 
-    public void addMachine(Machine machine) {
-        machines.add(machine);
-    }
 }

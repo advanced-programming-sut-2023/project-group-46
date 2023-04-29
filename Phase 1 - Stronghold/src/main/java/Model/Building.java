@@ -7,14 +7,12 @@ public class Building {
     private final BuildingType buildingType;
     private final Empire owner;
     private int hp;
-    private String name;
     private int rate;
     private int freeCapacity;
     private String mode;//this is for the buildings like armourers that can produce different things
 
     public Building(BuildingType buildingType, Empire owner) {
         this.owner = owner;
-        this.name = buildingType.getName();
         this.hp = buildingType.getHp();
         this.freeCapacity = buildingType.getCapacity();
         this.buildingType = buildingType;
@@ -37,6 +35,9 @@ public class Building {
         if (buildingType.getName().equals("Armoury")) {
             GameMenuController.getCurrentEmpire().getArmoury().addFreeCapacityArmoury(50);
         }
+        if (buildingType.getName().equals("Stable")) {
+            GameMenuController.getCurrentEmpire().getArmoury().addHorse(4);
+        }
         if (buildingType.getName().equals("FoodStock")) {
             GameMenuController.getCurrentEmpire().getFoodStock().addFreeCapacityFoodStock(250);
         }
@@ -54,14 +55,6 @@ public class Building {
 
     public void setHp(int hp) {
         this.hp = hp;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public BuildingType getBuildingType() {

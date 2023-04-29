@@ -84,8 +84,8 @@ public class EditMapMenuController {
         if ((x < 0 && y < 0) || (x >= map.getSize() && y >= map.getSize())) return "Invalid coordinate";
         if (map.getMap()[x][y].getBuilding() != null) return "Not empty";
         String type = matcher.group("type");
-        if (!EnvironmentType.getEnvironmentTypeByName(map.getMap()[x][y].getType()).isDropBuilding())
-            return "Invalid cell type";
+    //    if (!EnvironmentType.getEnvironmentTypeByName(map.getMap()[x][y].getType()).isDropBuilding())
+       //     return "Invalid cell type";
         if (type.equals("Keep") && map.getEmpireCoordinates().size() == 8) return "Too much keepBuildings";
         Building building = new Building(BuildingType.getBuildingByName(type), null);
         map.getMap()[x][y].setBuilding(building);
@@ -112,3 +112,7 @@ public class EditMapMenuController {
         return "";
     }
 }
+// هندل نکردن ارور های اینولید بودن موارد ورودی در کامند
+// هندل نکردن ارور های مربوط به خالی بوذن زمین برای دراپ بیلدینگ
+// کلاس سل باید environmatetype از جنس enum مربوطه باشد
+// اینولید کوردینیت ها اشتباه چک شده اند

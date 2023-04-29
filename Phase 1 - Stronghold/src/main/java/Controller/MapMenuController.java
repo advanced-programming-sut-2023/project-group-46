@@ -2,7 +2,6 @@ package Controller;
 
 import Enums.EnvironmentType;
 import Model.Cell;
-import Model.Machine;
 import Model.Map;
 import Model.Unit;
 import View.MapMenu;
@@ -157,12 +156,9 @@ public class MapMenuController {
         int y = Integer.parseInt(matcher.group("y"));
         String stringShowDetail = "type : " + map.getMap()[x][y].getType();
         if (map.getMap()[x][y].getBuilding() != null)
-            stringShowDetail += "\nbuilding : " + map.getMap()[x][y].getBuilding().getName();
+            stringShowDetail += "\nbuilding : " + map.getMap()[x][y].getBuilding().getBuildingType().getName();
         for (Unit unit : map.getMap()[x][y].getUnits()) {
-            if (unit != null) stringShowDetail += "\nUnit : " + unit.getName();
-        }
-        for (Machine machine : map.getMap()[x][y].getMachines()) {
-            if (machine != null) stringShowDetail += "\nmachine : " + machine.getName();
+            if (unit != null) stringShowDetail += "\nUnit : " + unit.getUnitType().getName();
         }
         if (map.getMap()[x][y].getEnvironmentName() != null && !map.getMap()[x][y].getEnvironmentName().equals("rock"))
             stringShowDetail += "\nrecourse : wood";

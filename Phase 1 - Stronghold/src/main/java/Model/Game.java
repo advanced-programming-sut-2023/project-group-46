@@ -53,14 +53,6 @@ public class Game {
         return empires;
     }
 
-    public void setEmpires(ArrayList<Empire> empires) {
-        this.empires = empires;
-    }
-
-    public Cell[][] getMapGame() {
-        return map;
-    }
-
     public Empire getEmpireById(int id) {
         for (Empire empire : empires) {
             if (empire.getEmpireId() == id)

@@ -14,7 +14,6 @@ public class Map {
         this.name = name;
         map = new Cell[size][size];
     }
-
     public ArrayList<int[]> getEmpireCoordinates() {
         return empireCoordinates;
     }

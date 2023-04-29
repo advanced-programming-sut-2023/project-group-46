@@ -6,13 +6,11 @@ public class Unit {
     private final UnitType unitType;
     private final Empire owner;
     private int hp;
-    private final String name;
     private String mode;
     private int attackPower;
 
     public Unit(UnitType unitType, Empire owner) {
         this.owner = owner;
-        this.name = unitType.getName();
         this.hp = unitType.getDefencePower();
         this.unitType = unitType;
         this.mode = "standing";
@@ -25,10 +23,6 @@ public class Unit {
 
     public void setHp(int hp) {
         this.hp = hp;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getMode() {

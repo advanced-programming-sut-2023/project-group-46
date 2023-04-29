@@ -12,6 +12,19 @@ public class Resources {
     private int pitch;
     private int freeCapacityStockpile;
 
+    public Resources(int gold, int wheat, int flour, int hop, int ale, int stone, int iron, int wood, int pitch, int freeCapacityStockpile) {
+        this.gold = gold;
+        this.wheat = wheat;
+        this.flour = flour;
+        this.hop = hop;
+        this.ale = ale;
+        this.stone = stone;
+        this.iron = iron;
+        this.wood = wood;
+        this.pitch = pitch;
+        this.freeCapacityStockpile = freeCapacityStockpile;
+    }
+
     public int getGold() {
         return gold;
     }
