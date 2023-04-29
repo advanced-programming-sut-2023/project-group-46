@@ -1,18 +1,20 @@
 package Controller;
 
-import Enums.BuildingType;
-import Enums.EnvironmentType;
-import Enums.UnitType;
-import Model.Building;
-import Model.Map;
-import Model.Unit;
+import Model.*;
+import View.EditMapMenu;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class EditMapMenuController {
     private Map map;
+    private final EditMapMenu editMapMenu;
+
+    public EditMapMenuController() {
+        editMapMenu = new EditMapMenu(this);
+    }
 
     public String setTexture(Matcher matcher) {
         int x = Integer.parseInt(matcher.group("x"));
@@ -84,12 +86,12 @@ public class EditMapMenuController {
         if ((x < 0 && y < 0) || (x >= map.getSize() && y >= map.getSize())) return "Invalid coordinate";
         if (map.getMap()[x][y].getBuilding() != null) return "Not empty";
         String type = matcher.group("type");
-    //    if (!EnvironmentType.getEnvironmentTypeByName(map.getMap()[x][y].getType()).isDropBuilding())
-       //     return "Invalid cell type";
-        if (type.equals("Keep") && map.getEmpireCoordinates().size() == 8) return "Too much keepBuildings";
+        if (!EnvironmentType.getEnvironmentTypeByName(map.getMap()[x][y].getType()).isDropBuilding())
+            return "Invalid cell type";
+        if(type.equals("Keep") && map.getEmpireCoordinates().size() == 8) return "Too much keepBuilding";
         Building building = new Building(BuildingType.getBuildingByName(type), null);
         map.getMap()[x][y].setBuilding(building);
-        int[] coordinates = {x, y};
+        int[] coordinates= {x, y};
         map.getEmpireCoordinates().add(coordinates);
         return "Success";
     }
@@ -107,12 +109,8 @@ public class EditMapMenuController {
         return "success";
     }
 
-    public String checkCountEmpires() {
-        if (map.getEmpireCoordinates().size() < 2) return "Need more keepBuilding";
+    public String checkCountEmpires(){
+        if(map.getEmpireCoordinates().size() < 2) return "Need more keepBuilding";
         return "";
     }
 }
-// هندل نکردن ارور های اینولید بودن موارد ورودی در کامند
-// هندل نکردن ارور های مربوط به خالی بوذن زمین برای دراپ بیلدینگ
-// کلاس سل باید environmatetype از جنس enum مربوطه باشد
-// اینولید کوردینیت ها اشتباه چک شده اند
