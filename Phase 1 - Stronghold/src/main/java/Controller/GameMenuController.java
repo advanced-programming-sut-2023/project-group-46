@@ -104,7 +104,7 @@ public class GameMenuController {
         if (BuildingType.getBuildingByName(buildingName) == null) {
             return "invalid building type";
         }
-        if (x > map.getSize() || x < 0 || y > map.getSize() || y < 0) {
+        if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
             return "invalid coordinate";
         }
         if (map.getMap()[x][y].getBuilding() != null || map.getMap()[x][y].getUnits() != null || map.getMap()[x][y].getEnvironmentName() != null) {
@@ -184,7 +184,7 @@ public class GameMenuController {
     public String selectBuilding(Matcher matcher) {
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
-        if (x > map.getSize() || x < 0 || y > map.getSize() || y < 0) {
+        if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
             return "invalid coordinate";
         }
         if (map.getMap()[x][y].getBuilding() == null) {
@@ -222,9 +222,12 @@ public class GameMenuController {
         return "success";
     }
 
-    public void selectUnit(Matcher matcher) {
+    public String selectUnit(Matcher matcher) {
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
+        if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
+            return "invalid coordinate";
+        }
         selectedUnits.clear();
         selectedCoordinates.put("unit", new int[]{x, y});
         for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
@@ -232,6 +235,7 @@ public class GameMenuController {
                 selectedUnits.add(map.getMap()[x][y].getUnits().get(i));
             }
         }
+        return "success";
     }
 
     public void setUnitMode(Matcher matcher) {
@@ -244,10 +248,68 @@ public class GameMenuController {
         }
     }
 
-    public void attackEnemy(Matcher matcher) {//mohammad.h
+    public String attackEnemy(Matcher matcher) {//archers will stay and give damage them amd other will go and damage one of the enemies randomly
+        int x = Integer.parseInt(matcher.group("x"));
+        int y = Integer.parseInt(matcher.group("y"));
+        if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
+            return "invalid coordinate";
+        }
+        if (selectedUnits.size() == 0) {
+            return "you should select a unit first";
+        }
+        int distance = distance(x, y, selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1]);
+        for (Unit selectedUnit : selectedUnits) {
+            int damage = selectedUnit.getUnitType().getAttackPower();
+            if (selectedUnit.getUnitType().getAttackRange() == 0) {
+                if (distance <= selectedUnit.getUnitType().getSpeed()) {
+                    boolean bool = true;
+                    while (bool) {
+                        int index = (int) (Math.random() * map.getMap()[x][y].getUnits().size());
+                        if (!map.getMap()[x][y].getUnits().get(index).getOwner().equals(currentEmpire)) {
+                            map.getMap()[x][y].getUnits().get(index).getDamage(damage);
+                            bool = false;
+                        }
+                    }
+                }
+            } else {
+                if (distance <= selectedUnit.getUnitType().getAttackRange()) {
+                    for (int j = 0; j < map.getMap()[x][y].getUnits().size(); j++) {
+                        if (map.getMap()[x][y].getUnits().get(j).getOwner().equals(currentEmpire)) {
+                            continue;
+                        }
+                        map.getMap()[x][y].getUnits().get(j).getDamage(damage);
+                    }
+                }
+            }
+        }
+        return "success";
     }
 
-    public void attackLocation(Matcher matcher) {//mohammad.h
+    public int distance(int x1, int y1, int x2, int y2) {
+        return Math.abs(x1 - x2) + Math.abs(y1 - y2);
+    }
+
+    public String attackLocation(Matcher matcher) {//tir baran!!
+        int x = Integer.parseInt(matcher.group("x"));
+        int y = Integer.parseInt(matcher.group("y"));
+        if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
+            return "invalid coordinate";
+        }
+        if (selectedUnits.size() == 0) {
+            return "you should select a unit first";
+        }
+        for (Unit selectedUnit : selectedUnits) {
+            if (selectedUnit.getUnitType().getAttackRange() < distance(x, y, selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1])) {
+                int damage = selectedUnit.getUnitType().getAttackPower();
+                for (int j = 0; j < map.getMap()[x][y].getUnits().size(); j++) {
+                    if (map.getMap()[x][y].getUnits().get(j).getOwner().equals(currentEmpire)) {
+                        continue;
+                    }
+                    map.getMap()[x][y].getUnits().get(j).getDamage(damage);
+                }
+            }
+        }
+        return "success";
     }
 
     public void pourOil(Matcher matcher) {//mohammad.h

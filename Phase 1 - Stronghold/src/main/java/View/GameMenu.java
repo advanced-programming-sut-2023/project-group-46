@@ -42,13 +42,13 @@ public class GameMenu {
                 ShopMenu shopMenu = new ShopMenu(new ShopMenuController());
                 shopMenu.run();
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.SELECT_UNIT_REGEX)) != null) {
-                gameMenuController.selectUnit(matcher);
+                System.out.println(gameMenuController.selectUnit(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.ATTACK_ARCHER_REGEX)) != null) {
-                gameMenuController.attackLocation(matcher);
+                System.out.println(gameMenuController.attackLocation(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.BUILD_REGEX)) != null) {
                 System.out.println(gameMenuController.buildEquipment(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.ATTACK_SPECIAL_ENEMY_REGEX)) != null) {
-                gameMenuController.attackEnemy(matcher);
+                System.out.println(gameMenuController.attackEnemy(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.DIG_TUNNEL_REGEX)) != null) {
                 gameMenuController.digTunnel(matcher);
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.DROP_BUILDING_REGEX)) != null) {

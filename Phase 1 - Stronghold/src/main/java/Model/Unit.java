@@ -21,8 +21,8 @@ public class Unit {
         return hp;
     }
 
-    public void setHp(int hp) {
-        this.hp = hp;
+    public void getDamage(int hp) {
+        this.hp -= hp;
     }
 
     public String getMode() {
