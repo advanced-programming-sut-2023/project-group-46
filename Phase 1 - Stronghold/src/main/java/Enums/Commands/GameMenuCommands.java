@@ -15,7 +15,8 @@ public enum GameMenuCommands {
     DIG_TUNNEL_REGEX("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^dig tunnel( *-[xy] \\d+){2}$"),
     BUILD_REGEX("^build -q (?<equipment>.+)$"),
     SET_UNIT_MODE_REGEX("^set -s (?<mode>\\S+)$"),
-    CREATE_UNIT_REGEX("(?=.* -t (?<type>\\S+))(?=.* -c (?<count>\\S+))^createunit( *-[tc] \\S+){2}$");
+    CREATE_UNIT_REGEX("(?=.* -t (?<type>\\S+))(?=.* -c (?<count>\\S+))^createunit( *-[tc] \\S+){2}$"),
+    CHANGE_MODE_ARMOUR_BUILDING_REGEX("^change mode -m (?<mode>\\S+)$");
 
     private final String regex;
 

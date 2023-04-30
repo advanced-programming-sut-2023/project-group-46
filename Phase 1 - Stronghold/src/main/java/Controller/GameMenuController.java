@@ -88,11 +88,13 @@ public class GameMenuController {
             game = new Game(map.getMap());
             for (int i = 0; i < usernames.length; i++) {
                 game.getEmpires().add(new Empire(User.getUserByUsername(usernames[i]), i, map.getEmpireCoordinates().get(i)[0], map.getEmpireCoordinates().get(i)[1]));
+                game.getEmpires().get(i).getBuildings().add(map.getMap()[map.getEmpireCoordinates().get(i)[0]][map.getEmpireCoordinates().get(i)[1]].getBuilding());
+                map.getMap()[map.getEmpireCoordinates().get(i)[0] + 1][map.getEmpireCoordinates().get(i)[1]].setBuilding(new Building(BuildingType.getBuildingByName("Stockpile"), game.getEmpires().get(i)));//add stockpile for start of the game
+                game.getEmpires().get(i).getBuildings().add(map.getMap()[map.getEmpireCoordinates().get(i)[0] + 1][map.getEmpireCoordinates().get(i)[1]].getBuilding());
             }
             currentEmpire = game.getEmpires().get(0);
             return "Game Started";
         }
-        //TODO check for drop keep building and also first stockpiles
     }
 
     public String dropBuilding(Matcher matcher) {
@@ -212,10 +214,10 @@ public class GameMenuController {
         if (anyEnemyNear(selectedCoordinates.get("building")[0], selectedCoordinates.get("building")[1])) {
             return "you can't repair your building while enemies are here";
         }
-        if (currentEmpire.getResources().getStone() < (selectedBuilding.getBuildingType().getHp() - selectedBuilding.getHp()) / 500) {//TODO saghf function
+        if (currentEmpire.getResources().getStone() < (Math.ceil(selectedBuilding.getBuildingType().getHp() - selectedBuilding.getHp()) / 500)) {
             return "not enough stone to repair this building";
         }
-        currentEmpire.getResources().addResource("stone", (selectedBuilding.getBuildingType().getHp() - selectedBuilding.getHp()) / 500);
+        currentEmpire.getResources().addResource("stone", -1 * (int) (Math.ceil(selectedBuilding.getBuildingType().getHp() - selectedBuilding.getHp()) / 500));
         selectedBuilding.setHp(selectedBuilding.getBuildingType().getHp());
         return "success";
     }
@@ -230,12 +232,6 @@ public class GameMenuController {
                 selectedUnits.add(map.getMap()[x][y].getUnits().get(i));
             }
         }
-    }
-
-    public void moveUnit(Matcher matcher) {//amir
-    }
-
-    public void patrolUnit(Matcher matcher) {//amir
     }
 
     public void setUnitMode(Matcher matcher) {
@@ -260,79 +256,96 @@ public class GameMenuController {
     public String createUnit(Matcher matcher) {
         String type = matcher.group("type");
         int count = Integer.parseInt(matcher.group("count"));
-        int cost = UnitType.getUnitByName(type).getCost() * count;
-        if (!selectedBuilding.getBuildingType().getName().equals("MercenaryPost") && !selectedBuilding.getBuildingType().getName().equals("Barrack") && !selectedBuilding.getBuildingType().getName().equals("EngineerGuild")) {
-            return "select proper building";
-        }
         if (UnitType.getUnitByName(type) == null) {
             return "invalid name for unit";
         }
-        if (selectedBuilding.getBuildingType().getName().equals("Barrack")) {
-            if (!type.equals("Archer") && !type.equals("Crossbowman") && !type.equals("Spearman") && !type.equals("Pikeman") && !type.equals("Maceman") && !type.equals("Swordsman") && !type.equals("Knight")) {
-                return "Barrack can't create " + type;
+        int cost = UnitType.getUnitByName(type).getCost() * count;
+        if (!selectedBuilding.getBuildingType().getName().equals("MercenaryPost") && !selectedBuilding.getBuildingType().getName().equals("Barrack") && !selectedBuilding.getBuildingType().getName().equals("EngineerGuild") && !selectedBuilding.getBuildingType().getName().equals("Cathedral")) {
+            return "select proper building";
+        }
+        if (count > currentEmpire.getUnemployedPeople()) {
+            return "not enough unemployed people";
+        }
+        switch (selectedBuilding.getBuildingType().getName()) {
+            case "Barrack" -> {
+                if (!type.equals("Archer") && !type.equals("Crossbowman") && !type.equals("Spearman") && !type.equals("Pikeman") && !type.equals("Maceman") && !type.equals("Swordsman") && !type.equals("Knight")) {
+                    return "Barrack can't create " + type;
+                }
+                if (currentEmpire.getResources().getGold() < cost) {
+                    return "not enough gold";
+                }
+                switch (type) {
+                    case "Archer" -> {
+                        if (currentEmpire.getArmoury().getBow() < count) {
+                            return "weapons needed";
+                        }
+                        currentEmpire.getArmoury().addArmoury("bow", -1 * count);
+                    }
+                    case "Crossbowman" -> {
+                        if (currentEmpire.getArmoury().getLeatherArmor() < count || currentEmpire.getArmoury().getCrossbow() < count) {
+                            return "weapons needed";
+                        }
+                        currentEmpire.getArmoury().addArmoury("crossbow", -1 * count);
+                        currentEmpire.getArmoury().addArmoury("leatherArmor", -1 * count);
+                    }
+                    case "Spearman" -> {
+                        if (currentEmpire.getArmoury().getSpear() < count) {
+                            return "weapons needed";
+                        }
+                        currentEmpire.getArmoury().addArmoury("spear", -1 * count);
+                    }
+                    case "Pikeman" -> {
+                        if (currentEmpire.getArmoury().getPike() < count || currentEmpire.getArmoury().getMetalArmor() < count) {
+                            return "weapons needed";
+                        }
+                        currentEmpire.getArmoury().addArmoury("pike", -1 * count);
+                        currentEmpire.getArmoury().addArmoury("metalArmor", -1 * count);
+                    }
+                    case "Maceman" -> {
+                        if (currentEmpire.getArmoury().getMace() < count || currentEmpire.getArmoury().getLeatherArmor() < count) {
+                            return "weapons needed";
+                        }
+                        currentEmpire.getArmoury().addArmoury("mace", -1 * count);
+                        currentEmpire.getArmoury().addArmoury("leatherArmor", -1 * count);
+                    }
+                    case "Swordsman" -> {
+                        if (currentEmpire.getArmoury().getSword() < count || currentEmpire.getArmoury().getMetalArmor() < count) {
+                            return "weapons needed";
+                        }
+                        currentEmpire.getArmoury().addArmoury("sword", -1 * count);
+                        currentEmpire.getArmoury().addArmoury("metalArmor", -1 * count);
+                    }
+                    case "Knight" -> {
+                        if (currentEmpire.getArmoury().getSword() < count || currentEmpire.getArmoury().getMetalArmor() < count || currentEmpire.getArmoury().getHorse() < count) {
+                            return "weapons needed";
+                        }
+                        currentEmpire.getArmoury().addArmoury("sword", -1 * count);
+                        currentEmpire.getArmoury().addArmoury("metalArmor", -1 * count);
+                        currentEmpire.getArmoury().addHorse(-1 * count);
+                    }
+                }
             }
-            if (currentEmpire.getResources().getGold() < cost) {
-                return "not enough gold";
+            case "MercenaryPost" -> {
+                if (!type.equals("FireThrower") && !type.equals("ArcherBow") && !type.equals("Slaves") && !type.equals("Slinger") && !type.equals("Assassin") && !type.equals("HorseArcher") && !type.equals("ArabianSwordsmen")) {
+                    return "MercenaryPost can't create " + type;
+                }
             }
-            if (type.equals("Archer")) {
-                if (currentEmpire.getArmoury().getBow() < count) {
-                    return "weapons needed";
+            case "EngineerGuild" -> {
+                if (!type.equals("Ladderman") && !type.equals("Engineer")) {
+                    return "EngineerGuild can't create " + type;
                 }
-                currentEmpire.getArmoury().addArmoury("bow", -1 * count);
-            } else if (type.equals("Crossbowman")) {
-                if (currentEmpire.getArmoury().getLeatherArmor() < count || currentEmpire.getArmoury().getCrossbow() < count) {
-                    return "weapons needed";
-                }
-                currentEmpire.getArmoury().addArmoury("crossbow", -1 * count);
-                currentEmpire.getArmoury().addArmoury("leatherArmor", -1 * count);
-            } else if (type.equals("Spearman")) {
-                if (currentEmpire.getArmoury().getSpear() < count) {
-                    return "weapons needed";
-                }
-                currentEmpire.getArmoury().addArmoury("spear", -1 * count);
-            } else if (type.equals("Pikeman")) {
-                if (currentEmpire.getArmoury().getPike() < count || currentEmpire.getArmoury().getMetalArmor() < count) {
-                    return "weapons needed";
-                }
-                currentEmpire.getArmoury().addArmoury("pike", -1 * count);
-                currentEmpire.getArmoury().addArmoury("metalArmor", -1 * count);
-            } else if (type.equals("Maceman")) {
-                if (currentEmpire.getArmoury().getMace() < count || currentEmpire.getArmoury().getLeatherArmor() < count) {
-                    return "weapons needed";
-                }
-                currentEmpire.getArmoury().addArmoury("mace", -1 * count);
-                currentEmpire.getArmoury().addArmoury("leatherArmor", -1 * count);
-            } else if (type.equals("Swordsman")) {
-                if (currentEmpire.getArmoury().getSword() < count || currentEmpire.getArmoury().getMetalArmor() < count) {
-                    return "weapons needed";
-                }
-                currentEmpire.getArmoury().addArmoury("sword", -1 * count);
-                currentEmpire.getArmoury().addArmoury("metalArmor", -1 * count);
-            } else if (type.equals("Knight")) {
-                if (currentEmpire.getArmoury().getSword() < count || currentEmpire.getArmoury().getMetalArmor() < count || currentEmpire.getArmoury().getHorse() < count) {
-                    return "weapons needed";
-                }
-                currentEmpire.getArmoury().addArmoury("sword", -1 * count);
-                currentEmpire.getArmoury().addArmoury("metalArmor", -1 * count);
-                currentEmpire.getArmoury().addHorse(-1 * count);
             }
-        } else if (selectedBuilding.getBuildingType().getName().equals("MercenaryPost")) {
-            if (!type.equals("FireThrower") && !type.equals("ArcherBow") && !type.equals("Slaves") && !type.equals("Slinger") && !type.equals("Assassin") && !type.equals("HorseArcher") && !type.equals("ArabianSwordsmen")) {
-                return "MercenaryPost can't create " + type;
-            }
-            if (currentEmpire.getResources().getGold() < cost) {
-                return "not enough gold";
-            }
-
-        } else if (selectedBuilding.getBuildingType().getName().equals("EngineerGuild")) {
-            if (!type.equals("Ladderman") && !type.equals("Engineer")) {
-                return "EngineerGuild can't create " + type;
-            }
-            if (currentEmpire.getResources().getGold() < cost) {
-                return "not enough gold";
+            case "Cathedral" -> {
+                if (!type.equals("BlackMonk")) {
+                    return "Cathedral can't create " + type;
+                }
             }
         }
+        if (currentEmpire.getResources().getGold() < cost) {
+            return "not enough gold";
+        }
         currentEmpire.getResources().addResource("gold", -1 * cost);
+        currentEmpire.addUnemployedPeople(-1 * count);
         int size = map.getMap()[currentEmpire.getKeepCoordinates()[0]][currentEmpire.getKeepCoordinates()[1]].getUnits().size();
         for (int i = 0; i < count; i++) {
             map.getMap()[currentEmpire.getKeepCoordinates()[0]][currentEmpire.getKeepCoordinates()[1]].getUnits().add(new Unit(UnitType.getUnitByName(type), currentEmpire));
@@ -344,8 +357,39 @@ public class GameMenuController {
     public void digTunnel(Matcher matcher) {
     }
 
-    public void changeArmourProdoucerMode() {
-
+    public String changeBuildingMode(Matcher matcher) {
+        String mode = matcher.group("mode");
+        switch (selectedBuilding.getBuildingType().getName()) {
+            case "Fletcher" -> {
+                if (mode.equals("bow") || mode.equals("crossbow")) {
+                    selectedBuilding.setMode(mode);
+                } else {
+                    return "invalid mode for Fletcher building";
+                }
+            }
+            case "PoleTurner" -> {
+                if (mode.equals("spear") || mode.equals("pike")) {
+                    selectedBuilding.setMode(mode);
+                } else {
+                    return "invalid mode for PoleTurner building";
+                }
+            }
+            case "BlackSmith" -> {
+                if (mode.equals("sword") || mode.equals("mace")) {
+                    selectedBuilding.setMode(mode);
+                } else {
+                    return "invalid mode for BlackSmith building";
+                }
+            }
+            case "SmallStoneGatehouse", "BigStoneGatehouse" -> {
+                if (mode.equals("open") || mode.equals("close")) {
+                    selectedBuilding.setMode(mode);
+                } else {
+                    return "invalid mode for Gate building";
+                }
+            }
+        }
+        return "";
     }
 
     public String buildEquipment(Matcher matcher) {
@@ -353,18 +397,78 @@ public class GameMenuController {
         if (!type.equals("PortableShield") && !type.equals("BatteringRam") && !type.equals("Trebuchet") && !type.equals("Catapult") && !type.equals("FireBallista") && !type.equals("SiegeTower")) {
             return "invalid type for equipment";
         }
+        int engineerCounter = 0;
+        for (Unit selectedUnit : selectedUnits) {
+            if (selectedUnit.getUnitType().getName().equals("Engineer")) {
+                engineerCounter++;
+            }
+        }
+        int cost = UnitType.getUnitByName(type).getCost();
+        if (currentEmpire.getResources().getGold() < cost) {
+            return "not enough gold";
+        }
+        switch (type) {
+            case "PortableShield" -> {
+                if (engineerCounter < 1) {
+                    return "not enough engineer to build this equipment";
+                }
+                map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().remove(getUnit(currentEmpire, "Engineer"));
+                currentEmpire.getUnits().remove(getUnit(currentEmpire, "Engineer"));
+            }
+            case "BatteringRam", "SiegeTower" -> {
+                if (engineerCounter < 4) {
+                    return "not enough engineer to build this equipment";
+                }
+                for (int i = 0; i < 4; i++) {
+                    map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().remove(getUnit(currentEmpire, "Engineer"));
+                    currentEmpire.getUnits().remove(getUnit(currentEmpire, "Engineer"));
+                }
+            }
+            case "Trebuchet" -> {
+                if (engineerCounter < 3) {
+                    return "not enough engineer to build this equipment";
+                }
+                for (int i = 0; i < 3; i++) {
+                    map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().remove(getUnit(currentEmpire, "Engineer"));
+                    currentEmpire.getUnits().remove(getUnit(currentEmpire, "Engineer"));
+                }
+            }
+            case "Catapult", "FireBallista" -> {
+                if (engineerCounter < 2) {
+                    return "not enough engineer to build this equipment";
+                }
+                for (int i = 0; i < 2; i++) {
+                    map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().remove(getUnit(currentEmpire, "Engineer"));
+                    currentEmpire.getUnits().remove(getUnit(currentEmpire, "Engineer"));
+                }
+            }
+        }
+        currentEmpire.getResources().addGold(-1 * cost);
+        currentEmpire.getUnits().add(new Unit(UnitType.getUnitByName(type), currentEmpire));
+        map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().add(currentEmpire.getUnits().get(currentEmpire.getUnits().size() - 1));
+        selectedUnits.clear();
+        return "success";
+    }
+
+    public Unit getUnit(Empire empire, String name) {
+        for (Unit selectedUnit : selectedUnits) {
+            if (selectedUnit.getUnitType().getName().equals(name) && selectedUnit.getOwner().equals(empire)) {
+                return selectedUnit;
+            }
+        }
+        return null;
     }
 
     public void disbandUnit() {
-    }
-
-    public void nextTurn() {//TODO make selecteds null
+        for (Unit selectedUnit : selectedUnits) {
+            map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().remove(selectedUnit);
+            currentEmpire.getUnits().remove(selectedUnit);
+        }
+        currentEmpire.addUnemployedPeople(selectedUnits.size());
+        selectedUnits.clear();
     }
 
     private void checkFightUnits() {
-    }
-
-    private void checkFightMachines() {
     }
 
     public void checkFoodProductiveBuildings() {// each building produces if there is enough free space in the foodStock
@@ -403,45 +507,50 @@ public class GameMenuController {
             if (!currentEmpire.getBuildings().get(i).getBuildingType().getType().equals("Weapon")) {
                 continue;
             }
-            if (currentEmpire.getArmoury().getFreeCapacityArmoury() < 1) {
+            int rate = currentEmpire.getBuildings().get(i).getRate();
+            if (currentEmpire.getArmoury().getFreeCapacityArmoury() < rate) {
                 continue;
             }
             switch (currentEmpire.getBuildings().get(i).getBuildingType().getName()) {
                 case "Fletcher" -> {
-                    if (currentEmpire.getResources().getWood() >= 1) {
-                        currentEmpire.getResources().addResource("wood", -1);
+                    if (currentEmpire.getResources().getWood() >= rate) {
+                        currentEmpire.getResources().addResource("wood", -rate);
                         if (currentEmpire.getBuildings().get(i).getMode().equals("bow")) {
-                            currentEmpire.getArmoury().addArmoury("bow", 1);
+                            currentEmpire.getArmoury().addArmoury("bow", rate);
                         } else {
-                            currentEmpire.getArmoury().addArmoury("crossbow", 1);
+                            currentEmpire.getArmoury().addArmoury("crossbow", rate);
                         }
                     }
                 }
                 case "DairyFarm" -> {
-                    currentEmpire.getArmoury().addArmoury("leatherArmor", 1);
+                    currentEmpire.getArmoury().addArmoury("leatherArmor", rate);
                 }
                 case "BlackSmith" -> {
-                    if (currentEmpire.getResources().getIron() >= 1) {
-                        currentEmpire.getResources().addResource("iron", -1);
+                    if (currentEmpire.getResources().getIron() >= rate) {
+                        currentEmpire.getResources().addResource("iron", -rate);
                         if (currentEmpire.getBuildings().get(i).getMode().equals("sword")) {
-                            currentEmpire.getArmoury().addArmoury("sword", 1);
+                            currentEmpire.getArmoury().addArmoury("sword", rate);
                         } else {
-                            currentEmpire.getArmoury().addArmoury("mace", 1);
+                            currentEmpire.getArmoury().addArmoury("mace", rate);
                         }
                     }
                 }
                 case "PoleTurner" -> {
-                    if (currentEmpire.getResources().getWood() >= 1) {
-                        currentEmpire.getResources().addResource("wood", -1);
+                    if (currentEmpire.getResources().getWood() >= rate) {
+                        currentEmpire.getResources().addResource("wood", -rate);
                         if (currentEmpire.getBuildings().get(i).getMode().equals("spear")) {
-                            currentEmpire.getArmoury().addArmoury("spear", 1);
+                            currentEmpire.getArmoury().addArmoury("spear", rate);
                         } else {
-                            currentEmpire.getArmoury().addArmoury("pike", 1);
+                            currentEmpire.getArmoury().addArmoury("pike", rate);
                         }
                     }
                 }
                 case "Armourer" -> {
-                    currentEmpire.getArmoury().addArmoury("metalArmor", 1);
+                    if (currentEmpire.getResources().getIron() >= rate) {
+                        currentEmpire.getResources().addResource("iron", -rate);
+                        currentEmpire.getArmoury().addArmoury("metalArmor", rate);
+                    }
+
                 }
             }
         }
@@ -493,7 +602,7 @@ public class GameMenuController {
                     currentEmpire.getResources().addResource("wheat", productEachRate * rate);
                 }
                 case "Brewery" -> {
-                    if (currentEmpire.getResources().getHop() < rate) {
+                    if (currentEmpire.getResources().getHop() < rate * productEachRate) {
                         continue;
                     }
                     if (currentEmpire.getResources().getFreeCapacityStockpile() < productEachRate * (rate - 1)) {

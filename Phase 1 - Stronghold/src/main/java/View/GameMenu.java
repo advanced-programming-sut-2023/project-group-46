@@ -54,9 +54,9 @@ public class GameMenu {
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.DROP_BUILDING_REGEX)) != null) {
                 System.out.println(gameMenuController.dropBuilding(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.PATROL_UNIT_REGEX)) != null) {
-                gameMenuController.patrolUnit(matcher);
+                //gameMenuController.patrolUnit(matcher);
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.MOVE_UNIT_REGEX)) != null) {
-                gameMenuController.moveUnit(matcher);
+                //gameMenuController.moveUnit(matcher);
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.SELECT_BUILDING_REGEX)) != null) {
                 System.out.println(gameMenuController.selectBuilding(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.POUR_OIL_REGEX)) != null) {
@@ -65,12 +65,14 @@ public class GameMenu {
                 gameMenuController.setUnitMode(matcher);
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.CREATE_UNIT_REGEX)) != null) {
                 System.out.println(gameMenuController.createUnit(matcher));
+            } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.CHANGE_MODE_ARMOUR_BUILDING_REGEX)) != null) {
+                System.out.println(gameMenuController.changeBuildingMode(matcher));
             } else if (command.matches("repair")) {
                 System.out.println(gameMenuController.repair());
             } else if (command.matches("disband unit")) {
                 gameMenuController.disbandUnit();
             } else if (command.matches("next turn")) {
-                gameMenuController.nextTurn();
+                //gameMenuController.nextTurn();
             } else {
                 System.out.println("Invalid command!");
             }//TODO find a way for invalid numbers like this 12a2
