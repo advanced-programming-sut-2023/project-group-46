@@ -50,7 +50,7 @@ public class GameMenu {
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.ATTACK_SPECIAL_ENEMY_REGEX)) != null) {
                 System.out.println(gameMenuController.attackEnemy(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.DIG_TUNNEL_REGEX)) != null) {
-                gameMenuController.digTunnel(matcher);
+                System.out.println(gameMenuController.digTunnel(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.DROP_BUILDING_REGEX)) != null) {
                 System.out.println(gameMenuController.dropBuilding(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.PATROL_UNIT_REGEX)) != null) {
@@ -67,6 +67,10 @@ public class GameMenu {
                 System.out.println(gameMenuController.createUnit(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.CHANGE_MODE_ARMOUR_BUILDING_REGEX)) != null) {
                 System.out.println(gameMenuController.changeBuildingMode(matcher));
+            } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.DROP_UNIT_REGEX)) != null) {
+                System.out.println(gameMenuController.dropUnit(matcher));
+            } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.ATTACK_MACHINES_REGEX)) != null) {
+                System.out.println(gameMenuController.attackMachines(matcher));
             } else if (command.matches("repair")) {
                 System.out.println(gameMenuController.repair());
             } else if (command.matches("disband unit")) {

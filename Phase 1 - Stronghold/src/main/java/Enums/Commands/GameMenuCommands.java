@@ -16,7 +16,9 @@ public enum GameMenuCommands {
     BUILD_REGEX("^build -q (?<equipment>.+)$"),
     SET_UNIT_MODE_REGEX("^set -s (?<mode>\\S+)$"),
     CREATE_UNIT_REGEX("(?=.* -t (?<type>\\S+))(?=.* -c (?<count>\\S+))^createunit( *-[tc] \\S+){2}$"),
-    CHANGE_MODE_ARMOUR_BUILDING_REGEX("^change mode -m (?<mode>\\S+)$");
+    CHANGE_MODE_ARMOUR_BUILDING_REGEX("^change mode -m (?<mode>\\S+)$"),
+    DROP_UNIT_REGEX("(?=.* -x (?<x>\\S+))(?=.* -y (?<y>\\S+))(?=.* -t (?<type>\\S+))(?=.* -c (?<count>\\S+))^dropunit( *-[xytc]+ \\S+){4}$"),
+    ATTACK_MACHINES_REGEX("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^attack machines( *-[xy] \\d+){2}$");
 
     private final String regex;
 

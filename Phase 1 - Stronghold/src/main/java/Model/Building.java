@@ -92,4 +92,8 @@ public class Building {
     public void setMode(String mode) {
         this.mode = mode;
     }
+
+    public void getDamage(int hp) {
+        this.hp -= hp;
+    }
 }

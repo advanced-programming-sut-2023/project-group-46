@@ -260,8 +260,8 @@ public class GameMenuController {
         int distance = distance(x, y, selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1]);
         for (Unit selectedUnit : selectedUnits) {
             int damage = selectedUnit.getUnitType().getAttackPower();
-            if (selectedUnit.getUnitType().getAttackRange() == 0) {
-                if (distance <= selectedUnit.getUnitType().getSpeed()) {
+            if (selectedUnit.getUnitType().getAttackRange() == 0) {//TODO add type of the units in if conditions
+                if (distance <= selectedUnit.getUnitType().getSpeed()) {//TODO check is there any way to that location or not
                     boolean bool = true;
                     while (bool) {
                         int index = (int) (Math.random() * map.getMap()[x][y].getUnits().size());
@@ -299,6 +299,9 @@ public class GameMenuController {
             return "you should select a unit first";
         }
         for (Unit selectedUnit : selectedUnits) {
+            if (!selectedUnit.getUnitType().getType().equals("Archer")) {
+                continue;
+            }
             if (selectedUnit.getUnitType().getAttackRange() < distance(x, y, selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1])) {
                 int damage = selectedUnit.getUnitType().getAttackPower();
                 for (int j = 0; j < map.getMap()[x][y].getUnits().size(); j++) {
@@ -313,6 +316,107 @@ public class GameMenuController {
     }
 
     public void pourOil(Matcher matcher) {//mohammad.h
+    }
+
+    public String attackMachines(Matcher matcher) {//TODO add data of machines
+        int x = Integer.parseInt(matcher.group("x"));
+        int y = Integer.parseInt(matcher.group("y"));
+        if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
+            return "invalid coordinate";
+        }
+        if (selectedUnits.size() == 0) {
+            return "you should select a unit first";
+        }
+        if (map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
+            return "that building is yours";
+        }
+        for (int i = 0; i < selectedUnits.size(); i++) {
+            switch (selectedUnits.get(i).getUnitType().getName()) {
+                case ""
+            }
+        }
+    }
+
+    public String dropUnit(Matcher matcher) {
+        int x = Integer.parseInt(matcher.group("x"));
+        int y = Integer.parseInt(matcher.group("y"));
+        String type = matcher.group("type");
+        int count = Integer.parseInt(matcher.group("count"));
+        if (count <= 0) {
+            return "invalid number for count";
+        }
+        if (UnitType.getUnitByName(type) == null) {
+            return "invalid type for unit";
+        }
+        if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
+            return "invalid coordinate";
+        }
+        if (count > currentEmpire.getUnemployedPeople()) {
+            return "not enough unemployed people";
+        }
+        if (currentEmpire.getResources().getGold() < UnitType.getUnitByName(type).getCost() * count) {
+            return "not enough gold";
+        }
+        switch (type) {
+            case "Archer" -> {
+                if (currentEmpire.getArmoury().getBow() < count) {
+                    return "weapons needed";
+                }
+                currentEmpire.getArmoury().addArmoury("bow", -1 * count);
+            }
+            case "Crossbowman" -> {
+                if (currentEmpire.getArmoury().getLeatherArmor() < count || currentEmpire.getArmoury().getCrossbow() < count) {
+                    return "weapons needed";
+                }
+                currentEmpire.getArmoury().addArmoury("crossbow", -1 * count);
+                currentEmpire.getArmoury().addArmoury("leatherArmor", -1 * count);
+            }
+            case "Spearman" -> {
+                if (currentEmpire.getArmoury().getSpear() < count) {
+                    return "weapons needed";
+                }
+                currentEmpire.getArmoury().addArmoury("spear", -1 * count);
+            }
+            case "Pikeman" -> {
+                if (currentEmpire.getArmoury().getPike() < count || currentEmpire.getArmoury().getMetalArmor() < count) {
+                    return "weapons needed";
+                }
+                currentEmpire.getArmoury().addArmoury("pike", -1 * count);
+                currentEmpire.getArmoury().addArmoury("metalArmor", -1 * count);
+            }
+            case "Maceman" -> {
+                if (currentEmpire.getArmoury().getMace() < count || currentEmpire.getArmoury().getLeatherArmor() < count) {
+                    return "weapons needed";
+                }
+                currentEmpire.getArmoury().addArmoury("mace", -1 * count);
+                currentEmpire.getArmoury().addArmoury("leatherArmor", -1 * count);
+            }
+            case "Swordsman" -> {
+                if (currentEmpire.getArmoury().getSword() < count || currentEmpire.getArmoury().getMetalArmor() < count) {
+                    return "weapons needed";
+                }
+                currentEmpire.getArmoury().addArmoury("sword", -1 * count);
+                currentEmpire.getArmoury().addArmoury("metalArmor", -1 * count);
+            }
+            case "Knight" -> {
+                if (currentEmpire.getArmoury().getSword() < count || currentEmpire.getArmoury().getMetalArmor() < count || currentEmpire.getArmoury().getHorse() < count) {
+                    return "weapons needed";
+                }
+                currentEmpire.getArmoury().addArmoury("sword", -1 * count);
+                currentEmpire.getArmoury().addArmoury("metalArmor", -1 * count);
+                currentEmpire.getArmoury().addHorse(-1 * count);
+            }
+        }
+        currentEmpire.getResources().addResource("gold", -1 * UnitType.getUnitByName(type).getCost() * count);
+        currentEmpire.addUnemployedPeople(-1 * count);
+        int size = map.getMap()[x][y].getUnits().size();
+        for (int i = 0; i < count; i++) {
+            map.getMap()[x][y].getUnits().add(new Unit(UnitType.getUnitByName(type), currentEmpire));
+            currentEmpire.getUnits().add(map.getMap()[x][y].getUnits().get(size + i));
+        }
+
+
+        return "success";
     }
 
     public String createUnit(Matcher matcher) {
@@ -416,7 +520,38 @@ public class GameMenuController {
         return "success";
     }
 
-    public void digTunnel(Matcher matcher) {
+    public String digTunnel(Matcher matcher) {//Tunnelers can dig tunnel in range 10 & damage that building 15000
+        int x = Integer.parseInt(matcher.group("x"));
+        int y = Integer.parseInt(matcher.group("y"));
+        if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
+            return "invalid coordinate";
+        }
+        if (selectedUnits.size() == 0) {
+            return "you should select a unit first";
+        }
+        if (distance(x, y, selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1]) > 10) {
+            return "out of range";
+        }
+        int index = -1;
+        for (int i = 0; i < selectedUnits.size(); i++) {
+            if (selectedUnits.get(i).getUnitType().getName().equals("Tunneler")) {
+                index = i;
+                break;
+            }
+        }
+        if (index == -1) {
+            return "there in no tunneler in the selected unit";
+        }
+        if (map.getMap()[x][y].getBuilding() == null) {
+            return "there is no building in that coordinate";
+        }
+        if (map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
+            return "the building in that coordinate is yours";
+        }
+        map.getMap()[x][y].getBuilding().getDamage(15000);
+        currentEmpire.getUnits().remove(selectedUnits.get(index));
+        selectedUnits.clear();
+        return "success";
     }
 
     public String changeBuildingMode(Matcher matcher) {
