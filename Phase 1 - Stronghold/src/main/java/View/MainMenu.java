@@ -5,7 +5,6 @@ import Controller.GameMenuController;
 import Controller.ProfileMenuController;
 
 public class MainMenu {
-
     public void run() throws Exception {
         String command;
 

@@ -260,7 +260,7 @@ public class GameMenuController {
         int distance = distance(x, y, selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1]);
         for (Unit selectedUnit : selectedUnits) {
             int damage = selectedUnit.getUnitType().getAttackPower();
-            if (selectedUnit.getUnitType().getAttackRange() == 0) {//TODO add type of the units in if conditions
+            if (selectedUnit.getUnitType().getType().equals("Sword")) {
                 if (distance <= selectedUnit.getUnitType().getSpeed()) {//TODO check is there any way to that location or not
                     boolean bool = true;
                     while (bool) {
@@ -271,25 +271,50 @@ public class GameMenuController {
                         }
                     }
                 }
-            } else {
-                if (distance <= selectedUnit.getUnitType().getAttackRange()) {
-                    for (int j = 0; j < map.getMap()[x][y].getUnits().size(); j++) {
-                        if (map.getMap()[x][y].getUnits().get(j).getOwner().equals(currentEmpire)) {
-                            continue;
+            } else if (selectedUnit.getUnitType().getType().equals("Archer") && distance <= selectedUnit.getUnitType().getAttackRange()) {
+                boolean bool = true;
+                while (bool) {
+                    int index = (int) (Math.random() * map.getMap()[x][y].getUnits().size());
+                    if (!map.getMap()[x][y].getUnits().get(index).getOwner().equals(currentEmpire)) {
+                        for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
+                            if (map.getMap()[x][y].getUnits().get(i).getUnitType().equals(UnitType.PORTABLE_SHIELD) && map.getMap()[x][y].getUnits().get(index).getOwner().equals(map.getMap()[x][y].getUnits().get(i).getOwner())) {
+                                map.getMap()[x][y].getUnits().get(i).getDamage(damage);
+                                bool = false;
+                                break;
+                            }
                         }
-                        map.getMap()[x][y].getUnits().get(j).getDamage(damage);
+                        if (!bool) {
+                            break;
+                        }
+                        map.getMap()[x][y].getUnits().get(index).getDamage(damage);
+                        bool = false;
                     }
                 }
             }
+            checkDeadUnitsLocation(x, y);
         }
         return "success";
+    }//TODO add attack for ladderman
+
+    private void checkDeadUnitsLocation(int x, int y) {
+        ArrayList<Unit> forDelete = new ArrayList<>();
+        for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
+            if (map.getMap()[x][y].getUnits().get(i).getHp() <= 0) {
+                forDelete.add(map.getMap()[x][y].getUnits().get(i));
+            }
+
+        }
+        for (Unit unit : forDelete) {
+            map.getMap()[x][y].getUnits().remove(unit);
+            unit.getOwner().getUnits().remove(unit);
+        }
     }
 
     public int distance(int x1, int y1, int x2, int y2) {
         return Math.abs(x1 - x2) + Math.abs(y1 - y2);
     }
 
-    public String attackLocation(Matcher matcher) {//tir baran!!
+    public String attackLocation(Matcher matcher) {
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
@@ -298,19 +323,33 @@ public class GameMenuController {
         if (selectedUnits.size() == 0) {
             return "you should select a unit first";
         }
+        int distance = distance(x, y, selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1]);
         for (Unit selectedUnit : selectedUnits) {
             if (!selectedUnit.getUnitType().getType().equals("Archer")) {
                 continue;
             }
-            if (selectedUnit.getUnitType().getAttackRange() < distance(x, y, selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1])) {
+            if (distance <= selectedUnit.getUnitType().getAttackRange()) {
                 int damage = selectedUnit.getUnitType().getAttackPower();
-                for (int j = 0; j < map.getMap()[x][y].getUnits().size(); j++) {
-                    if (map.getMap()[x][y].getUnits().get(j).getOwner().equals(currentEmpire)) {
-                        continue;
+                boolean bool = true;
+                while (bool) {
+                    int index = (int) (Math.random() * map.getMap()[x][y].getUnits().size());
+                    if (!map.getMap()[x][y].getUnits().get(index).getOwner().equals(currentEmpire)) {
+                        for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
+                            if (map.getMap()[x][y].getUnits().get(i).getUnitType().equals(UnitType.PORTABLE_SHIELD) && map.getMap()[x][y].getUnits().get(index).getOwner().equals(map.getMap()[x][y].getUnits().get(i).getOwner())) {
+                                map.getMap()[x][y].getUnits().get(i).getDamage(damage);
+                                bool = false;
+                                break;
+                            }
+                        }
+                        if (!bool) {
+                            break;
+                        }
+                        map.getMap()[x][y].getUnits().get(index).getDamage(damage);
+                        bool = false;
                     }
-                    map.getMap()[x][y].getUnits().get(j).getDamage(damage);
                 }
             }
+            checkDeadUnitsLocation(x, y);
         }
         return "success";
     }
@@ -318,7 +357,7 @@ public class GameMenuController {
     public void pourOil(Matcher matcher) {//mohammad.h
     }
 
-    public String attackMachines(Matcher matcher) {//TODO add data of machines
+    public String attackMachines(Matcher matcher) {//fire ballista attack in group of archers not here
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
@@ -327,14 +366,34 @@ public class GameMenuController {
         if (selectedUnits.size() == 0) {
             return "you should select a unit first";
         }
-        if (map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
+        if (map.getMap()[x][y].getBuilding() == null) {
+            return "there is no building in that coordinate";
+        } else if (map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
             return "that building is yours";
         }
-        for (int i = 0; i < selectedUnits.size(); i++) {
-            switch (selectedUnits.get(i).getUnitType().getName()) {
-                case ""
+        int distance = distance(x, y, selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1]);
+        for (Unit selectedUnit : selectedUnits) {
+            switch (selectedUnit.getUnitType()) {
+                case CATAPULT, TREBUCHET -> {
+                    if (distance <= selectedUnit.getUnitType().getAttackRange())
+                        map.getMap()[x][y].getBuilding().getDamage(selectedUnit.getAttackPower());
+                }
+                case BATTERING_RAM -> {
+                    //TODO add function of movement and is there any way to that place or not
+                    //TODO remove this unit from the start location and add to the end location
+                    if (selectedUnit.getUnitType().getSpeed() >= distance)
+                        map.getMap()[x][y].getBuilding().getDamage(selectedUnit.getAttackPower());
+                }
+                case SIEGE_TOWER -> {
+                    //TODO add function of movement and is there any way to that place or not
+                    //TODO remove this unit from the start location and add to the end location
+                    if (selectedUnit.getUnitType().getSpeed() >= distance) {
+                        map.getMap()[x][y].getBuilding().setIsPassableForEnemies(true);
+                    }
+                }
             }
         }
+        return "success";
     }
 
     public String dropUnit(Matcher matcher) {
@@ -550,6 +609,7 @@ public class GameMenuController {
         }
         map.getMap()[x][y].getBuilding().getDamage(15000);
         currentEmpire.getUnits().remove(selectedUnits.get(index));
+        map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().remove(selectedUnits.get(index));
         selectedUnits.clear();
         return "success";
     }
@@ -589,7 +649,7 @@ public class GameMenuController {
         return "";
     }
 
-    public String buildEquipment(Matcher matcher) {
+    public String buildEquipment(Matcher matcher) {//TODO remove enginner from selectedunits in the remove times
         String type = matcher.group("equipment");
         if (!type.equals("PortableShield") && !type.equals("BatteringRam") && !type.equals("Trebuchet") && !type.equals("Catapult") && !type.equals("FireBallista") && !type.equals("SiegeTower")) {
             return "invalid type for equipment";
@@ -665,7 +725,8 @@ public class GameMenuController {
         selectedUnits.clear();
     }
 
-    private void checkFightUnits() {
+    private void checkFightUnits() {//this function should be ca
+
     }
 
     public void checkFoodProductiveBuildings() {// each building produces if there is enough free space in the foodStock
