@@ -353,6 +353,7 @@ public class GameMenuController {
         if (!type.equals("PortableShield") && !type.equals("BatteringRam") && !type.equals("Trebuchet") && !type.equals("Catapult") && !type.equals("FireBallista") && !type.equals("SiegeTower")) {
             return "invalid type for equipment";
         }
+        return type;
     }
 
     public void disbandUnit() {

@@ -5,15 +5,32 @@ import Model.Cell;
 import Model.Map;
 import Model.Unit;
 import View.MapMenu;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.regex.Matcher;
 
 public class MapMenuController {
 
     private final MapMenu mapMenu;
+
+    private String username = LoginMenuController.getLoggedInUser().getUsername();
     private Map map;
     private int x;
     private int y;
+
+
+    {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        try {
+            map = objectMapper.readValue(new File(username + ".json"), Map.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public MapMenuController() {
         mapMenu = new MapMenu(this);
@@ -31,7 +48,7 @@ public class MapMenuController {
         String[][] partOfMap = new String[x2 - x1][y2 - y1];
         for (int i = 0; i < x2 - x1; i++) {
             for (int j = 0; j < y2 - y1; j++)
-                partOfMap[i][j] = cellForShow(map.getMap()[i][j]);
+                partOfMap[i][j] = cellForShow(map.getMap()[x1 + i][y1 + j]);
         }
         return partOfMap;
     }
@@ -68,12 +85,15 @@ public class MapMenuController {
 
     private String cellForShow(Cell cell) {
         String stringCellForShow = EnvironmentType.getEnvironmentTypeByName(cell.getType()).getColor();
-        if (cell.getUnits() != null)
-            stringCellForShow += "S\n";
-        if (cell.getBuilding() != null)
-            stringCellForShow += "B\n";
-        if (cell.getEnvironmentName() != null && !cell.getEnvironmentName().equals("rock"))
+        if (cell.getUnits().size() > 0) {
+            stringCellForShow += "S";
+        } else if (cell.getBuilding() != null) {
+            stringCellForShow += "B";
+        }else if (cell.getEnvironmentName() != null && !cell.getEnvironmentName().equals("rock")) {
             stringCellForShow += "T";
+        } else if (cell.getEnvironmentName() != null && cell.getEnvironmentName().equals("rock")) {
+            stringCellForShow += "R";
+        } else stringCellForShow += " ";
         String reset = "\033[0m";
         stringCellForShow += reset;
         return stringCellForShow;
@@ -90,10 +110,8 @@ public class MapMenuController {
                     if (j % 6 == 0)
                         stringMakeOutputInStandard += "|";
                     else {
-                        int row = i / 4;
-                        int column = j / 6;
-                        if (i % 4 == 2 && j % 6 == 3 && !partOfMap[row][column].equals("")) {
-                            stringMakeOutputInStandard += (partOfMap[row][column]);
+                        if (i % 4 == 2 && j % 6 == 2) {
+                            stringMakeOutputInStandard += (partOfMap[i / 4][j / 6]);
                         } else
                             stringMakeOutputInStandard += "#";
                     }

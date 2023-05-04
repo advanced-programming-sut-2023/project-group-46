@@ -2,8 +2,11 @@ package Controller;
 
 import Enums.PreBuiltSecurityQuestions;
 import Enums.PreBuiltSlogans;
+import Model.Cell;
 import Model.User;
 import View.SignupMenu;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -140,6 +143,15 @@ public class SignUpMenuController {
         }
 
         writeInJsonFile(username, password, email, nickName, slogan);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+
+        try {
+            objectMapper.writeValue(new File( username + ".json"), new Model.Map(100));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
 
         return showSecurityQuestion();
     }
@@ -211,6 +223,16 @@ public class SignUpMenuController {
         String password = generateRandomPassword();
 
         writeInJsonFile(username, password, email, nickName, slogan);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+
+        try {
+            Model.Map map= new Model.Map(100);
+            objectMapper.writeValue(new File( username + ".json"), map);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return "Please re-enter you password:  \"   " + password + "   \"";
 

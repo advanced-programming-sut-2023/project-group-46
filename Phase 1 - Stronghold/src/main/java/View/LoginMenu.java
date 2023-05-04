@@ -11,11 +11,12 @@ import java.util.regex.Matcher;
 
 public class LoginMenu {
     private final LoginMenuController loginMenuController;
-    private MainMenu mainMenu;
+    private final MainMenu mainMenu;
     private final SignUpMenuController signUpMenuController = new SignUpMenuController();
     private final SignupMenu signupMenu = new SignupMenu(signUpMenuController);
 
     public LoginMenu(LoginMenuController loginMenuController) {
+        this.mainMenu= new MainMenu();
         this.loginMenuController = loginMenuController;
     }
 

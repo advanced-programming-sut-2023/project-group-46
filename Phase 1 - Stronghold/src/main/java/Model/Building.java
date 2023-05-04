@@ -4,13 +4,12 @@ import Controller.GameMenuController;
 import Enums.BuildingType;
 
 public class Building {
-    private final BuildingType buildingType;
-    private final Empire owner;
+    private BuildingType buildingType;
+    private Empire owner;
     private int hp;
     private int rate;
     private int freeCapacity;
     private String mode;//this is for the buildings like armourers that can produce different things
-
     public Building(BuildingType buildingType, Empire owner) {
         this.owner = owner;
         this.hp = buildingType.getHp();
@@ -48,6 +47,12 @@ public class Building {
             //TODO check for the change of popularity
         }
     }
+    public Building(BuildingType buildingType) {
+        this.buildingType = buildingType;
+    }
+
+    public Building() {
+    }
 
     public int getHp() {
         return hp;
@@ -61,8 +66,16 @@ public class Building {
         return buildingType;
     }
 
+    public void setBuildingType(BuildingType buildingType) {
+        this.buildingType = buildingType;
+    }
+
     public Empire getOwner() {
         return owner;
+    }
+
+    public void setOwner(Empire owner) {
+        this.owner = owner;
     }
 
     public int getFreeCapacity() {
