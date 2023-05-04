@@ -15,7 +15,7 @@ public class GameMenu {
     public void run() throws Exception {
         Matcher matcher;
         String command, result;
-        while (true) {
+        do {
             System.out.println("name the players that you want to play with (pattern : FirstUsername/SecondUsername/ThirdUsername...)");
             command = Menu.getScanner().nextLine();
             if (command.equals("back")) {
@@ -23,23 +23,24 @@ public class GameMenu {
             }
             result = gameMenuController.startANewGame(command);
             System.out.println(result);
-            if (result.contains("Game Started")) {
-                break;
-            }
-        }
+        } while (!result.contains("Game Started"));
         while (true) {
             command = Menu.getScanner().nextLine();
             if (command.matches("EmpireMenu")) {
                 EmpireMenu empireMenu = new EmpireMenu(new EmpireMenuController());
+                System.out.println("Entered EmpireMenu");
                 empireMenu.run();
             } else if (command.matches("MapMenu")) {
                 MapMenu mapMenu = new MapMenu(new MapMenuController());
+                System.out.println("Entered MapMenu");
                 mapMenu.run();
             } else if (command.matches("TradeMenu")) {
                 TradeMenu tradeMenu = new TradeMenu(new TradeMenuController());
+                System.out.println("Entered TradeMenu");
                 tradeMenu.run();
             } else if (command.matches("ShopMenu")) {
                 ShopMenu shopMenu = new ShopMenu(new ShopMenuController());
+                System.out.println("Entered ShopMenu");
                 shopMenu.run();
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.SELECT_UNIT_REGEX)) != null) {
                 System.out.println(gameMenuController.selectUnit(matcher));

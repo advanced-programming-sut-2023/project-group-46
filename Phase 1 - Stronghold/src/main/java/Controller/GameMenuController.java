@@ -3,7 +3,11 @@ package Controller;
 import Enums.BuildingType;
 import Enums.UnitType;
 import Model.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -70,6 +74,7 @@ public class GameMenuController {
     }
 
     public String startANewGame(String command) throws Exception {
+        readMap();
         String[] usernames = command.split("/");
         int players = 1;
         for (String username : usernames) {
@@ -85,19 +90,24 @@ public class GameMenuController {
         } else if (map.getEmpireCoordinates().size() < players) {
             return "this map doesn't have enough capacity for this players";
         } else {
-            game = new Game(map.getMap());
+            game = new Game();
             for (int i = 0; i < usernames.length; i++) {
                 game.getEmpires().add(new Empire(User.getUserByUsername(usernames[i]), i, map.getEmpireCoordinates().get(i)[0], map.getEmpireCoordinates().get(i)[1]));
+                currentEmpire = game.getEmpires().get(i);
                 game.getEmpires().get(i).getBuildings().add(map.getMap()[map.getEmpireCoordinates().get(i)[0]][map.getEmpireCoordinates().get(i)[1]].getBuilding());
-                map.getMap()[map.getEmpireCoordinates().get(i)[0] + 1][map.getEmpireCoordinates().get(i)[1]].setBuilding(new Building(BuildingType.getBuildingByName("Stockpile"), game.getEmpires().get(i)));//add stockpile for start of the game
+                map.getMap()[map.getEmpireCoordinates().get(i)[0] + 1][map.getEmpireCoordinates().get(i)[1]].setBuilding(new Building(BuildingType.STOCKPILE, game.getEmpires().get(i)));//add stockpile for start of the game
                 game.getEmpires().get(i).getBuildings().add(map.getMap()[map.getEmpireCoordinates().get(i)[0] + 1][map.getEmpireCoordinates().get(i)[1]].getBuilding());
+                map.getMap()[map.getEmpireCoordinates().get(i)[0] - 1][map.getEmpireCoordinates().get(i)[1]].setBuilding(new Building(BuildingType.FOOD_STOCK, game.getEmpires().get(i)));//add foodStock for start of the game
+                game.getEmpires().get(i).getBuildings().add(map.getMap()[map.getEmpireCoordinates().get(i)[0] - 1][map.getEmpireCoordinates().get(i)[1]].getBuilding());
             }
             currentEmpire = game.getEmpires().get(0);
+            writeMap();
             return "Game Started";
         }
     }
 
     public String dropBuilding(Matcher matcher) {
+        readMap();
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         String buildingName = matcher.group("type");
@@ -107,7 +117,7 @@ public class GameMenuController {
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
             return "invalid coordinate";
         }
-        if (map.getMap()[x][y].getBuilding() != null || map.getMap()[x][y].getUnits() != null || map.getMap()[x][y].getEnvironmentName() != null) {
+        if (map.getMap()[x][y].getBuilding() != null || map.getMap()[x][y].getUnits().size() > 0 || map.getMap()[x][y].getEnvironmentName() != null) {
             return "there are some other things in this place";
         }
         String cellType = map.getMap()[x][y].getEnvironmentName();
@@ -178,6 +188,7 @@ public class GameMenuController {
         }
         map.getMap()[x][y].setBuilding(new Building(BuildingType.getBuildingByName(buildingName), currentEmpire));
         currentEmpire.getBuildings().add(map.getMap()[x][y].getBuilding());
+        writeMap();
         return "success";
     }
 
@@ -204,6 +215,7 @@ public class GameMenuController {
     }
 
     public String repair() {
+        readMap();
         if (selectedBuilding == null) {
             return "you should select a building first";
         }
@@ -219,6 +231,7 @@ public class GameMenuController {
         }
         currentEmpire.getResources().addResource("stone", -1 * (int) (Math.ceil(selectedBuilding.getBuildingType().getHp() - selectedBuilding.getHp()) / 500));
         selectedBuilding.setHp(selectedBuilding.getBuildingType().getHp());
+        writeMap();
         return "success";
     }
 
@@ -880,5 +893,27 @@ public class GameMenuController {
     }
 
     private void checkEndOfTheGame() {
+    }
+
+    private void readMap() {
+        String username = LoginMenuController.getLoggedInUser().getUsername();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        try {
+            map = objectMapper.readValue(new File(username + ".json"), Map.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void writeMap() {
+        String username = LoginMenuController.getLoggedInUser().getUsername();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        try {
+            objectMapper.writeValue(new File(username + ".json"), map);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

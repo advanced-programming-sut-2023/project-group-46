@@ -1,6 +1,5 @@
 package Model;
 
-import Enums.BuildingType;
 import Enums.EmpireColors;
 import Model.Goods.Armoury;
 import Model.Goods.FoodStock;
@@ -10,13 +9,13 @@ import java.util.ArrayList;
 
 public class Empire {
 
-    private final ArrayList<Building> buildings;
-    private final ArrayList<Unit> units;
-    private final User user;
-    private final int empireId;//this is equal to index of the arraylist of empires in the Game
-    private final String color;
-    private final Armoury armoury;
-    private final FoodStock foodStock;
+    private ArrayList<Building> buildings;
+    private ArrayList<Unit> units;
+    private User user;
+    private int empireId;//this is equal to index of the arraylist of empires in the Game
+    private String color;
+    private Armoury armoury;
+    private FoodStock foodStock;
     private int unemployedPeople;
     private int employedPeople;
     private int foodRate;
@@ -32,22 +31,25 @@ public class Empire {
 
     public Empire(User user, int empireId, int x, int y) {//TODO check for the rates in the start of the game
         this.user = user;
-        this.unemployedPeople = 0;
+        this.unemployedPeople = 10;
         this.employedPeople = 0;
         this.foodRate = 0;
         this.taxRate = 0;
         this.fearRate = 0;
         this.buildings = new ArrayList<>();
-        this.buildings.add(new Building(BuildingType.getBuildingByName("Stockpile"), this));//TODO in the map first stockpile should be placed
         this.units = new ArrayList<>();
+        keepCoordinates = new int[2];
         this.empireId = empireId;
         this.religionPopularity = 0;
         this.keepCoordinates[0] = x;
         this.keepCoordinates[1] = y;
-        this.resources = new Resources(500, 0, 0, 0, 0, 0, 0, 0, 0, 0);//TODO check what to give in the start of the game and the free capacity stockpile
-        this.armoury = new Armoury(0, 0, 0, 0, 0, 0, 0, 0, 0,0);
-        this.foodStock = new FoodStock(0, 0, 0, 0, 0);
+        this.resources = new Resources(5000, 0, 0, 0, 0, 50, 0, 100, 0, -150);
+        this.armoury = new Armoury(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        this.foodStock = new FoodStock(0, 0, 0, 60, -60);
         this.color = EmpireColors.getEmpireColorByNumber(empireId).getName();
+    }
+
+    Empire() {
     }
 
     public int[] getKeepCoordinates() {
