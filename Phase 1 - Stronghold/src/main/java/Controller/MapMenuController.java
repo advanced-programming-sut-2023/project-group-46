@@ -103,49 +103,23 @@ public class MapMenuController {
         String stringMakeOutputInStandard = "";
         for (int i = 0; i <= 16; i++) {
             if (i % 4 == 0) {
-                if (i != 0 && i != (16)) stringMakeOutputInStandard += splitRowsForIn();
-                else stringMakeOutputInStandard += splitRowsForEnd();
+                if (i != 0 && i != (16)) stringMakeOutputInStandard += "\n";
             } else {
                 for (int j = 0; j <= 6 * 14; j++) {
                     if (j % 6 == 0)
                         stringMakeOutputInStandard += "|";
                     else {
-                        if (i % 4 == 2 && j % 6 == 2) {
+                        if (i % 4 == 2 && j % 6 == 3) {
                             stringMakeOutputInStandard += (partOfMap[i / 4][j / 6]);
                         } else
                             stringMakeOutputInStandard += "#";
                     }
                 }
+                stringMakeOutputInStandard += "\n";
             }
-            stringMakeOutputInStandard += "\n";
         }
         return stringMakeOutputInStandard;
     }
-
-    private String splitRowsForIn() {
-        int length = 25;
-        String stringSplitRowsForIn = "";
-        length -= 2;
-        stringSplitRowsForIn += "|";
-        while (length > 0) {
-            stringSplitRowsForIn += "-";
-            length--;
-        }
-        stringSplitRowsForIn += "|\n";
-        return stringSplitRowsForIn;
-    }
-
-    private String splitRowsForEnd() {
-        int length = 25;
-        String stringSplitRowsForEnd = "";
-        while (length > 0) {
-            stringSplitRowsForEnd += "-";
-            length--;
-        }
-        stringSplitRowsForEnd += "\n";
-        return stringSplitRowsForEnd;
-    }
-
 
     public String moveInMap(Matcher matcher) {
         int x = 0;
