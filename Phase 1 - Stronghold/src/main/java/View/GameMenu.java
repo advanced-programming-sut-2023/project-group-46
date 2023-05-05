@@ -63,7 +63,7 @@ public class GameMenu {
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.POUR_OIL_REGEX)) != null) {
                 gameMenuController.pourOil(matcher);
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.SET_UNIT_MODE_REGEX)) != null) {
-                gameMenuController.setUnitMode(matcher);
+                System.out.println(gameMenuController.setUnitMode(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.CREATE_UNIT_REGEX)) != null) {
                 System.out.println(gameMenuController.createUnit(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.CHANGE_MODE_ARMOUR_BUILDING_REGEX)) != null) {

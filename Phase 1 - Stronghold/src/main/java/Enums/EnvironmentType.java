@@ -1,9 +1,9 @@
 package Enums;
 
 public enum EnvironmentType {
-    EARTH("earth", "\u001b[42m", true, true),
+    EARTH("earth", "\u001b[43m", true, true),
     EARTH_AND_SAND("earthAndStone", "\u001b[42m", true, true),
-    BOULDER("boulder", "\u001b[46m", false, true),
+    BOULDER("boulder", "\u001b[41m", false, true),
     ROCK_TEXTURE("rockTexture", "\u001b[41m", false, false),
     IRON_TEXTURE("ironTexture", "\u001b[41m", false, true),
     SCRUB("scrub", "\u001b[42m", true, true),

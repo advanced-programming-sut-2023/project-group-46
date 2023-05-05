@@ -251,17 +251,18 @@ public class GameMenuController {
         return "success";
     }
 
-    public void setUnitMode(Matcher matcher) {
+    public String setUnitMode(Matcher matcher) {
         String mode = matcher.group("mode");
         if (!mode.equals("standing") && !mode.equals("defensive") && !mode.equals("offensive")) {
-            return;
+            return "invalid mode for units";
         }
         for (Unit selectedUnit : selectedUnits) {
             selectedUnit.setMode(mode);
         }
+        return "success";
     }
 
-    public String attackEnemy(Matcher matcher) {//archers will stay and give damage them amd other will go and damage one of the enemies randomly
+    public String attackEnemy(Matcher matcher) {//archers will stay and give damage them and other will go and damage one of the enemies randomly
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
@@ -273,7 +274,13 @@ public class GameMenuController {
         int distance = distance(x, y, selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1]);
         for (Unit selectedUnit : selectedUnits) {
             int damage = selectedUnit.getUnitType().getAttackPower();
-            if (selectedUnit.getUnitType().getType().equals("Sword")) {
+            if (selectedUnit.getUnitType().equals(UnitType.LADDER_MAN)) {
+                if (distance <= selectedUnit.getUnitType().getSpeed()) {
+                    if (map.getMap()[x][y].getBuilding() != null && !map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
+                        map.getMap()[x][y].getBuilding().setIsPassableForEnemies(true);
+                    }
+                }
+            } else if (selectedUnit.getUnitType().getType().equals("Sword")) {
                 if (distance <= selectedUnit.getUnitType().getSpeed()) {//TODO check is there any way to that location or not
                     boolean bool = true;
                     while (bool) {
@@ -307,7 +314,7 @@ public class GameMenuController {
             checkDeadUnitsLocation(x, y);
         }
         return "success";
-    }//TODO add attack for ladderman
+    }
 
     private void checkDeadUnitsLocation(int x, int y) {
         ArrayList<Unit> forDelete = new ArrayList<>();
@@ -320,6 +327,16 @@ public class GameMenuController {
         for (Unit unit : forDelete) {
             map.getMap()[x][y].getUnits().remove(unit);
             unit.getOwner().getUnits().remove(unit);
+        }
+    }
+
+    private void checkDestroyedBuildingLocation(int x, int y) {
+        if (map.getMap()[x][y].getBuilding() == null) {
+            return;
+        }
+        if (map.getMap()[x][y].getBuilding().getHp() <= 0) {
+            map.getMap()[x][y].getBuilding().getOwner().getBuildings().remove(map.getMap()[x][y].getBuilding());
+            map.getMap()[x][y].setBuilding(null);
         }
     }
 
@@ -405,6 +422,7 @@ public class GameMenuController {
                     }
                 }
             }
+            checkDestroyedBuildingLocation(x, y);
         }
         return "success";
     }
@@ -629,6 +647,9 @@ public class GameMenuController {
 
     public String changeBuildingMode(Matcher matcher) {
         String mode = matcher.group("mode");
+        if (selectedBuilding == null) {
+            return "no selected building";
+        }
         switch (selectedBuilding.getBuildingType().getName()) {
             case "Fletcher" -> {
                 if (mode.equals("bow") || mode.equals("crossbow")) {
@@ -659,10 +680,10 @@ public class GameMenuController {
                 }
             }
         }
-        return "";
+        return "success";
     }
 
-    public String buildEquipment(Matcher matcher) {//TODO remove enginner from selectedunits in the remove times
+    public String buildEquipment(Matcher matcher) {
         String type = matcher.group("equipment");
         if (!type.equals("PortableShield") && !type.equals("BatteringRam") && !type.equals("Trebuchet") && !type.equals("Catapult") && !type.equals("FireBallista") && !type.equals("SiegeTower")) {
             return "invalid type for equipment";
@@ -692,6 +713,7 @@ public class GameMenuController {
                 for (int i = 0; i < 4; i++) {
                     map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().remove(getUnit(currentEmpire, "Engineer"));
                     currentEmpire.getUnits().remove(getUnit(currentEmpire, "Engineer"));
+                    selectedUnits.remove(getUnit(currentEmpire, "Engineer"));
                 }
             }
             case "Trebuchet" -> {
@@ -701,6 +723,7 @@ public class GameMenuController {
                 for (int i = 0; i < 3; i++) {
                     map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().remove(getUnit(currentEmpire, "Engineer"));
                     currentEmpire.getUnits().remove(getUnit(currentEmpire, "Engineer"));
+                    selectedUnits.remove(getUnit(currentEmpire, "Engineer"));
                 }
             }
             case "Catapult", "FireBallista" -> {
@@ -710,6 +733,7 @@ public class GameMenuController {
                 for (int i = 0; i < 2; i++) {
                     map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().remove(getUnit(currentEmpire, "Engineer"));
                     currentEmpire.getUnits().remove(getUnit(currentEmpire, "Engineer"));
+                    selectedUnits.remove(getUnit(currentEmpire, "Engineer"));
                 }
             }
         }
@@ -736,6 +760,55 @@ public class GameMenuController {
         }
         currentEmpire.addUnemployedPeople(selectedUnits.size());
         selectedUnits.clear();
+    }
+
+    private void attackNextTurnByMode(int x, int y, Unit unit) {//TODO after any movement and in the start of the turn it should be called
+        int damage = unit.getAttackPower();
+        if (unit.getUnitType().getType().equals("Archer")) {
+            int attackRange = unit.getUnitType().getAttackRange();
+            for (int i = x - attackRange; i < attackRange + x; i++) {
+                for (int j = y - attackRange; j < y + attackRange; j++) {
+                    if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
+                        continue;
+                    }
+                    for (int k = 0; k < map.getMap()[i][j].getUnits().size(); k++) {
+                        if (!map.getMap()[i][j].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                            map.getMap()[i][j].getUnits().get(i).getDamage(damage);
+                        }
+                    }
+                    checkDeadUnitsLocation(i, j);
+                }
+            }
+        } else if (unit.getUnitType().getType().equals("Sword")) {
+            if (unit.getMode().equals("standing")) {//just if they are in the same cell
+                for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
+                    if (!map.getMap()[x][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                        map.getMap()[x][y].getUnits().get(i).getDamage(damage);
+                    }
+                }
+            } else {
+                int attackRange = 0;
+                if (unit.getMode().equals("offensive")) {
+                    attackRange = unit.getUnitType().getSpeed() + 2;
+                } else if (unit.getMode().equals("defensive")) {
+                    attackRange = unit.getUnitType().getSpeed();
+                }
+                for (int i = x - attackRange; i < attackRange + x; i++) {
+                    for (int j = y - attackRange; j < y + attackRange; j++) {
+                        if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
+                            continue;
+                        }
+                        //TODO add the is passable function
+                        for (int k = 0; k < map.getMap()[i][j].getUnits().size(); k++) {
+                            if (!map.getMap()[i][j].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                                map.getMap()[i][j].getUnits().get(i).getDamage(damage);
+                            }
+                        }
+                        checkDeadUnitsLocation(i, j);
+                    }
+                }
+            }
+        }
     }
 
     private void checkFightUnits() {//this function should be ca

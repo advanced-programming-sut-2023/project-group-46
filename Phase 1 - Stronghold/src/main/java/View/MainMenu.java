@@ -2,6 +2,7 @@ package View;
 
 import Controller.EditMapMenuController;
 import Controller.GameMenuController;
+import Controller.MapMenuController;
 import Controller.ProfileMenuController;
 
 public class MainMenu {
@@ -27,6 +28,10 @@ public class MainMenu {
                 System.out.println("logged out");
                 //TODO kiarash should check this part in loginMenu
                 return;
+            } else if (command.matches("MapMenu")) {
+                MapMenu mapMenu = new MapMenu(new MapMenuController());
+                System.out.println("Entered MapMenu");
+                mapMenu.run();
             } else {
                 System.out.println("invalid command!");
             }
