@@ -19,36 +19,36 @@ public class Building {
         this.buildingType = buildingType;
         this.rate = buildingType.getRate() + (int) (-0.5 * owner.getFearRate());
         this.isPassableForEnemies = false;
-        if (buildingType.getName().equals("Church") || buildingType.getName().equals("Cathedral")) {
-            owner.addReligionPopularity(2);
-        }
-        if (buildingType.getName().equals("Hovel")) {
-            owner.addUnemployedPeople(8);
-        }
-        if (buildingType.getName().equals("Fletcher")) {
-            this.mode = "bow";
-        }
-        if (buildingType.getName().equals("BlackSmith")) {
-            this.mode = "sword";
-        }
-        if (buildingType.getName().equals("PoleTurner")) {
-            this.mode = "spear";
-        }
-        if (buildingType.getName().equals("Armoury")) {
-            GameMenuController.getCurrentEmpire().getArmoury().addFreeCapacityArmoury(50);
-        }
-        if (buildingType.getName().equals("Stable")) {
-            GameMenuController.getCurrentEmpire().getArmoury().addHorse(4);
-        }
-        if (buildingType.getName().equals("FoodStock")) {
-            GameMenuController.getCurrentEmpire().getFoodStock().addFreeCapacityFoodStock(250);
-        }
-        if (buildingType.getName().equals("Stockpile")) {
-            GameMenuController.getCurrentEmpire().getResources().addFreeCapacityStockpile(190);
-        }
-        if (buildingType.getName().equals("Inn")) {
-            //TODO check for the change of popularity
-        }
+//        if (buildingType.getName().equals("Church") || buildingType.getName().equals("Cathedral")) {
+//            owner.addReligionPopularity(2);
+//        }
+//        if (buildingType.getName().equals("Hovel")) {
+//            owner.addUnemployedPeople(8);
+//        }
+//        if (buildingType.getName().equals("Fletcher")) {
+//            this.mode = "bow";
+//        }
+//        if (buildingType.getName().equals("BlackSmith")) {
+//            this.mode = "sword";
+//        }
+//        if (buildingType.getName().equals("PoleTurner")) {
+//            this.mode = "spear";
+//        }
+//        if (buildingType.getName().equals("Armoury")) {
+//            GameMenuController.getCurrentEmpire().getArmoury().addFreeCapacityArmoury(50);
+//        }
+//        if (buildingType.getName().equals("Stable")) {
+//            GameMenuController.getCurrentEmpire().getArmoury().addHorse(4);
+//        }
+//        if (buildingType.getName().equals("FoodStock")) {
+//            GameMenuController.getCurrentEmpire().getFoodStock().addFreeCapacityFoodStock(250);
+//        }
+//        if (buildingType.getName().equals("Stockpile")) {
+//            GameMenuController.getCurrentEmpire().getResources().addFreeCapacityStockpile(190);
+//        }
+//        if (buildingType.getName().equals("Inn")) {
+//            //TODO check for the change of popularity
+//        }
     }
 
     public Building(BuildingType buildingType) {

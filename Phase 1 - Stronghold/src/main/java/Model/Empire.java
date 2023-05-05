@@ -49,7 +49,7 @@ public class Empire {
         this.color = EmpireColors.getEmpireColorByNumber(empireId).getName();
     }
 
-    Empire() {
+    public Empire() {
     }
 
     public int[] getKeepCoordinates() {

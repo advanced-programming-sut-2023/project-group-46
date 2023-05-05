@@ -94,7 +94,9 @@ public class GameMenuController {
             for (int i = 0; i < usernames.length; i++) {
                 game.getEmpires().add(new Empire(User.getUserByUsername(usernames[i]), i, map.getEmpireCoordinates().get(i)[0], map.getEmpireCoordinates().get(i)[1]));
                 currentEmpire = game.getEmpires().get(i);
-                game.getEmpires().get(i).getBuildings().add(map.getMap()[map.getEmpireCoordinates().get(i)[0]][map.getEmpireCoordinates().get(i)[1]].getBuilding());
+                System.out.println(map.getMap()[map.getEmpireCoordinates().get(i)[0]][map.getEmpireCoordinates().get(i)[1]].getBuilding().getBuildingType().getName());
+                game.getEmpires().get(i).getBuildings().add(new Building(BuildingType.KEEP, currentEmpire));
+                map.getMap()[map.getEmpireCoordinates().get(i)[0]][map.getEmpireCoordinates().get(i)[1]].setBuilding(game.getEmpires().get(i).getBuildings().get(0));
                 map.getMap()[map.getEmpireCoordinates().get(i)[0] + 1][map.getEmpireCoordinates().get(i)[1]].setBuilding(new Building(BuildingType.STOCKPILE, game.getEmpires().get(i)));//add stockpile for start of the game
                 game.getEmpires().get(i).getBuildings().add(map.getMap()[map.getEmpireCoordinates().get(i)[0] + 1][map.getEmpireCoordinates().get(i)[1]].getBuilding());
                 map.getMap()[map.getEmpireCoordinates().get(i)[0] - 1][map.getEmpireCoordinates().get(i)[1]].setBuilding(new Building(BuildingType.FOOD_STOCK, game.getEmpires().get(i)));//add foodStock for start of the game
@@ -384,7 +386,77 @@ public class GameMenuController {
         return "success";
     }
 
-    public void pourOil(Matcher matcher) {//mohammad.h
+    public String pourOil(Matcher matcher) {
+        readMap();
+        String dir = matcher.group("direction");
+        int damage = UnitType.ENGINEER_WITH_OIL.getAttackPower();
+        if (!dir.equals("up") && !dir.equals("down") && !dir.equals("left") && !dir.equals("right")) {
+            return "invalid direction";
+        }
+        Unit unit = null;
+        for (Unit selectedUnit : selectedUnits) {
+            if (selectedUnit.getUnitType().equals(UnitType.ENGINEER_WITH_OIL)) {
+                unit = selectedUnit;
+                break;
+            }
+        }
+        if (unit == null) {
+            return "there is no engineer with oil in this place";
+        }
+        int x = selectedCoordinates.get("unit")[0];
+        int y = selectedCoordinates.get("unit")[1];
+        if (dir.equals("up")) {
+            if (y + 1 > map.getSize() - 1) {
+                return "EndOfTheMap!";
+            }
+            for (int i = 0; i < map.getMap()[x][y + 1].getUnits().size(); i++) {
+                if (!map.getMap()[x][y + 1].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                    map.getMap()[x][y + 1].getUnits().get(i).getDamage(damage);
+                }
+            }
+        } else if (dir.equals("down")) {
+            if (y == 0) {
+                return "EndOfTheMap!";
+            }
+            for (int i = 0; i < map.getMap()[x][y - 1].getUnits().size(); i++) {
+                if (!map.getMap()[x][y - 1].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                    map.getMap()[x][y - 1].getUnits().get(i).getDamage(damage);
+                }
+            }
+        } else if (dir.equals("left")) {
+            if (x == 0) {
+                return "EndOfTheMap!";
+            }
+            for (int i = 0; i < map.getMap()[x - 1][y].getUnits().size(); i++) {
+                if (!map.getMap()[x - 1][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                    map.getMap()[x - 1][y].getUnits().get(i).getDamage(damage);
+                }
+            }
+        } else if (dir.equals("right")) {
+            if (x + 1 > map.getSize() - 1) {
+                return "EndOfTheMap!";
+            }
+            for (int i = 0; i < map.getMap()[x + 1][y].getUnits().size(); i++) {
+                if (!map.getMap()[x + 1][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                    map.getMap()[x + 1][y].getUnits().get(i).getDamage(damage);
+                }
+            }
+        }
+        boolean bool = false;
+        for (int i = 0; i < currentEmpire.getBuildings().size(); i++) {
+            if (currentEmpire.getBuildings().get(i).getBuildingType().equals(BuildingType.OIL_SMELTER)) {
+                bool = true;
+                break;
+            }
+        }
+        if (!(bool && currentEmpire.getResources().getPitch() > 0)) {
+            map.getMap()[x][y].getUnits().remove(unit);
+            currentEmpire.getUnits().remove(unit);
+            map.getMap()[x][y].getUnits().add(new Unit(UnitType.ENGINEER, currentEmpire));
+            currentEmpire.getUnits().add(map.getMap()[x][y].getUnits().get(map.getMap()[x][y].getUnits().size() - 1));
+        }
+        writeMap();
+        return "success";
     }
 
     public String attackMachines(Matcher matcher) {//fire ballista attack in group of archers not here
@@ -811,10 +883,6 @@ public class GameMenuController {
         }
     }
 
-    private void checkFightUnits() {//this function should be ca
-
-    }
-
     public void checkFoodProductiveBuildings() {// each building produces if there is enough free space in the foodStock
         for (int i = 0; i < currentEmpire.getBuildings().size(); i++) {
             String name = currentEmpire.getBuildings().get(i).getBuildingType().getName();
@@ -988,5 +1056,44 @@ public class GameMenuController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String setOilForEngineers(Matcher matcher) {
+        readMap();
+        int count = Integer.parseInt(matcher.group("count"));
+        int counter = 0;
+        for (Unit selectedUnit : selectedUnits) {
+            if (selectedUnit.getUnitType().equals(UnitType.ENGINEER)) {
+                counter++;
+            }
+        }
+        if (count > counter) {
+            return "not enough engineer";
+        }
+        boolean bool = false;
+        for (int i = 0; i < currentEmpire.getBuildings().size(); i++) {
+            if (currentEmpire.getBuildings().get(i).getBuildingType().equals(BuildingType.OIL_SMELTER)) {
+                bool = true;
+                break;
+            }
+        }
+        if (!bool) {
+            return "you don't have oil smelter in your buildings";
+        }
+        if (currentEmpire.getResources().getPitch() < count) {
+            return "you don't have enough pitch";
+        }
+        currentEmpire.getResources().addResource("pitch", -count);
+        for (int i = 0; i < count; i++) {
+            map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().remove(getUnit(currentEmpire, "Engineer"));
+            currentEmpire.getUnits().remove(getUnit(currentEmpire, "Engineer"));
+            selectedUnits.remove(getUnit(currentEmpire, "Engineer"));
+        }
+        for (int i = 0; i < count; i++) {
+            map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().add(new Unit(UnitType.ENGINEER_WITH_OIL, currentEmpire));
+            currentEmpire.getUnits().add(map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().get(map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().size() - 1));
+        }
+        writeMap();
+        return "success";
     }
 }

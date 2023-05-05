@@ -11,6 +11,7 @@ public enum UnitType {
     TUNNELER("Tunneler", 10, 10, 4, 30, 0, "Engineer"),
     LADDER_MAN("Ladderman", 0, 10, 4, 4, 0, "Engineer"),
     ENGINEER("Engineer", 0, 10, 3, 30, 0, "Engineer"),
+    ENGINEER_WITH_OIL("EngineerWithOil",200,10, 3,30,0,"Engineer"),
     BLACK_MONK("BlackMonk", 30, 150, 2, 10, 0, "Sword"),
     ARCHER_BOW("ArcherBow", 4, 20, 4, 75, 10, "Archer"),
     SLAVES("Slaves", 10, 10, 4, 5, 0, "Sword"),

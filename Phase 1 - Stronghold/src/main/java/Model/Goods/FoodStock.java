@@ -16,6 +16,9 @@ public class FoodStock {
         this.freeCapacityFoodStock = freeCapacityFoodStock;
     }
 
+    public FoodStock() {
+    }
+
     public double getMeat() {
         return meat;
     }

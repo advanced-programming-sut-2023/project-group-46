@@ -34,7 +34,7 @@ public class User {
         this.isStayedLoggedIn = false;
     }
 
-    User() {
+    public User() {
     }
 
     public static User getUserByUsername(String username) throws Exception {

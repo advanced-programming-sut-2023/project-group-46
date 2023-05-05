@@ -61,11 +61,13 @@ public class GameMenu {
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.SELECT_BUILDING_REGEX)) != null) {
                 System.out.println(gameMenuController.selectBuilding(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.POUR_OIL_REGEX)) != null) {
-                gameMenuController.pourOil(matcher);
+                System.out.println(gameMenuController.pourOil(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.SET_UNIT_MODE_REGEX)) != null) {
                 System.out.println(gameMenuController.setUnitMode(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.CREATE_UNIT_REGEX)) != null) {
                 System.out.println(gameMenuController.createUnit(matcher));
+            } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.SET_OIL_FOR_ENGINEER)) != null) {
+                System.out.println(gameMenuController.setOilForEngineers(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.CHANGE_MODE_ARMOUR_BUILDING_REGEX)) != null) {
                 System.out.println(gameMenuController.changeBuildingMode(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.DROP_UNIT_REGEX)) != null) {

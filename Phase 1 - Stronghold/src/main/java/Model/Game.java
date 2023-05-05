@@ -5,8 +5,8 @@ import java.util.HashMap;
 
 public class Game {
     private static HashMap<String, Integer> shopItems = new HashMap<>();
-    private final ArrayList<Trade> availableTrades;
-    private final ArrayList<Trade> historyTrades;
+    private ArrayList<Trade> availableTrades;
+    private ArrayList<Trade> historyTrades;
     private ArrayList<Empire> empires;
     private int turnsCounter;
 
@@ -36,6 +36,7 @@ public class Game {
         shopItems.put("leatherArmor", 25);
         shopItems.put("metalArmor", 58);
     }
+
 
     public static HashMap<String, Integer> getShopItems() {
         return shopItems;
