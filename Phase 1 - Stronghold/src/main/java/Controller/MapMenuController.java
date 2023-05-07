@@ -1,5 +1,6 @@
 package Controller;
 
+import Enums.Commands.MapMenuCommands;
 import Enums.EnvironmentType;
 import Model.Cell;
 import Model.Map;
@@ -124,14 +125,23 @@ public class MapMenuController {
     public String moveInMap(Matcher matcher) {
         int x = 0;
         int y = 0;
-        while (matcher.find()) {
-            String type = matcher.group("type");
-            int count = Integer.parseInt(matcher.group("count"));
-            if (type.equals("up")) y += count;
-            else if (type.equals("down")) y -= count;
-            else if (type.equals("right")) x += count;
-            else if (type.equals("left")) x -= count;
+        String command = matcher.group("command");
+        Matcher up = MapMenuCommands.getMatcher(command, MapMenuCommands.UP);
+        Matcher down = MapMenuCommands.getMatcher(command, MapMenuCommands.DOWN);
+        Matcher left = MapMenuCommands.getMatcher(command, MapMenuCommands.LEFT);
+        Matcher right = MapMenuCommands.getMatcher(command, MapMenuCommands.RIGHT);
+        boolean upFound = up.find(), downFound = down.find(), leftFound = left.find(), rightFound = right.find();
+        if (!upFound && !downFound && !leftFound && !rightFound) {
+            return "Invalid command";
         }
+        if (upFound && (up.group("count") == null || up.group("count").isEmpty())) y += 1;
+        else if(upFound && !(up.group("count") == null || up.group("count").isEmpty())) y +=  Integer.parseInt(up.group("count"));
+        if (downFound && (down.group("count") == null || down.group("count").isEmpty())) y -= 1;
+        else if(downFound && !(down.group("count") == null || down.group("count").isEmpty())) y -=  Integer.parseInt(down.group("count"));
+        if (rightFound && (right.group("count") == null || right.group("count").isEmpty())) x += 1;
+        else if(rightFound && !(right.group("count") == null || right.group("count").isEmpty())) x +=  Integer.parseInt(right.group("count"));
+        if (leftFound && (left.group("count") == null || left.group("count").isEmpty())) x -= 1;
+        else if(leftFound && !(left.group("count") == null || left.group("count").isEmpty())) x -=  Integer.parseInt(left.group("count"));
         if (!checkMove(x, y)) return "Invalid move";
         this.x += x;
         this.y += y;
