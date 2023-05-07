@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 public class Menu {
     private static final Scanner scanner = new Scanner(System.in);
 
+
     public static Matcher getMatcher(String command, String regex) {
         Matcher matcher = Pattern.compile(regex).matcher(command);
         return matcher.matches() ? matcher : null;
@@ -15,5 +16,6 @@ public class Menu {
     public static Scanner getScanner() {
         return scanner;
     }
+
 
 }

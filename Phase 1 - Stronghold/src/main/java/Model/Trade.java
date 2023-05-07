@@ -1,12 +1,12 @@
 package Model;
 
 public class Trade {
-    private String wantedResource;
-    private int wantedResourceAmount;
-    private String givenResource;
-    private int givenResourceAmount;
-    private String message;
-    private Empire senderEmpire;
+    private final String wantedResource;
+    private final int wantedResourceAmount;
+    private final String givenResource;
+    private final int givenResourceAmount;
+    private final String message;
+    private final Empire senderEmpire;
     private Empire getterEmpire;
 
     public Trade(String wantedResource, int wantedResourceAmount, String givenResource, int givenResourceAmount, String message, Empire senderEmpire) {
@@ -16,9 +16,6 @@ public class Trade {
         this.givenResourceAmount = givenResourceAmount;
         this.message = message;
         this.senderEmpire = senderEmpire;
-    }
-
-    public Trade() {
     }
 
     public String getWantedResource() {

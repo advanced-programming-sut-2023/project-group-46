@@ -4,13 +4,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum MapMenuCommands {
-    SHOW_MAP("^show map \\-x (?<x>\\d+) \\-y (?<y>\\d+)$"),
-    MOVE_IN_MAP("^map(\\\\s(?<type>(up|left|down|right))(?<count>\\\\d*))+$"),
+    SHOW_MAP("^show  map \\-x (?<x>\\d+) \\-y (?<y>\\d+)$"),
+    MOVE_IN_MAP("^map ((up||left||down||right)\\s\\d+*)+$"),
     SHOW_DETAILS("^show details \\-x (?<x>\\d+) \\-y (?<y>\\d+)$");
 
-    private final String regex;
+    private String regex;
 
-    MapMenuCommands(String regex) {
+    private MapMenuCommands(String regex) {
         this.regex = regex;
     }
 

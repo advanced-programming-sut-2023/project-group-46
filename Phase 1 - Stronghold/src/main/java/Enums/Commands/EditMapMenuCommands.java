@@ -12,9 +12,9 @@ public enum EditMapMenuCommands {
     DROP_BUILDING("^dropbuilding \\-x (?<x>\\d+) \\-y (?<y>\\d+) \\-t (?<type>\\S+)$"),
     DROP_UNIT("^dropunit \\-x (?<x>\\d+) \\-y (?<y>\\d+) \\-t (?<type>\\S+) \\-c (?<count>\\S+)$");
 
-    private final String regex;
+    private String regex;
 
-    EditMapMenuCommands(String regex) {
+    private EditMapMenuCommands(String regex) {
         this.regex = regex;
     }
 
