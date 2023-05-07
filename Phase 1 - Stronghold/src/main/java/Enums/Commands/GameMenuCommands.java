@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public enum GameMenuCommands {
     DROP_BUILDING_REGEX("(?=.* -x (?<x>\\S+))(?=.* -y (?<y>\\S+))(?=.* -t (?<type>.+))^dropbuilding( *-[xyt]+ \\S+){3}$"),
     SELECT_BUILDING_REGEX("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^select building( *-[xy] \\d+){2}$"),
-    SELECT_UNIT_REGEX("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^select unit( *-[xy] \\d+){2}$"),
+    SELECT_UNIT_REGEX("(?=.* -x (?<x>\\S+))(?=.* -y (?<y>\\S+))(?=.* -t (?<type>\\S+))*^select unit( *-[xyt] \\S+){2,3}$"),
     MOVE_UNIT_REGEX("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^move unit to( *-[xy] \\d+){2}$"),
     PATROL_UNIT_REGEX("(?=.* -x1 (?<x1>\\d+))(?=.* -y1 (?<y1>\\d+))(?=.* -x2 (?<x2>\\d+))(?=.* -y2 (?<y2>\\d+))^patrol unit( *-[xy12]+ \\d+){4}$"),
     ATTACK_SPECIAL_ENEMY_REGEX("^attack -e (?<x>\\d+) (?<y>\\d+)$"),

@@ -241,6 +241,7 @@ public class GameMenuController {
     public String selectUnit(Matcher matcher) {
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
+        String type = matcher.group("type");
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
             return "invalid coordinate";
         }
@@ -248,7 +249,9 @@ public class GameMenuController {
         selectedCoordinates.put("unit", new int[]{x, y});
         for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
             if (map.getMap()[x][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
-                selectedUnits.add(map.getMap()[x][y].getUnits().get(i));
+                if (type == null) {//TODO add types for units in this part
+                    selectedUnits.add(map.getMap()[x][y].getUnits().get(i));
+                }
             }
         }
         return "success";
