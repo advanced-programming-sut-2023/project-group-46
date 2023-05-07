@@ -26,6 +26,7 @@ public class TradeMenu {
             } else if ((matcher = TradeMenuCommands.getMatcher(command, TradeMenuCommands.TRADE_REGEX)) != null) {
                 System.out.println(tradeMenuController.trade(matcher));
             } else if (command.matches("back")) {
+                System.out.println("Back to GameMenu");
                 return;
             } else {
                 System.out.println("Invalid command!");
