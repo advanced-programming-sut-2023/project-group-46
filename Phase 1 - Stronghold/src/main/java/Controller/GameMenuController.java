@@ -18,7 +18,7 @@ public class GameMenuController {
     private final ArrayList<Unit> selectedUnits;
     private final HashMap<String, int[]> selectedCoordinates;//keys are building , unit
     private Building selectedBuilding;
-    private Map map;//zero base
+    private static Map map;//zero base
 
     public GameMenuController() {
         selectedUnits = new ArrayList<>();
@@ -32,6 +32,8 @@ public class GameMenuController {
     public static Game getGame() {
         return game;
     }
+
+    public static Map getMap(){return map;};
 
     private ArrayList<Cell> neighbors(int x, int y) {
         ArrayList<Cell> cells = new ArrayList<>();
@@ -75,8 +77,9 @@ public class GameMenuController {
 
     public String startANewGame(String command) throws Exception {
         readMap();
+        command = command.concat("/" + LoginMenuController.getLoggedInUser().getUsername());
         String[] usernames = command.split("/");
-        int players = 1;
+        int players = 0;
         for (String username : usernames) {
             if (User.getUserByUsername(username) == null) {
                 return username + " doesn't exist";
@@ -94,7 +97,6 @@ public class GameMenuController {
             for (int i = 0; i < usernames.length; i++) {
                 game.getEmpires().add(new Empire(User.getUserByUsername(usernames[i]), i, map.getEmpireCoordinates().get(i)[0], map.getEmpireCoordinates().get(i)[1]));
                 currentEmpire = game.getEmpires().get(i);
-                System.out.println(map.getMap()[map.getEmpireCoordinates().get(i)[0]][map.getEmpireCoordinates().get(i)[1]].getBuilding().getBuildingType().getName());
                 game.getEmpires().get(i).getBuildings().add(new Building(BuildingType.KEEP, currentEmpire));
                 map.getMap()[map.getEmpireCoordinates().get(i)[0]][map.getEmpireCoordinates().get(i)[1]].setBuilding(game.getEmpires().get(i).getBuildings().get(0));
                 map.getMap()[map.getEmpireCoordinates().get(i)[0] + 1][map.getEmpireCoordinates().get(i)[1]].setBuilding(new Building(BuildingType.STOCKPILE, game.getEmpires().get(i)));//add stockpile for start of the game
@@ -103,13 +105,11 @@ public class GameMenuController {
                 game.getEmpires().get(i).getBuildings().add(map.getMap()[map.getEmpireCoordinates().get(i)[0] - 1][map.getEmpireCoordinates().get(i)[1]].getBuilding());
             }
             currentEmpire = game.getEmpires().get(0);
-            writeMap();
             return "Game Started";
         }
     }
 
     public String dropBuilding(Matcher matcher) {
-        readMap();
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         String buildingName = matcher.group("type");
@@ -122,7 +122,7 @@ public class GameMenuController {
         if (map.getMap()[x][y].getBuilding() != null || map.getMap()[x][y].getUnits().size() > 0 || map.getMap()[x][y].getEnvironmentName() != null) {
             return "there are some other things in this place";
         }
-        String cellType = map.getMap()[x][y].getEnvironmentName();
+        String cellType = map.getMap()[x][y].getType();
         if (BuildingType.getBuildingByName(buildingName).getType().equals("FarmBuildings")) {
             if (!cellType.equals("thickGrass") && !cellType.equals("oasisGrass")) {
                 return "can't drop farm buildings in this place";
@@ -190,7 +190,6 @@ public class GameMenuController {
         }
         map.getMap()[x][y].setBuilding(new Building(BuildingType.getBuildingByName(buildingName), currentEmpire));
         currentEmpire.getBuildings().add(map.getMap()[x][y].getBuilding());
-        writeMap();
         return "success";
     }
 
@@ -217,7 +216,6 @@ public class GameMenuController {
     }
 
     public String repair() {
-        readMap();
         if (selectedBuilding == null) {
             return "you should select a building first";
         }
@@ -233,7 +231,6 @@ public class GameMenuController {
         }
         currentEmpire.getResources().addResource("stone", -1 * (int) (Math.ceil(selectedBuilding.getBuildingType().getHp() - selectedBuilding.getHp()) / 500));
         selectedBuilding.setHp(selectedBuilding.getBuildingType().getHp());
-        writeMap();
         return "success";
     }
 
@@ -278,11 +275,21 @@ public class GameMenuController {
             int damage = selectedUnit.getUnitType().getAttackPower();
             if (selectedUnit.getUnitType().equals(UnitType.LADDER_MAN)) {
                 if (distance <= selectedUnit.getUnitType().getSpeed()) {
-                    if (map.getMap()[x][y].getBuilding() != null && !map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
-                        map.getMap()[x][y].getBuilding().setIsPassableForEnemies(true);
+                    String name = map.getMap()[x][y].getBuilding().getBuildingType().getName();
+                    if (name.equals("ShortWall") || name.equals("TallWall")) {
+                        if (map.getMap()[x][y].getBuilding() != null && !map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
+                            map.getMap()[x][y].getBuilding().setIsPassableForEnemies(true);
+                        }
                     }
                 }
-            } else if (selectedUnit.getUnitType().getType().equals("Sword")) {
+            }//TODO the code under this comment should be added in the movement function
+//            else if (selectedUnit.getUnitType().equals(UnitType.ASSASSIN) && map.getMap()[x][y].getBuilding() != null) {
+//                String name = map.getMap()[x][y].getBuilding().getBuildingType().getName();
+//                if (name.equals("SmallStoneGatehouse") || name.equals("BigStoneGatehouse") || name.equals("TallWall") || name.equals("ShortWall")) {
+//                    map.getMap()[x][y].getBuilding().setIsPassableForEnemies(true);
+//                }
+//            }
+            else if (selectedUnit.getUnitType().getType().equals("Sword")) {
                 if (distance <= selectedUnit.getUnitType().getSpeed()) {//TODO check is there any way to that location or not
                     boolean bool = true;
                     while (bool) {
@@ -387,7 +394,6 @@ public class GameMenuController {
     }
 
     public String pourOil(Matcher matcher) {
-        readMap();
         String dir = matcher.group("direction");
         int damage = UnitType.ENGINEER_WITH_OIL.getAttackPower();
         if (!dir.equals("up") && !dir.equals("down") && !dir.equals("left") && !dir.equals("right")) {
@@ -455,7 +461,6 @@ public class GameMenuController {
             map.getMap()[x][y].getUnits().add(new Unit(UnitType.ENGINEER, currentEmpire));
             currentEmpire.getUnits().add(map.getMap()[x][y].getUnits().get(map.getMap()[x][y].getUnits().size() - 1));
         }
-        writeMap();
         return "success";
     }
 
@@ -835,7 +840,7 @@ public class GameMenuController {
     }
 
     private void attackNextTurnByMode(int x, int y, Unit unit) {//TODO after any movement and in the start of the turn it should be called
-        int damage = unit.getAttackPower();
+        int damage = unit.getAttackPower();//TODO add functions for engineer with oil
         if (unit.getUnitType().getType().equals("Archer")) {
             int attackRange = unit.getUnitType().getAttackRange();
             for (int i = x - attackRange; i < attackRange + x; i++) {
@@ -879,8 +884,11 @@ public class GameMenuController {
                         checkDeadUnitsLocation(i, j);
                     }
                 }
-            }
+            }//TODO complete
         }
+//        else if (unit.getUnitType().equals(UnitType.ENGINEER_WITH_OIL)) {
+//            if(unit.getMode().)
+//        }
     }
 
     public void checkFoodProductiveBuildings() {// each building produces if there is enough free space in the foodStock
@@ -1036,30 +1044,7 @@ public class GameMenuController {
     private void checkEndOfTheGame() {
     }
 
-    private void readMap() {
-        String username = LoginMenuController.getLoggedInUser().getUsername();
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        try {
-            map = objectMapper.readValue(new File(username + ".json"), Map.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void writeMap() {
-        String username = LoginMenuController.getLoggedInUser().getUsername();
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        try {
-            objectMapper.writeValue(new File(username + ".json"), map);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public String setOilForEngineers(Matcher matcher) {
-        readMap();
         int count = Integer.parseInt(matcher.group("count"));
         int counter = 0;
         for (Unit selectedUnit : selectedUnits) {
@@ -1093,7 +1078,17 @@ public class GameMenuController {
             map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().add(new Unit(UnitType.ENGINEER_WITH_OIL, currentEmpire));
             currentEmpire.getUnits().add(map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().get(map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().size() - 1));
         }
-        writeMap();
         return "success";
+    }
+
+    private void readMap() {
+        String username = LoginMenuController.getLoggedInUser().getUsername();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        try {
+            map = objectMapper.readValue(new File(username + ".json"), Map.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

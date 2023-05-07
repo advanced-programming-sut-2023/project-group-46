@@ -5,11 +5,7 @@ import Model.Cell;
 import Model.Map;
 import Model.Unit;
 import View.MapMenu;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.regex.Matcher;
 
 public class MapMenuController {
@@ -21,19 +17,9 @@ public class MapMenuController {
     private int x;
     private int y;
 
-
-    {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        try {
-            map = objectMapper.readValue(new File(username + ".json"), Map.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public MapMenuController() {
         mapMenu = new MapMenu(this);
+        map = GameMenuController.getMap();
     }
 
     public String showMap(Matcher matcher) {
@@ -89,7 +75,7 @@ public class MapMenuController {
             stringCellForShow += "S";
         } else if (cell.getBuilding() != null) {
             stringCellForShow += "B";
-        }else if (cell.getEnvironmentName() != null && !cell.getEnvironmentName().equals("rock")) {
+        } else if (cell.getEnvironmentName() != null && !cell.getEnvironmentName().equals("rock")) {
             stringCellForShow += "T";
         } else if (cell.getEnvironmentName() != null && cell.getEnvironmentName().equals("rock")) {
             stringCellForShow += "R";
@@ -148,7 +134,7 @@ public class MapMenuController {
         int y = Integer.parseInt(matcher.group("y"));
         String stringShowDetail = "type : " + map.getMap()[x][y].getType();
         if (map.getMap()[x][y].getBuilding() != null)
-            stringShowDetail += "\nbuilding : " + map.getMap()[x][y].getBuilding().getBuildingType().getName();
+            stringShowDetail += "\nbuilding : " + map.getMap()[x][y].getBuilding().getBuildingType().getName() + " owner:" + map.getMap()[x][y].getBuilding().getOwner().getUser().getUsername();
         for (Unit unit : map.getMap()[x][y].getUnits()) {
             if (unit != null) stringShowDetail += "\nUnit : " + unit.getUnitType().getName();
         }
