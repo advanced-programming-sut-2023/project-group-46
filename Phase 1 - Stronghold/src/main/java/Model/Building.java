@@ -4,12 +4,13 @@ import Controller.GameMenuController;
 import Enums.BuildingType;
 
 public class Building {
-    private final BuildingType buildingType;
-    private final Empire owner;
+    private BuildingType buildingType;
+    private Empire owner;
     private int hp;
     private int rate;
     private int freeCapacity;
     private String mode;//this is for the buildings like armourers that can produce different things
+    private boolean isPassableForEnemies;
 
     public Building(BuildingType buildingType, Empire owner) {
         this.owner = owner;
@@ -17,6 +18,7 @@ public class Building {
         this.freeCapacity = buildingType.getCapacity();
         this.buildingType = buildingType;
         this.rate = buildingType.getRate() + (int) (-0.5 * owner.getFearRate());
+        this.isPassableForEnemies = false;
         if (buildingType.getName().equals("Church") || buildingType.getName().equals("Cathedral")) {
             owner.addReligionPopularity(2);
         }
@@ -47,6 +49,21 @@ public class Building {
         if (buildingType.getName().equals("Inn")) {
             //TODO check for the change of popularity
         }
+    }
+
+    public Building(BuildingType buildingType) {
+        this.buildingType = buildingType;
+    }
+
+    public Building() {
+    }
+
+    public boolean isIsPassableForEnemies() {
+        return isPassableForEnemies;
+    }
+
+    public void setIsPassableForEnemies(boolean isPassableForEnemies) {
+        this.isPassableForEnemies = isPassableForEnemies;
     }
 
     public int getHp() {
@@ -91,5 +108,9 @@ public class Building {
 
     public void setMode(String mode) {
         this.mode = mode;
+    }
+
+    public void getDamage(int hp) {
+        this.hp -= hp;
     }
 }

@@ -34,6 +34,9 @@ public class User {
         this.isStayedLoggedIn = false;
     }
 
+    public User() {
+    }
+
     public static User getUserByUsername(String username) throws Exception {
         for (User user : getUsersFromJsonFile()) {
             if (Objects.equals(user.getUsername(), username))

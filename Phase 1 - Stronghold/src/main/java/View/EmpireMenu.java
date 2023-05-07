@@ -36,6 +36,7 @@ public class EmpireMenu {
             } else if (command.matches("^fear rate show$")) {
                 System.out.println(empireMenuController.fearRateShow());
             } else if (command.matches("back")) {
+                System.out.println("Back to GameMenu");
                 return;
             } else {
                 System.out.println("Invalid command!");

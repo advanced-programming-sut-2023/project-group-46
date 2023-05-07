@@ -11,12 +11,15 @@ import java.util.regex.Matcher;
 public class MapMenuController {
 
     private final MapMenu mapMenu;
+
+    private String username = LoginMenuController.getLoggedInUser().getUsername();
     private Map map;
     private int x;
     private int y;
 
     public MapMenuController() {
         mapMenu = new MapMenu(this);
+        map = GameMenuController.getMap();
     }
 
     public String showMap(Matcher matcher) {
@@ -31,7 +34,7 @@ public class MapMenuController {
         String[][] partOfMap = new String[x2 - x1][y2 - y1];
         for (int i = 0; i < x2 - x1; i++) {
             for (int j = 0; j < y2 - y1; j++)
-                partOfMap[i][j] = cellForShow(map.getMap()[i][j]);
+                partOfMap[i][j] = cellForShow(map.getMap()[x1 + i][y1 + j]);
         }
         return partOfMap;
     }
@@ -68,12 +71,15 @@ public class MapMenuController {
 
     private String cellForShow(Cell cell) {
         String stringCellForShow = EnvironmentType.getEnvironmentTypeByName(cell.getType()).getColor();
-        if (cell.getUnits() != null)
-            stringCellForShow += "S\n";
-        if (cell.getBuilding() != null)
-            stringCellForShow += "B\n";
-        if (cell.getEnvironmentName() != null && !cell.getEnvironmentName().equals("rock"))
+        if (cell.getUnits().size() > 0) {
+            stringCellForShow += "S";
+        } else if (cell.getBuilding() != null) {
+            stringCellForShow += "B";
+        } else if (cell.getEnvironmentName() != null && !cell.getEnvironmentName().equals("rock")) {
             stringCellForShow += "T";
+        } else if (cell.getEnvironmentName() != null && cell.getEnvironmentName().equals("rock")) {
+            stringCellForShow += "R";
+        } else stringCellForShow += " ";
         String reset = "\033[0m";
         stringCellForShow += reset;
         return stringCellForShow;
@@ -83,51 +89,23 @@ public class MapMenuController {
         String stringMakeOutputInStandard = "";
         for (int i = 0; i <= 16; i++) {
             if (i % 4 == 0) {
-                if (i != 0 && i != (16)) stringMakeOutputInStandard += splitRowsForIn();
-                else stringMakeOutputInStandard += splitRowsForEnd();
+                if (i != 0 && i != (16)) stringMakeOutputInStandard += "\n";
             } else {
                 for (int j = 0; j <= 6 * 14; j++) {
                     if (j % 6 == 0)
                         stringMakeOutputInStandard += "|";
                     else {
-                        int row = i / 4;
-                        int column = j / 6;
-                        if (i % 4 == 2 && j % 6 == 3 && !partOfMap[row][column].equals("")) {
-                            stringMakeOutputInStandard += (partOfMap[row][column]);
+                        if (i % 4 == 2 && j % 6 == 3) {
+                            stringMakeOutputInStandard += (partOfMap[i / 4][j / 6]);
                         } else
                             stringMakeOutputInStandard += "#";
                     }
                 }
+                stringMakeOutputInStandard += "\n";
             }
-            stringMakeOutputInStandard += "\n";
         }
         return stringMakeOutputInStandard;
     }
-
-    private String splitRowsForIn() {
-        int length = 25;
-        String stringSplitRowsForIn = "";
-        length -= 2;
-        stringSplitRowsForIn += "|";
-        while (length > 0) {
-            stringSplitRowsForIn += "-";
-            length--;
-        }
-        stringSplitRowsForIn += "|\n";
-        return stringSplitRowsForIn;
-    }
-
-    private String splitRowsForEnd() {
-        int length = 25;
-        String stringSplitRowsForEnd = "";
-        while (length > 0) {
-            stringSplitRowsForEnd += "-";
-            length--;
-        }
-        stringSplitRowsForEnd += "\n";
-        return stringSplitRowsForEnd;
-    }
-
 
     public String moveInMap(Matcher matcher) {
         int x = 0;
@@ -156,7 +134,7 @@ public class MapMenuController {
         int y = Integer.parseInt(matcher.group("y"));
         String stringShowDetail = "type : " + map.getMap()[x][y].getType();
         if (map.getMap()[x][y].getBuilding() != null)
-            stringShowDetail += "\nbuilding : " + map.getMap()[x][y].getBuilding().getBuildingType().getName();
+            stringShowDetail += "\nbuilding : " + map.getMap()[x][y].getBuilding().getBuildingType().getName() + " owner:" + map.getMap()[x][y].getBuilding().getOwner().getUser().getUsername();
         for (Unit unit : map.getMap()[x][y].getUnits()) {
             if (unit != null) stringShowDetail += "\nUnit : " + unit.getUnitType().getName();
         }
