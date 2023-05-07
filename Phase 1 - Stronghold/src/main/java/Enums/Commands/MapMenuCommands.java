@@ -5,7 +5,11 @@ import java.util.regex.Pattern;
 
 public enum MapMenuCommands {
     SHOW_MAP("^show map \\-x (?<x>\\d+) \\-y (?<y>\\d+)$"),
-    MOVE_IN_MAP("^map(\\s(?<type>(up|left|down|right))(?<count>\\d*))+$"),
+    MOVE_IN_MAP("^move map (?<content>.+)$"),
+    UP("up( (?<count>[\\d]*))?"),
+    DOWN("down( (?<count>[\\d]*))?"),
+    LEFT("left( (?<count>[\\d]*))?"),
+    RIGHT("right( (?<count>[\\d]*))?"),
     SHOW_DETAILS("^show details \\-x (?<x>\\d+) \\-y (?<y>\\d+)$");
 
     private final String regex;
