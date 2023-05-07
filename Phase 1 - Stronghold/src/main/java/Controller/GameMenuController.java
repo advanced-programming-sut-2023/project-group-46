@@ -249,7 +249,7 @@ public class GameMenuController {
         selectedCoordinates.put("unit", new int[]{x, y});
         for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
             if (map.getMap()[x][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
-                if (type == null) {//TODO add types for units in this part
+                if (type == null) {//TODO add types for units in this part imp
                     selectedUnits.add(map.getMap()[x][y].getUnits().get(i));
                 }
             }
