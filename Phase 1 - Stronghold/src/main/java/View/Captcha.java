@@ -6,7 +6,7 @@ public class Captcha {
 
     public static String generateCaptcha() {
         String code = "";
-        int length = (int) (Math.random() * 5) + 4; // generate a random length between 4 and 8
+        int length = (int) (Math.random() * 4) + 1; // generate a random length between 4 and 8
         StringBuilder captcha = new StringBuilder();
         for (int i = 0; i < length; i++) {
             int digit = (int) (Math.random() * 10); // generate a random digit
