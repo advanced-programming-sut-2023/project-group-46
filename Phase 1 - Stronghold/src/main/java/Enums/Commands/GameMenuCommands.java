@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum GameMenuCommands {
-    DROP_BUILDING_REGEX("(?=.* -x (?<x>\\S+))(?=.* -y (?<y>\\S+))(?=.* -type (?<type>.+))^dropbuilding( *-[xytpe]+ \\S+){3}$"),
+    DROP_BUILDING_REGEX("(?=.* -x (?<x>\\S+))(?=.* -y (?<y>\\S+))(?=.* -t (?<type>.+))^dropbuilding( *-[xyt]+ \\S+){3}$"),
     SELECT_BUILDING_REGEX("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^select building( *-[xy] \\d+){2}$"),
     SELECT_UNIT_REGEX("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^select unit( *-[xy] \\d+){2}$"),
     MOVE_UNIT_REGEX("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^move unit to( *-[xy] \\d+){2}$"),

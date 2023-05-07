@@ -189,7 +189,7 @@ public class Empire {
 
     public Boolean haveThisBuilding(String name) {
         for (Building building : buildings) {
-            if (building.getBuildingType().getName().equals(name)) {
+            if (building.getBuildingType().getName().equalsIgnoreCase(name)) {
                 return true;
             }
         }

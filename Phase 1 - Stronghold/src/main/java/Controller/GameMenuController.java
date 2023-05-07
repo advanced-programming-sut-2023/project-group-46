@@ -15,10 +15,10 @@ import java.util.regex.Matcher;
 public class GameMenuController {
     private static Game game;
     private static Empire currentEmpire;
+    private static Map map;//zero base
     private final ArrayList<Unit> selectedUnits;
     private final HashMap<String, int[]> selectedCoordinates;//keys are building , unit
     private Building selectedBuilding;
-    private static Map map;//zero base
 
     public GameMenuController() {
         selectedUnits = new ArrayList<>();
@@ -33,7 +33,11 @@ public class GameMenuController {
         return game;
     }
 
-    public static Map getMap(){return map;};
+    public static Map getMap() {
+        return map;
+    }
+
+    ;
 
     private ArrayList<Cell> neighbors(int x, int y) {
         ArrayList<Cell> cells = new ArrayList<>();
@@ -113,7 +117,7 @@ public class GameMenuController {
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         String buildingName = matcher.group("type");
-        if (BuildingType.getBuildingByName(buildingName) == null) {
+        if (BuildingType.getBuildingByName(buildingName) == null || buildingName.equalsIgnoreCase("keep")) {
             return "invalid building type";
         }
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
@@ -127,15 +131,15 @@ public class GameMenuController {
             if (!cellType.equals("thickGrass") && !cellType.equals("oasisGrass")) {
                 return "can't drop farm buildings in this place";
             }
-        } else if (buildingName.equals("IronMine")) {
+        } else if (buildingName.equalsIgnoreCase("IronMine")) {
             if (!cellType.equals("ironTexture")) {
                 return "IronMine must be built on IronTexture";
             }
-        } else if (buildingName.equals("Quarry")) {
+        } else if (buildingName.equalsIgnoreCase("Quarry")) {
             if (!cellType.equals("boulder")) {
                 return "Quarry must be built on Boulder";
             }
-        } else if (buildingName.equals("PitchRig")) {
+        } else if (buildingName.equalsIgnoreCase("PitchRig")) {
             if (!cellType.equals("oil")) {//TODO check for environment type
                 return "PitchRig must be built on Oil";
             }
@@ -143,7 +147,7 @@ public class GameMenuController {
             if (!cellType.equals("earth") && !cellType.equals("earthAndStone") && !cellType.equals("scrub") && !cellType.equals("thickGrass") && !cellType.equals("oasisGrass") && !cellType.equals("beach")) {
                 return "can't drop this building in this place";
             }
-            if (buildingName.equals("DrawBridge")) {
+            if (buildingName.equalsIgnoreCase("DrawBridge")) {
                 boolean bool = false;
                 for (int i = 0; i < neighbors(x, y).size(); i++) {
                     if (neighbors(x, y).get(i).getBuilding() != null && (neighbors(x, y).get(i).getBuilding().getBuildingType().getName().equals("SmallStoneGatehouse") || neighbors(x, y).get(i).getBuilding().getBuildingType().getName().equals("BigStoneGatehouse"))) {
@@ -154,7 +158,7 @@ public class GameMenuController {
                     return "DrawBridge must be built near Gates";
                 }
             }
-            if (buildingName.equals("Armoury") && currentEmpire.haveThisBuilding(buildingName)) {
+            if (buildingName.equalsIgnoreCase("Armoury") && currentEmpire.haveThisBuilding(buildingName)) {
                 boolean bool = false;
                 for (int i = 0; i < neighbors(x, y).size(); i++) {
                     if (neighbors(x, y).get(i).getBuilding() != null && neighbors(x, y).get(i).getBuilding().getBuildingType().getName().equals("Armoury")) {
@@ -165,7 +169,7 @@ public class GameMenuController {
                     return "Armoury must be built near other Armouries";
                 }
             }
-            if (buildingName.equals("FoodStock") && currentEmpire.haveThisBuilding(buildingName)) {
+            if (buildingName.equalsIgnoreCase("FoodStock") && currentEmpire.haveThisBuilding(buildingName)) {
                 boolean bool = false;
                 for (int i = 0; i < neighbors(x, y).size(); i++) {
                     if (neighbors(x, y).get(i).getBuilding() != null && neighbors(x, y).get(i).getBuilding().getBuildingType().getName().equals("FoodStock")) {
@@ -176,7 +180,7 @@ public class GameMenuController {
                     return "FoodStock must be built near other FoodStocks";
                 }
             }
-            if (buildingName.equals("Stockpile") && currentEmpire.haveThisBuilding(buildingName)) {
+            if (buildingName.equalsIgnoreCase("Stockpile") && currentEmpire.haveThisBuilding(buildingName)) {
                 boolean bool = false;
                 for (int i = 0; i < neighbors(x, y).size(); i++) {
                     if (neighbors(x, y).get(i).getBuilding() != null && neighbors(x, y).get(i).getBuilding().getBuildingType().getName().equals("Stockpile")) {

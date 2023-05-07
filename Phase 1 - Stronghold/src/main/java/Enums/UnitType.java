@@ -47,7 +47,7 @@ public enum UnitType {
 
     public static UnitType getUnitByName(String name) {
         for (UnitType unit : UnitType.values()) {
-            if (name.equalsIgnoreCase(unit.name))
+            if (name.equals(unit.name))
                 return unit;
         }
         return null;

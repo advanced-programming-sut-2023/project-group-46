@@ -148,15 +148,15 @@ public class EditMapMenuController {
             if (!cellType.equals("thickGrass") && !cellType.equals("oasisGrass")) {
                 return "can't drop farm buildings in this place";
             }
-        } else if (buildingName.equals("IronMine")) {
+        } else if (buildingName.equalsIgnoreCase("IronMine")) {
             if (!cellType.equals("ironTexture")) {
                 return "IronMine must be built on IronTexture";
             }
-        } else if (buildingName.equals("Quarry")) {
+        } else if (buildingName.equalsIgnoreCase("Quarry")) {
             if (!cellType.equals("boulder")) {
                 return "Quarry must be built on Boulder";
             }
-        } else if (buildingName.equals("PitchRig")) {
+        } else if (buildingName.equalsIgnoreCase("PitchRig")) {
             if (!cellType.equals("oil")) {//TODO check for environment type
                 return "PitchRig must be built on Oil";
             }
@@ -164,11 +164,11 @@ public class EditMapMenuController {
             if (!cellType.equals("earth") && !cellType.equals("earthAndStone") && !cellType.equals("scrub") && !cellType.equals("thickGrass") && !cellType.equals("oasisGrass") && !cellType.equals("beach")) {
                 return "can't drop this building in this place";
             }
-            if (buildingName.equals("keep") && map.getEmpireCoordinates().size() == 8) {
+            if (buildingName.equalsIgnoreCase("keep") && map.getEmpireCoordinates().size() == 8) {
                 return "Too much keepBuildings";
             }
         }
-        if (buildingName.equals("keep")) {
+        if (buildingName.equalsIgnoreCase("keep")) {
             if (x == map.getSize() - 1 || y == map.getSize() - 1) {
                 return "keep building won't place in the corner of the map";
             }
