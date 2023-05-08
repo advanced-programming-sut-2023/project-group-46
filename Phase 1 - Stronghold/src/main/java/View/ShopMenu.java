@@ -26,7 +26,9 @@ public class ShopMenu {
             } else if (command.matches("back")) {
                 System.out.println("Back to GameMenu");
                 return;
-            }  else {
+            } else if (command.matches("show current menu")) {
+                System.out.println("ShopMenu");
+            } else {
                 System.out.println("Invalid command!");
             }
         }

@@ -9,13 +9,13 @@ public class EmpireMenuController {
     public String showPopularityFactors() {
         String output = "";
         output += "Food : ";
-        output += (GameMenuController.getCurrentEmpire().getFoodPopularity()) + '\n';
+        output += (GameMenuController.getCurrentEmpire().getFoodPopularity()) + "\n";
         output += "Tax : ";
-        output += (GameMenuController.getCurrentEmpire().getTaxPopularity()) + '\n';
+        output += (GameMenuController.getCurrentEmpire().getTaxPopularity()) + "\n";
         output += "Fear : ";
-        output += (GameMenuController.getCurrentEmpire().getFearPopularity()) + '\n';
+        output += (GameMenuController.getCurrentEmpire().getFearPopularity()) + "\n";
         output += "Religion : ";
-        output += (GameMenuController.getCurrentEmpire().getReligionPopularity()) + '\n';
+        output += (GameMenuController.getCurrentEmpire().getReligionPopularity()) + "\n";
         return output;
     }
 
@@ -64,7 +64,7 @@ public class EmpireMenuController {
         return GameMenuController.getCurrentEmpire().getFearRate();
     }
 
-    public void calculatePopularityFactors() {
+    public static void calculatePopularityFactors() {
         switch (GameMenuController.getCurrentEmpire().getFoodRate()) {
             case -2 -> GameMenuController.getCurrentEmpire().setFoodPopularity(-8);
             case -1 -> GameMenuController.getCurrentEmpire().setFoodPopularity(-4);

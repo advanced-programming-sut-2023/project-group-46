@@ -45,7 +45,7 @@ public class LoginMenu {
             command = Menu.getScanner().nextLine();
 
             if (command.matches("^show current menu$"))
-                System.out.println("Login Menu");
+                System.out.println("LoginMenu");
 
             else if (command.matches("^create a new account$")) {
                 System.out.println("Entered Sign up menu!");

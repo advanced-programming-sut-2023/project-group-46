@@ -28,6 +28,8 @@ public class TradeMenu {
             } else if (command.matches("back")) {
                 System.out.println("Back to GameMenu");
                 return;
+            }  else if (command.matches("show current menu")) {
+                System.out.println("TradeMenu");
             } else {
                 System.out.println("Invalid command!");
             }

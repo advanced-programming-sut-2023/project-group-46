@@ -78,6 +78,8 @@ public class GameMenu {
                 System.out.println(gameMenuController.repair());
             } else if (command.matches("disband unit")) {
                 gameMenuController.disbandUnit();
+            } else if (command.matches("show current menu")) {
+                System.out.println("GameMenu");
             } else if (command.matches("next turn")) {
                 //gameMenuController.nextTurn();
             } else {

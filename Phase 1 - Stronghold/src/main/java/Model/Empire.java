@@ -43,6 +43,7 @@ public class Empire {
         this.religionPopularity = 0;
         this.keepCoordinates[0] = x;
         this.keepCoordinates[1] = y;
+        //TODo add number to popularity factors
         this.resources = new Resources(5000, 0, 0, 0, 0, 50, 0, 100, 0, -150);
         this.armoury = new Armoury(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         this.foodStock = new FoodStock(0, 0, 0, 60, -60);

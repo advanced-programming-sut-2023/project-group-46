@@ -27,6 +27,8 @@ public class MainMenu {
                 System.out.println("logged out");
                 //TODO kiarash should check this part in loginMenu
                 return;
+            }  else if (command.matches("show current menu")) {
+                System.out.println("MainMenu");
             } else {
                 System.out.println("invalid command!");
             }
