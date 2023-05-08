@@ -9,14 +9,29 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 
 public class LoginMenu {
-    private final LoginMenuController loginMenuController;
-    private final SignUpMenuController signUpMenuController = new SignUpMenuController();
-    private final SignupMenu signupMenu = new SignupMenu(signUpMenuController);
-    private final MainMenu mainMenu;
+    static int delayTime = 0;
+    private LoginMenuController loginMenuController;
+    private MainMenu mainMenu;
+    private SignUpMenuController signUpMenuController = new SignUpMenuController();
+    private SignupMenu signupMenu = new SignupMenu(signUpMenuController);
 
     public LoginMenu(LoginMenuController loginMenuController) {
         this.loginMenuController = loginMenuController;
         this.mainMenu = new MainMenu();
+    }
+
+    static void delayForWrongPassword() {
+        if (delayTime < 15000)
+            delayTime += 5000;
+
+        System.out.println("The system is locked for " + delayTime / 1000 + " seconds. please don't type anything until the sleep time ends.");
+
+        try {
+            Thread.sleep(delayTime);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
+
     }
 
     public void run() throws Exception {
@@ -29,14 +44,28 @@ public class LoginMenu {
         while (true) {
             command = Menu.getScanner().nextLine();
 
-            if (command.matches("^create a new account$")) {
+            if (command.matches("^show current menu$"))
+                System.out.println("Login Menu");
+
+            else if (command.matches("^create a new account$")) {
                 System.out.println("Entered Sign up menu!");
                 signupMenu.run();
             } else if ((matcher = LoginMenuCommands.getMatcher(command, LoginMenuCommands.LOGGING_IN)) != null) {
                 result = loginMenuController.login(matcher);
-                System.out.println(result);
-                if (Objects.equals(result, "user logged in successfully!"))
+                if (!Objects.equals(result, "Information were correct!"))
+                    System.out.println(result);
+                if (Objects.equals(result, "Information were correct!")) {
+                    while (true) {
+                        if (Captcha.verifyCaptcha(false)) {
+                            System.out.println("Logged in successfully!");
+                            break;
+                        }
+                    }
                     mainMenu.run();
+                    delayTime = 0;
+                } else if (Objects.equals(result, "Username and password did not match!"))
+                    delayForWrongPassword();
+
             } else if ((matcher = LoginMenuCommands.getMatcher(command, LoginMenuCommands.FORGOT_PASSWORD)) != null) {
                 result = loginMenuController.forgetPassword(matcher);
                 System.out.println(result);
@@ -69,4 +98,5 @@ public class LoginMenu {
         }
 
     }
+
 }

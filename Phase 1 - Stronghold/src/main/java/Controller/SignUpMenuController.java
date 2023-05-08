@@ -2,11 +2,8 @@ package Controller;
 
 import Enums.PreBuiltSecurityQuestions;
 import Enums.PreBuiltSlogans;
-import Model.Cell;
 import Model.User;
 import View.SignupMenu;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,14 +16,22 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.regex.Matcher;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 
 public class SignUpMenuController {
-    private static String generateRandomPassword() {
+    private final SignupMenu signupMenu;
+
+    public SignUpMenuController() {
+        signupMenu = new SignupMenu(this);
+    }
+
+    public static String generateRandomPassword() {
         String uppercaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String lowercaseLetters = "abcdefghijklmnopqrstuvwxyz";
         String digits = "0123456789";
-        String specialCharacters = "!@#$%^&*()_+-=[]{}|;:,.<>?";
+        String specialCharacters = "!@#$%^&*()_+=[]{}|;:,.<>?";
 
         StringBuilder sb = new StringBuilder();
         SecureRandom random = new SecureRandom();
@@ -52,8 +57,8 @@ public class SignUpMenuController {
         //"Only one double quote"   1
         //"Has two double quotes correctly which should be removed"    2
         //"Is not between double quotes and has whitespace"    3
-        //"doesn't have whitespace and double quote, acceptable"     4
-        //Others(unreachable)    5
+        //"doesn't have whitespace, acceptable"     4
+
         if (input.contains("\"")) {
             int firstQuote = input.indexOf("\"");
             int lastQuote = input.lastIndexOf("\"");
@@ -62,13 +67,21 @@ public class SignUpMenuController {
 
             else if (firstQuote == 0 && lastQuote == input.length() - 1)
                 return 2;   //"Has two double quotes correctly which should be removed"
+
+            else {
+                if (input.matches(".*\\s.*"))
+                    return 3;   //"Is not between double quotes and has whitespace"
+
+                else
+                    return 4;   //"doesn't have whitespace, acceptable"
+            }
+
         } else if (input.matches(".*\\s.*"))
             return 3;  //"Is not between double quotes and has whitespace"
 
         else
-            return 4;  //"doesn't have whitespace and double quote, acceptable"
+            return 4;  //"doesn't have whitespace, acceptable"
 
-        return 5;
     }
 
     public String register(Matcher matcher) throws Exception {
@@ -78,7 +91,9 @@ public class SignUpMenuController {
         String email = matcher.group("email");
         String nickName = matcher.group("nickname");
 
-        if (username.matches("^ *$") || password.matches("^ *$") || passwordConfirmation.matches("^ *$") || email.matches("^ *$") || nickName.matches("^ *$"))
+        if (username.matches("^ *$")
+                || password.matches("^ *$") || passwordConfirmation.matches("^ *$")
+                || email.matches("^ *$") || nickName.matches("^ *$"))
             return "Invalid command! Please enter your username, password, password confirmation, email and nickname correctly!";
 
         username = cleanUsername(username);
@@ -122,7 +137,7 @@ public class SignUpMenuController {
 
         if (slogan != null) {
             if (slogan.matches("^-s\\s*$"))
-                return "Invalid command! Slogan flag and slogan come with together!.";
+                return "Invalid command! Slogan flag and slogan come with together!";
 
             slogan = slogan.substring(3);
             while (slogan.matches("^\\s.*$")) {
@@ -137,21 +152,21 @@ public class SignUpMenuController {
                     break;
                 case 3:
                     return "The slogan you entered has some whitespaces and is not between double quotes";
-                case 4:
+                default:
                     break;
             }
         }
 
-        writeInJsonFile(username, password, email, nickName, slogan);
+        writeInJsonFile(username, password, email, nickName, slogan, "users.json");
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
         try {
-            objectMapper.writeValue(new File( username + ".json"), new Model.Map(100));
+            Model.Map map= new Model.Map(100);
+            objectMapper.writeValue(new File( username + ".json"), map);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
 
         return showSecurityQuestion();
     }
@@ -181,7 +196,7 @@ public class SignUpMenuController {
         }
 
         if (username.matches(".*[^a-zA-Z0-9|_].*"))
-            return "Invalid username format! Username is only consisted of English letters, numbers and underline character.";
+            return "Invalid username format! Username should contain only English letters, digits and underline character.";
 
         if (User.getUserByUsername(username) != null)
             return suggestUsername(username);
@@ -222,14 +237,12 @@ public class SignUpMenuController {
 
         String password = generateRandomPassword();
 
-        writeInJsonFile(username, password, email, nickName, slogan);
-
+        writeInJsonFile(username, password, email, nickName, slogan, "users.json");
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
         try {
-            Model.Map map= new Model.Map(100);
-            objectMapper.writeValue(new File( username + ".json"), map);
+            objectMapper.writeValue(new File( username + ".json"), new Model.Map(100));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -297,7 +310,7 @@ public class SignUpMenuController {
         // write the updated contents of the JSONArray back to the users.json file
         Files.write(Paths.get("users.json"), usersArray.toString().getBytes());
 
-        return "You registered successfully!";
+        return "You chose question successfully!";
     }
 
     public String handlePasswordErrors(String password, String passwordConfirmation) {
@@ -322,60 +335,34 @@ public class SignUpMenuController {
         else return "";
     }
 
-    public String cleanUsername(String username) {
-        username = username.trim();
-        if (username.matches("^-u\\s.*$"))    // if the last input in username
-        {
-            username = username.substring(3);
-            while (username.matches("^\\s.*$")) {
-                username = username.substring(1);
-            }
+    public String cleanStringWithAFlag(String string, String flag) {
+        string = string.trim();
+        if (string.matches("^" + flag + "\\s.*$")) {
+            string = string.substring(3);
+            while (string.matches("^\\s.*$"))
+                string = string.substring(1);
         }
-        return username;
+        return string;
+    }
+
+    public String cleanUsername(String username) {
+        return cleanStringWithAFlag(username, "-u");
     }
 
     public String cleanPassword(String password) {
-        password = password.trim();
-        if (password.matches("^-p\\s.*$")) {
-            password = password.substring(3);
-            while (password.matches("^\\s.*$")) {
-                password = password.substring(1);
-            }
-        }
-        return password;
+        return cleanStringWithAFlag(password, "-p");
     }
 
     public String cleanPasswordConfirmation(String passwordConfirmation) {
-        passwordConfirmation = passwordConfirmation.trim();
-        if (passwordConfirmation.matches("^-c\\s.*$")) {
-            passwordConfirmation = passwordConfirmation.substring(3);
-            while (passwordConfirmation.matches("^\\s.*$")) {
-                passwordConfirmation = passwordConfirmation.substring(1);
-            }
-        }
-        return passwordConfirmation;
+        return cleanStringWithAFlag(passwordConfirmation, "-c");
     }
 
     public String cleanEmail(String email) {
-        email = email.trim();
-        if (email.matches("^-e\\s.*$")) {
-            email = email.substring(3);
-            while (email.matches("^\\s.*$")) {
-                email = email.substring(1);
-            }
-        }
-        return email;
+        return cleanStringWithAFlag(email, "-e");
     }
 
     public String cleanNickname(String nickName) {
-        nickName = nickName.trim();
-        if (nickName.matches("^-n\\s.*$")) {
-            nickName = nickName.substring(3);
-            while (nickName.matches("^\\s.*$")) {
-                nickName = nickName.substring(1);
-            }
-        }
-        return nickName;
+        return cleanStringWithAFlag(nickName, "-n");
     }
 
     public String suggestUsername(String username) throws Exception {
@@ -388,8 +375,8 @@ public class SignUpMenuController {
         return "This username is already taken! You can use this username instead: " + username + randomNumber;
     }
 
-    public void writeInJsonFile(String username, String password, String email, String nickName, String slogan) throws IOException {
-        File file = new File("users.json");
+    public void writeInJsonFile(String username, String password, String email, String nickName, String slogan, String fileName) throws IOException {
+        File file = new File(fileName);
 
         Map<String, Object> newUserMap = new LinkedHashMap<>();
         newUserMap.put("username", username);
@@ -450,4 +437,5 @@ public class SignUpMenuController {
         return output;
     }
 }
+
 

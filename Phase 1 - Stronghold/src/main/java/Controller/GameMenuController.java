@@ -114,6 +114,9 @@ public class GameMenuController {
     }
 
     public String dropBuilding(Matcher matcher) {
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         String buildingName = matcher.group("type");
@@ -198,6 +201,9 @@ public class GameMenuController {
     }
 
     public String selectBuilding(Matcher matcher) {
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
@@ -239,19 +245,30 @@ public class GameMenuController {
     }
 
     public String selectUnit(Matcher matcher) {
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         String type = matcher.group("type");
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
             return "invalid coordinate";
         }
+
+        if (type != null && UnitType.getUnitByName(type) == null) {
+            return "invalid type for units";
+        }
         selectedUnits.clear();
         selectedCoordinates.put("unit", new int[]{x, y});
         for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
             if (map.getMap()[x][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
-                if (type == null) {//TODO add types for units in this part imp
-                    selectedUnits.add(map.getMap()[x][y].getUnits().get(i));
+                if (type != null) {
+                    if (map.getMap()[x][y].getUnits().get(i).getUnitType().getName().equals(type)) {
+                        selectedUnits.add(map.getMap()[x][y].getUnits().get(i));
+                    }
+                    continue;
                 }
+                selectedUnits.add(map.getMap()[x][y].getUnits().get(i));
             }
         }
         return "success";
@@ -269,6 +286,9 @@ public class GameMenuController {
     }
 
     public String attackEnemy(Matcher matcher) {//archers will stay and give damage them and other will go and damage one of the enemies randomly
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
@@ -361,6 +381,9 @@ public class GameMenuController {
     }
 
     public String attackLocation(Matcher matcher) {
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
@@ -472,6 +495,9 @@ public class GameMenuController {
     }
 
     public String attackMachines(Matcher matcher) {//fire ballista attack in group of archers not here
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
@@ -512,6 +538,9 @@ public class GameMenuController {
     }
 
     public String dropUnit(Matcher matcher) {
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         String type = matcher.group("type");
@@ -695,6 +724,9 @@ public class GameMenuController {
     }
 
     public String digTunnel(Matcher matcher) {//Tunnelers can dig tunnel in range 10 & damage that building 15000
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
