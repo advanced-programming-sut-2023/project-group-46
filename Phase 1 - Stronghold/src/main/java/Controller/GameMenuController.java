@@ -110,7 +110,7 @@ public class GameMenuController {
                 EmpireMenuController.calculatePopularityFactors();
             }
             currentEmpire = game.getEmpires().get(0);
-            return "Game Started";
+            return "Game Started  " + currentEmpire.getUser().getUsername() + "  is now playing";
         }
     }
 
@@ -255,7 +255,6 @@ public class GameMenuController {
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
             return "invalid coordinate";
         }
-
         if (type != null && UnitType.getUnitByName(type) == null) {
             return "invalid type for units";
         }
@@ -359,11 +358,15 @@ public class GameMenuController {
             if (map.getMap()[x][y].getUnits().get(i).getHp() <= 0) {
                 forDelete.add(map.getMap()[x][y].getUnits().get(i));
             }
-
+        }
+        if (forDelete.size() == 0) {
+            return;
         }
         for (Unit unit : forDelete) {
             map.getMap()[x][y].getUnits().remove(unit);
-            unit.getOwner().getUnits().remove(unit);
+            if (unit.getOwner() != null) {
+                unit.getOwner().getUnits().remove(unit);
+            }
         }
     }
 
@@ -372,7 +375,9 @@ public class GameMenuController {
             return;
         }
         if (map.getMap()[x][y].getBuilding().getHp() <= 0) {
-            map.getMap()[x][y].getBuilding().getOwner().getBuildings().remove(map.getMap()[x][y].getBuilding());
+            if (map.getMap()[x][y].getBuilding().getOwner() != null) {
+                map.getMap()[x][y].getBuilding().getOwner().getBuildings().remove(map.getMap()[x][y].getBuilding());
+            }
             map.getMap()[x][y].setBuilding(null);
         }
     }
@@ -1075,13 +1080,30 @@ public class GameMenuController {
         }
     }
 
-    private void removeDestroyedThings() {
-    }
-
     private void findDirectionForMovements() {
     }
 
     private void checkEndOfTheGame() {
+    }
+
+    public String nextTurn() {
+        checkFoodProductiveBuildings();
+        checkArmourProductiveBuildings();
+        checkResourceProductiveBuildings();
+        for (int i = 0; i < map.getSize(); i++) {
+            for (int j = 0; j < map.getSize(); j++) {
+                checkDeadUnitsLocation(i, j);
+                checkDestroyedBuildingLocation(i, j);
+            }
+        }
+        //TODO end of the game should be checked
+        int id = currentEmpire.getEmpireId();
+        if (id == game.getEmpires().size() - 1) {
+            currentEmpire = game.getEmpires().get(0);
+        } else {
+            currentEmpire = game.getEmpires().get(id + 1);
+        } //TODO add mode unit functions;
+        return currentEmpire.getUser().getUsername() + " is now playing";
     }
 
     public String setOilForEngineers(Matcher matcher) {

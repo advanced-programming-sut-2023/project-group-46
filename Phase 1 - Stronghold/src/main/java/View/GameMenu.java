@@ -81,7 +81,7 @@ public class GameMenu {
             } else if (command.matches("show current menu")) {
                 System.out.println("GameMenu");
             } else if (command.matches("next turn")) {
-                //gameMenuController.nextTurn();
+                System.out.println(gameMenuController.nextTurn());
             } else {
                 System.out.println("Invalid command!");
             }//TODO find a way for invalid numbers like this 12a2
