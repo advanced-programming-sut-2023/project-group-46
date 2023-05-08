@@ -2,7 +2,6 @@ package Model.Goods;
 
 public class
 Armoury {
-    private int horse;
     private int bow;
     private int crossbow;
     private int spear;
@@ -13,29 +12,9 @@ Armoury {
     private int metalArmor;
     private int freeCapacityArmoury;
 
-    public Armoury(int bow, int crossbow, int spear, int pike, int mace, int sword, int leatherArmor, int metalArmor, int freeCapacityArmoury, int horse) {
-        this.bow = bow;
-        this.crossbow = crossbow;
-        this.spear = spear;
-        this.pike = pike;
-        this.mace = mace;
-        this.sword = sword;
-        this.leatherArmor = leatherArmor;
-        this.metalArmor = metalArmor;
-        this.freeCapacityArmoury = freeCapacityArmoury;
-        this.horse = horse;
-    }
-
-    public Armoury() {
-    }
-
     public boolean isArmouryType(String name) {
         return name.equals("bow") || name.equals("crossbow") || name.equals("spear") || name.equals("pike") || name.equals("mace") || name.equals("sword") ||
                 name.equals("leatherArmor") || name.equals("metalArmor");
-    }
-
-    public int getHorse() {
-        return horse;
     }
 
     public int getBow() {
@@ -88,10 +67,6 @@ Armoury {
 
     public void addMace(int mace) {
         this.mace += mace;
-    }
-
-    public void addHorse(int horse) {
-        this.horse += horse;
     }
 
     public void addSword(int sword) {

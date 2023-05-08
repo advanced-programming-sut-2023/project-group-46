@@ -4,16 +4,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Game {
-    private static HashMap<String, Integer> shopItems = new HashMap<>();
-    private ArrayList<Trade> availableTrades;
-    private ArrayList<Trade> historyTrades;
     private ArrayList<Empire> empires;
+    private final Cell[][] map;
+    private final ArrayList<Trade> availableTrades;
+    private final ArrayList<Trade> historyTrades;
     private int turnsCounter;
 
-    public Game() {
+    private static HashMap<String, Integer> shopItems = new HashMap<>();
+
+    public Game(Cell[][] map) {
+        this.map = map;
         availableTrades = new ArrayList<>();
         historyTrades = new ArrayList<>();
-        empires = new ArrayList<>();
         shopItems = new HashMap<>();
         shopItems.put("meat", 8);
         shopItems.put("bread", 8);
@@ -37,6 +39,17 @@ public class Game {
         shopItems.put("metalArmor", 58);
     }
 
+    public void setEmpires(ArrayList<Empire> empires) {
+        this.empires = empires;
+    }
+
+    public ArrayList<Empire> getEmpires() {
+        return empires;
+    }
+
+    public Cell[][] getMapGame() {
+        return map;
+    }
 
     public static HashMap<String, Integer> getShopItems() {
         return shopItems;
@@ -49,10 +62,6 @@ public class Game {
         return 0;
     }
 
-    public ArrayList<Empire> getEmpires() {
-        return empires;
-    }
-
     public Empire getEmpireById(int id) {
         for (Empire empire : empires) {
             if (empire.getEmpireId() == id)
@@ -61,12 +70,16 @@ public class Game {
         return null;
     }
 
-    public int getTurnsCounter() {
-        return turnsCounter;
-    }
-
     public void setTurnsCounter(int turnsCounter) {
         this.turnsCounter = turnsCounter;
+    }
+
+    public Cell[][] getMap() {
+        return map;
+    }
+
+    public int getTurnsCounter() {
+        return turnsCounter;
     }
 
     public ArrayList<Trade> getAvailableTrades() {

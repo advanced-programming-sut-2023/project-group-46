@@ -22,8 +22,6 @@ public class ShopMenuController {
             }
             output.append("item's name: ").append(key).append(" |buy: ").append(value).append(" |sell: ").append((int) (value * 0.8)).append(" |you have ").append(amount).append(" of this item").append('\n');
         }
-        int money = GameMenuController.getCurrentEmpire().getResources().getGold();
-        output.append("your money: ").append(money);
         return output.toString();
     }
 
