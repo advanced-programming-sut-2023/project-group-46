@@ -110,8 +110,13 @@ public class GameMenuController {
                 EmpireMenuController.calculatePopularityFactors();
             }
             currentEmpire = game.getEmpires().get(0);
-            return "Game Started  " + currentEmpire.getUser().getUsername() + "  is now playing";
+            return "success";
         }
+    }
+
+    public String checkNumberOfTheTurns(int number) {
+        game.setTurnsCounter(number);
+        return "Game Started  " + currentEmpire.getUser().getUsername() + "  is now playing";
     }
 
     public String dropBuilding(Matcher matcher) {
@@ -885,6 +890,9 @@ public class GameMenuController {
     }
 
     private void attackNextTurnByMode(int x, int y, Unit unit) {//TODO after any movement and in the start of the turn it should be called
+        if (!unit.getOwner().equals(currentEmpire)) {
+            return;
+        }
         int damage = unit.getAttackPower();//TODO add functions for engineer with oil
         if (unit.getUnitType().getType().equals("Archer")) {
             int attackRange = unit.getUnitType().getAttackRange();
@@ -934,6 +942,7 @@ public class GameMenuController {
 //        else if (unit.getUnitType().equals(UnitType.ENGINEER_WITH_OIL)) {
 //            if(unit.getMode().)
 //        }
+        checkDeadUnitsLocation(x, y);
     }
 
     public void checkFoodProductiveBuildings() {// each building produces if there is enough free space in the foodStock
@@ -1080,29 +1089,35 @@ public class GameMenuController {
         }
     }
 
-    private void findDirectionForMovements() {
-    }
+    private void checkEndOfTheGame() {//TODO complete and give the empires their points
 
-    private void checkEndOfTheGame() {
     }
 
     public String nextTurn() {
         checkFoodProductiveBuildings();
         checkArmourProductiveBuildings();
         checkResourceProductiveBuildings();
+        int id = currentEmpire.getEmpireId();
+        if (id == game.getEmpires().size() - 1) {
+            currentEmpire = game.getEmpires().get(0);
+            game.setTurnsCounter(game.getTurnsCounter() - 1);
+        } else {
+            currentEmpire = game.getEmpires().get(id + 1);
+        }
         for (int i = 0; i < map.getSize(); i++) {
             for (int j = 0; j < map.getSize(); j++) {
                 checkDeadUnitsLocation(i, j);
                 checkDestroyedBuildingLocation(i, j);
+                for (int k = 0; k < map.getMap()[i][j].getUnits().size(); k++) {
+                    attackNextTurnByMode(i, j, map.getMap()[i][j].getUnits().get(k));
+                }
             }
         }
         //TODO end of the game should be checked
-        int id = currentEmpire.getEmpireId();
-        if (id == game.getEmpires().size() - 1) {
-            currentEmpire = game.getEmpires().get(0);
-        } else {
-            currentEmpire = game.getEmpires().get(id + 1);
-        } //TODO add mode unit functions;
+        if (game.getTurnsCounter() == 0) {
+            checkEndOfTheGame();
+            return "end of the game";
+        }
         return currentEmpire.getUser().getUsername() + " is now playing";
     }
 
