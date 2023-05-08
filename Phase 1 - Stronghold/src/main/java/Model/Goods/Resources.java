@@ -25,6 +25,9 @@ public class Resources {
         this.freeCapacityStockpile = freeCapacityStockpile;
     }
 
+    public Resources() {
+    }
+
     public int getGold() {
         return gold;
     }
