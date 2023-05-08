@@ -1,27 +1,29 @@
-package Model;
+package Enums;
 
 public enum MachineType {
-    PORTABLE_SHIELDS(null, null, null, "portable shields", 1, 0, 0, 0);
-
-    MachineType(String speed, String attackPower, String defencePower, String name, int engineerNumber, int gold, int rate, int attackRange) {
+    PORTABLE_SHIELD("high", 0, 100, "PortableShield", 1, 5, 0),
+    BATTERING_RAM("low", 500, 2000, "BatteringRam", 4, 150, 0),
+    TREBUCHET(null, 2000, 400, "Trebuchet", 3, 150, 40),//منجنیق با وزنه تعادل
+    SIEGE_TOWER("medium", 0, 3300, "SiegeTower", 4, 150, 0),
+    CATAPULT("medium", 650, 150, "Catapult", 2, 150, 30),
+    FIRE_BALLISTA("medium", 100, 150, "FireBallista", 2, 150, 30);
+    MachineType(String speed, int attackPower, int defencePower, String name, int engineerNumber, int gold, int attackRange) {
         this.speed = speed;
         this.attackPower = attackPower;
         this.defencePower = defencePower;
         this.name = name;
         this.engineerNumber = engineerNumber;
         this.gold = gold;
-        this.rate = rate;
         this.attackRange = attackRange;
     }
 
-    private String speed;
-    private String attackPower;
-    private String defencePower;
-    private String name;
-    private int engineerNumber;
-    private int gold;
-    private int rate;
-    private int attackRange;
+    private final String speed;
+    private final int attackPower;
+    private final int defencePower;
+    private final String name;
+    private final int engineerNumber;
+    private final int gold;
+    private final int attackRange;
 
     public int getAttackRange() {
         return attackRange;
@@ -31,11 +33,11 @@ public enum MachineType {
         return speed;
     }
 
-    public String getAttackPower() {
+    public int getAttackPower() {
         return attackPower;
     }
 
-    public String getDefencePower() {
+    public int getDefencePower() {
         return defencePower;
     }
 
@@ -49,10 +51,6 @@ public enum MachineType {
 
     public int getGold() {
         return gold;
-    }
-
-    public int getRate() {
-        return rate;
     }
 
     public static MachineType getMachineByName(String name) {
