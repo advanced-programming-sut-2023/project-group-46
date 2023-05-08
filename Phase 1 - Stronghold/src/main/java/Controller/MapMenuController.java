@@ -130,18 +130,19 @@ public class MapMenuController {
         Matcher down = MapMenuCommands.getMatcher(command, MapMenuCommands.DOWN);
         Matcher left = MapMenuCommands.getMatcher(command, MapMenuCommands.LEFT);
         Matcher right = MapMenuCommands.getMatcher(command, MapMenuCommands.RIGHT);
-        boolean upFound = up.find(), downFound = down.find(), leftFound = left.find(), rightFound = right.find();
-        if (!upFound && !downFound && !leftFound && !rightFound) {
-            return "Invalid command";
-        }
-        if (upFound && (up.group("count") == null || up.group("count").isEmpty())) y += 1;
-        else if(upFound && !(up.group("count") == null || up.group("count").isEmpty())) y +=  Integer.parseInt(up.group("count"));
-        if (downFound && (down.group("count") == null || down.group("count").isEmpty())) y -= 1;
-        else if(downFound && !(down.group("count") == null || down.group("count").isEmpty())) y -=  Integer.parseInt(down.group("count"));
-        if (rightFound && (right.group("count") == null || right.group("count").isEmpty())) x += 1;
-        else if(rightFound && !(right.group("count") == null || right.group("count").isEmpty())) x +=  Integer.parseInt(right.group("count"));
-        if (leftFound && (left.group("count") == null || left.group("count").isEmpty())) x -= 1;
-        else if(leftFound && !(left.group("count") == null || left.group("count").isEmpty())) x -=  Integer.parseInt(left.group("count"));
+        if(up != null){
+            if ((up.group("count") == null || up.group("count").isEmpty())) y += 1;
+            else y +=  Integer.parseInt(up.group("count"));
+        }else if(down != null){
+            if ((down.group("count") == null || down.group("count").isEmpty())) y -= 1;
+            else y -=  Integer.parseInt(down.group("count"));
+        } else if(right != null){
+            if ((right.group("count") == null || right.group("count").isEmpty())) x += 1;
+            else x +=  Integer.parseInt(right.group("count"));
+        } else if(left != null){
+            if ((left.group("count") == null || left.group("count").isEmpty())) x -= 1;
+            else x -=  Integer.parseInt(left.group("count"));
+        } else return "Invalid command";
         if (!checkMove(x, y)) return "Invalid move";
         this.x += x;
         this.y += y;

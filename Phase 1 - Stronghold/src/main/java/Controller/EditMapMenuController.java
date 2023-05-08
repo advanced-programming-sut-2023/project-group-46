@@ -149,7 +149,7 @@ public class EditMapMenuController {
                 return "Too much keepBuildings";
             }
         }
-        if (buildingName.equals("keep")) {
+        if (buildingName.equalsIgnoreCase("keep")) {
             int[] coordinates = {x, y};
             map.getEmpireCoordinates().add(coordinates);
         }
