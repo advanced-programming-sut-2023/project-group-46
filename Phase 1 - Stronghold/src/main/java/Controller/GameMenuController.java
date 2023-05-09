@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 
-public class GameMenuController {//TODO add function for dig moat
+public class GameMenuController {
+    //TODO in the move functions killing pit
     private static Game game;
     private static Empire currentEmpire;
     private static Map map;//zero base
@@ -44,8 +45,6 @@ public class GameMenuController {//TODO add function for dig moat
         int y = map.getEmpireCoordinates().get(currentEmpire.getEmpireId())[1];
         return "x: " + x + " y: " + y;
     }
-
-    ;
 
     private ArrayList<Cell> neighbors(int x, int y) {
         ArrayList<Cell> cells = new ArrayList<>();
@@ -437,7 +436,7 @@ public class GameMenuController {//TODO add function for dig moat
                 boolean bool = true;
                 while (bool) {
                     int index = (int) (Math.random() * map.getMap()[x][y].getUnits().size());
-                    if (!map.getMap()[x][y].getUnits().get(index).getOwner().equals(currentEmpire)) {
+                    if (!map.getMap()[x][y].getUnits().get(index).getOwner().equals(currentEmpire) && !map.getMap()[x][y].getUnits().get(index).getUnitType().equals(UnitType.ASSASSIN)) {
                         for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
                             if (map.getMap()[x][y].getUnits().get(i).getUnitType().equals(UnitType.PORTABLE_SHIELD) && map.getMap()[x][y].getUnits().get(index).getOwner().equals(map.getMap()[x][y].getUnits().get(i).getOwner())) {
                                 map.getMap()[x][y].getUnits().get(i).getDamage(damage);
@@ -920,7 +919,7 @@ public class GameMenuController {//TODO add function for dig moat
     }
 
     private void attackNextTurnByMode(int x, int y, Unit unit) {//TODO after any movement and in the start of the turn it should be called
-        if (!unit.getOwner().equals(currentEmpire)) {//TODO call this part in the drop and create building
+        if (!unit.getOwner().equals(currentEmpire)) {//TODO call this part in the drop and create unit
             return;
         }
         int damage = unit.getAttackPower();
@@ -932,8 +931,8 @@ public class GameMenuController {//TODO add function for dig moat
                         continue;
                     }
                     for (int k = 0; k < map.getMap()[i][j].getUnits().size(); k++) {
-                        if (!map.getMap()[i][j].getUnits().get(i).getOwner().equals(currentEmpire)) {
-                            map.getMap()[i][j].getUnits().get(i).getDamage(damage);
+                        if (!map.getMap()[i][j].getUnits().get(k).getOwner().equals(currentEmpire) && !map.getMap()[x][y].getUnits().get(k).getUnitType().equals(UnitType.ASSASSIN)) {
+                            map.getMap()[i][j].getUnits().get(k).getDamage(damage);
                         }
                     }
                     checkDeadUnitsLocation(i, j);
@@ -960,14 +959,14 @@ public class GameMenuController {//TODO add function for dig moat
                         }
                         //TODO add the is passable function
                         for (int k = 0; k < map.getMap()[i][j].getUnits().size(); k++) {
-                            if (!map.getMap()[i][j].getUnits().get(i).getOwner().equals(currentEmpire)) {
-                                map.getMap()[i][j].getUnits().get(i).getDamage(damage);
+                            if (!map.getMap()[i][j].getUnits().get(k).getOwner().equals(currentEmpire) && !map.getMap()[x][y].getUnits().get(k).getUnitType().equals(UnitType.ASSASSIN)) {
+                                map.getMap()[i][j].getUnits().get(k).getDamage(damage);
                             }
                         }
                         checkDeadUnitsLocation(i, j);
                     }
                 }
-            }//TODO complete
+            }
         } else if (unit.getUnitType().equals(UnitType.ENGINEER_WITH_OIL)) {
             int neededEnemyForAttack = switch (unit.getMode()) {
                 case "offensive" -> 1;
@@ -977,7 +976,7 @@ public class GameMenuController {//TODO add function for dig moat
             };
             for (int i = 0; i < neighbors(x, y).size(); i++) {
                 for (int j = 0; j < neighbors(x, y).get(i).getUnits().size(); j++) {
-                    if (neighbors(x, y).get(i).getUnits().get(j).getOwner() != currentEmpire) {
+                    if (neighbors(x, y).get(i).getUnits().get(j).getOwner() != currentEmpire && !neighbors(x, y).get(i).getUnits().get(j).getUnitType().equals(UnitType.ASSASSIN)) {
                         neededEnemyForAttack--;
                     }
                 }
@@ -1176,12 +1175,18 @@ public class GameMenuController {//TODO add function for dig moat
         checkFoodProductiveBuildings();
         checkArmourProductiveBuildings();
         checkResourceProductiveBuildings();
+        EmpireMenuController.checkEffectOfFearRate();
+        EmpireMenuController.calculatePopularityFactors();
+        EmpireMenuController.calculateFoodAndTax();
         int id = currentEmpire.getEmpireId();
         if (id == game.getEmpires().size() - 1) {
             currentEmpire = game.getEmpires().get(0);
             game.setTurnsCounter(game.getTurnsCounter() - 1);
         } else {
             currentEmpire = game.getEmpires().get(id + 1);
+        }
+        if (game.getTurnsCounter() == 0) {
+            return "end of the game" + '\n' + checkEndOfTheGame();
         }
         for (int i = 0; i < map.getSize(); i++) {
             for (int j = 0; j < map.getSize(); j++) {
@@ -1191,10 +1196,6 @@ public class GameMenuController {//TODO add function for dig moat
                     attackNextTurnByMode(i, j, map.getMap()[i][j].getUnits().get(k));
                 }
             }
-        }
-        //TODO end of the game should be checked
-        if (game.getTurnsCounter() == 0) {
-            return "end of the game" + '\n' + checkEndOfTheGame();
         }
         return currentEmpire.getUser().getUsername() + " is now playing";
     }
@@ -1245,5 +1246,66 @@ public class GameMenuController {//TODO add function for dig moat
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String digMoat(Matcher matcher) {//spearman and slaves can dig moat
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
+        int x = Integer.parseInt(matcher.group("x"));
+        int y = Integer.parseInt(matcher.group("y"));
+        if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
+            return "invalid coordinate";
+        }
+        if (selectedUnits.size() == 0) {
+            return "you should select a unit first";
+        }
+        boolean bool = false;
+        for (Unit selectedUnit : selectedUnits) {
+            if (selectedUnit.getUnitType().equals(UnitType.SPEARMAN) || selectedUnit.getUnitType().equals(UnitType.SLAVES)) {
+                bool = true;
+            }
+        }
+        //TODO add passable function for this part
+        if (map.getMap()[x][y].getBuilding() != null || map.getMap()[x][y].getUnits().size() > 0 || map.getMap()[x][y].getEnvironmentName() != null) {
+            return "there are some other things in this place";
+        }
+        if (!bool) {
+            return "you should select a unit with spearman or slave";
+        }
+        map.getMap()[x][y].setType("moat");
+        return "success";
+    }
+
+    public String noMoat(Matcher matcher) {
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
+        int x = Integer.parseInt(matcher.group("x"));
+        int y = Integer.parseInt(matcher.group("y"));
+        if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
+            return "invalid coordinate";
+        }
+        if (selectedUnits.size() == 0) {
+            return "you should select a unit first";
+        }
+        boolean bool = false;
+        for (Unit selectedUnit : selectedUnits) {
+            if (selectedUnit.getUnitType().equals(UnitType.SPEARMAN) || selectedUnit.getUnitType().equals(UnitType.SLAVES)) {
+                bool = true;
+            }
+        }
+        //TODO add passable function for this part
+        if (map.getMap()[x][y].getBuilding() != null || map.getMap()[x][y].getUnits().size() > 0 || map.getMap()[x][y].getEnvironmentName() != null) {
+            return "there are some other things in this place";
+        }
+        if (!bool) {
+            return "you should select a unit with spearman or slave";
+        }
+        if (!map.getMap()[x][y].getType().equals("moat")) {
+            return "there is no moa in that coordinate";
+        }
+        map.getMap()[x][y].setType("earth");
+        return "success";
     }
 }

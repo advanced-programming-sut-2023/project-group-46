@@ -31,6 +31,10 @@ public class EmpireMenuController {
         GameMenuController.getCurrentEmpire().setFearPopularity(GameMenuController.getCurrentEmpire().getFearRate());
     }
 
+    public static void calculateFoodAndTax() {
+        //TODO complete
+    }
+
     public String showPopularityFactors() {
         String output = "";
         output += "Food : ";
@@ -89,7 +93,7 @@ public class EmpireMenuController {
         return GameMenuController.getCurrentEmpire().getFearRate();
     }
 
-    public void checkEffectOfFearRate() {// fear rate cause buildings and units do better
+    public static void checkEffectOfFearRate() {// fear rate cause buildings and units do better
         int fearRate = GameMenuController.getCurrentEmpire().getFearRate();
         for (int i = 0; i < GameMenuController.getCurrentEmpire().getUnits().size(); i++) {
             int defaultAttackPower = GameMenuController.getCurrentEmpire().getUnits().get(i).getUnitType().getAttackPower();

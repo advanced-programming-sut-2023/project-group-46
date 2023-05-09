@@ -87,6 +87,10 @@ public class GameMenu {
                 System.out.println(gameMenuController.dropUnit(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.ATTACK_MACHINES_REGEX)) != null) {
                 System.out.println(gameMenuController.attackMachines(matcher));
+            } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.DIG_MOAT)) != null) {
+                System.out.println(gameMenuController.digMoat(matcher));
+            } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.NO_MOAT)) != null) {
+                System.out.println(gameMenuController.noMoat(matcher));
             } else if (command.matches("repair")) {
                 System.out.println(gameMenuController.repair());
             } else if (command.matches("disband unit")) {
