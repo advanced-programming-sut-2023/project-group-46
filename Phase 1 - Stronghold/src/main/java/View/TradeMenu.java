@@ -18,9 +18,9 @@ public class TradeMenu {
         while (true) {
             command = Menu.getScanner().nextLine();
             if (command.matches("^trade list$")) {
-                System.out.println(tradeMenuController.tradeList());
+                System.out.print(tradeMenuController.tradeList());
             } else if (command.matches("^trade history$")) {
-                System.out.println(tradeMenuController.tradeHistory());
+                System.out.print(tradeMenuController.tradeHistory());
             } else if ((matcher = TradeMenuCommands.getMatcher(command, TradeMenuCommands.TRADE_ACCEPT_REGEX)) != null) {
                 System.out.println(tradeMenuController.tradeAccept(matcher));
             } else if ((matcher = TradeMenuCommands.getMatcher(command, TradeMenuCommands.TRADE_REGEX)) != null) {

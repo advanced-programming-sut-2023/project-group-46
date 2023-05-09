@@ -102,15 +102,27 @@ public class EmpireMenuController {
     }
 
     public String showArmoury() {//TODO complete this part
-        return null;
+        return "bow->" + GameMenuController.getCurrentEmpire().getArmoury().getArmouryAmount("bow") + '\n' +
+                "crossbow->" + GameMenuController.getCurrentEmpire().getArmoury().getArmouryAmount("crossbow") + '\n' +
+                "spear->" + GameMenuController.getCurrentEmpire().getArmoury().getArmouryAmount("spear") + '\n' +
+                "pike->" + GameMenuController.getCurrentEmpire().getArmoury().getArmouryAmount("pike") + '\n' +
+                "mace->" + GameMenuController.getCurrentEmpire().getArmoury().getArmouryAmount("mace") + '\n' +
+                "sword->" + GameMenuController.getCurrentEmpire().getArmoury().getArmouryAmount("sword") + '\n' +
+                "leatherArmor->" + GameMenuController.getCurrentEmpire().getArmoury().getArmouryAmount("leatherArmor") + '\n' +
+                "metalArmor->" + GameMenuController.getCurrentEmpire().getArmoury().getArmouryAmount("metalArmor") + '\n';
     }
 
-    public String showFoodStock() {//TODO complete this part
-        return null;
-    }
+    public String showStockpile() {
+        return "gold->" + GameMenuController.getCurrentEmpire().getResources().getResourceAmount("gold") + '\n' +
+                "wheat->" + GameMenuController.getCurrentEmpire().getResources().getResourceAmount("wheat") + '\n' +
+                "flour->" + GameMenuController.getCurrentEmpire().getResources().getResourceAmount("flour") + '\n' +
+                "hop->" + GameMenuController.getCurrentEmpire().getResources().getResourceAmount("hop") + '\n' +
+                "ale->" + GameMenuController.getCurrentEmpire().getResources().getResourceAmount("ale") + '\n' +
+                "stone->" + GameMenuController.getCurrentEmpire().getResources().getResourceAmount("stone") + '\n' +
+                "iron->" + GameMenuController.getCurrentEmpire().getResources().getResourceAmount("iron") + '\n' +
+                "wood->" + GameMenuController.getCurrentEmpire().getResources().getResourceAmount("wood") + '\n' +
+                "pitch->" + GameMenuController.getCurrentEmpire().getResources().getResourceAmount("pitch") + '\n';
 
-    public String showStockpile() {//TODO complete this part
-        return null;
     }
     //TODO check if the empire doesn't have enough food set the rate -2 (look at the getFoodPopularity  method)
     //TODO check for money(tax) and food that increases and decreases in resources (dependency <-> foodRate & taxRate)
