@@ -158,6 +158,7 @@ public class Empire {
 
     public void addEmployedPeople(int employedPeople) {
         this.employedPeople += employedPeople;
+        this.unemployedPeople -= employedPeople;
     }
 
     public int getKingHp() {
@@ -195,5 +196,14 @@ public class Empire {
             }
         }
         return false;
+    }
+
+    public void calculateReductionInTheFoodStock() {
+        //TODO complete depends on rate
+        //TODO pay attention to if any number of food became 0 it changes food popularity in it should be changed
+    }
+
+    public void calculateTaxRate() {
+        //TODO complete this part depends on tax rate
     }
 }

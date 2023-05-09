@@ -220,6 +220,10 @@ public class GameMenuController {
         if (BuildingType.getBuildingByName(buildingName).getStone() > currentEmpire.getResources().getStone()) {
             return "not enough stone for this building";
         }
+        if (currentEmpire.getUnemployedPeople() < BuildingType.getBuildingByName(buildingName).getWorkers()) {
+            return "not enough worker for this building";
+        }
+        currentEmpire.addEmployedPeople(BuildingType.getBuildingByName(buildingName).getWorkers());
         currentEmpire.getResources().addGold(-1 * BuildingType.getBuildingByName(buildingName).getGold());
         currentEmpire.getResources().addIron(-1 * BuildingType.getBuildingByName(buildingName).getIron());
         currentEmpire.getResources().addWood(-1 * BuildingType.getBuildingByName(buildingName).getWood());
@@ -328,11 +332,11 @@ public class GameMenuController {
         int distance = distance(x, y, selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1]);
         for (Unit selectedUnit : selectedUnits) {
             int damage = selectedUnit.getUnitType().getAttackPower();
-            if (selectedUnit.getUnitType().equals(UnitType.LADDER_MAN)) {
+            if (selectedUnit.getUnitType().equals(UnitType.LADDER_MAN) && map.getMap()[x][y].getBuilding() != null) {
                 if (distance <= selectedUnit.getUnitType().getSpeed()) {
                     String name = map.getMap()[x][y].getBuilding().getBuildingType().getName();
                     if (name.equals("ShortWall") || name.equals("TallWall")) {
-                        if (map.getMap()[x][y].getBuilding() != null && !map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
+                        if (!map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
                             map.getMap()[x][y].getBuilding().setIsPassableForEnemies(true);
                         }
                     }
@@ -346,6 +350,10 @@ public class GameMenuController {
 //            }
             else if (selectedUnit.getUnitType().getType().equals("Sword")) {
                 if (distance <= selectedUnit.getUnitType().getSpeed()) {//TODO check is there any way to that location or not
+                    if (map.getMap()[x][y].getBuilding() != null && !map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
+                        map.getMap()[x][y].getBuilding().getDamage(damage);
+                        continue;
+                    }
                     boolean bool = true;
                     while (bool) {
                         int index = (int) (Math.random() * map.getMap()[x][y].getUnits().size());
@@ -356,6 +364,10 @@ public class GameMenuController {
                     }
                 }
             } else if (selectedUnit.getUnitType().getType().equals("Archer") && distance <= selectedUnit.getUnitType().getAttackRange()) {
+                if (map.getMap()[x][y].getBuilding() != null && !map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
+                    map.getMap()[x][y].getBuilding().getDamage(damage);
+                    continue;
+                }
                 boolean bool = true;
                 while (bool) {
                     int index = (int) (Math.random() * map.getMap()[x][y].getUnits().size());
@@ -405,6 +417,7 @@ public class GameMenuController {
         if (map.getMap()[x][y].getBuilding().getHp() <= 0) {
             if (map.getMap()[x][y].getBuilding().getOwner() != null) {
                 map.getMap()[x][y].getBuilding().getOwner().getBuildings().remove(map.getMap()[x][y].getBuilding());
+                map.getMap()[x][y].getBuilding().getOwner().addEmployedPeople(-1 * map.getMap()[x][y].getBuilding().getBuildingType().getWorkers());
             }
             map.getMap()[x][y].setBuilding(null);
         }
@@ -433,6 +446,10 @@ public class GameMenuController {
             }
             if (distance <= selectedUnit.getUnitType().getAttackRange()) {
                 int damage = selectedUnit.getUnitType().getAttackPower();
+                if (map.getMap()[x][y].getBuilding() != null && !map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
+                    map.getMap()[x][y].getBuilding().getDamage(damage);
+                    continue;
+                }
                 boolean bool = true;
                 while (bool) {
                     int index = (int) (Math.random() * map.getMap()[x][y].getUnits().size());
@@ -1176,8 +1193,8 @@ public class GameMenuController {
         checkArmourProductiveBuildings();
         checkResourceProductiveBuildings();
         EmpireMenuController.checkEffectOfFearRate();
-        EmpireMenuController.calculatePopularityFactors();
         EmpireMenuController.calculateFoodAndTax();
+        EmpireMenuController.calculatePopularityFactors();
         int id = currentEmpire.getEmpireId();
         if (id == game.getEmpires().size() - 1) {
             currentEmpire = game.getEmpires().get(0);

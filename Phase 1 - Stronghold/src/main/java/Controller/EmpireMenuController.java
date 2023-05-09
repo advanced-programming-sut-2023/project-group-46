@@ -31,8 +31,82 @@ public class EmpireMenuController {
         GameMenuController.getCurrentEmpire().setFearPopularity(GameMenuController.getCurrentEmpire().getFearRate());
     }
 
-    public static void calculateFoodAndTax() {
-        //TODO complete
+    public static void calculateFoodAndTax() {// if your empire doesn't have enough food or gold your food and your tax rate will be change and you should use change rate commands to set them in another rate
+        int allPeople = GameMenuController.getCurrentEmpire().getUnemployedPeople() + GameMenuController.getCurrentEmpire().getEmployedPeople();
+        double allFood = GameMenuController.getCurrentEmpire().getFoodStock().getApple() + GameMenuController.getCurrentEmpire().getFoodStock().getBread() + GameMenuController.getCurrentEmpire().getFoodStock().getMeat() + GameMenuController.getCurrentEmpire().getFoodStock().getCheese();
+        int gold = GameMenuController.getCurrentEmpire().getResources().getGold();
+        if (GameMenuController.getCurrentEmpire().getFoodRate() == -1) {
+            if (allFood < allPeople * 0.5) {
+                GameMenuController.getCurrentEmpire().setFoodRate(-2);
+            }
+        } else if (GameMenuController.getCurrentEmpire().getFoodRate() == 0) {
+            if (allFood < allPeople * 1.0) {
+                if (allFood < allPeople * 0.5) {
+                    GameMenuController.getCurrentEmpire().setFoodRate(-2);
+                } else {
+                    GameMenuController.getCurrentEmpire().setFoodRate(-1);
+                }
+            }
+        } else if (GameMenuController.getCurrentEmpire().getFoodRate() == 1) {
+            if (allFood < allPeople * 1.5) {
+                if (allFood > allPeople * 1.0) {
+                    GameMenuController.getCurrentEmpire().setFoodRate(0);
+                } else if (allFood > allPeople * 0.5) {
+                    GameMenuController.getCurrentEmpire().setFoodRate(-1);
+                } else {
+                    GameMenuController.getCurrentEmpire().setFoodRate(-2);
+                }
+            }
+        } else if (GameMenuController.getCurrentEmpire().getFoodRate() == 2) {
+            if (allFood < allPeople * 2.0) {
+                if (allFood > allPeople * 1.5) {
+                    GameMenuController.getCurrentEmpire().setFoodRate(1);
+                } else if (allFood > allPeople * 1.0) {
+                    GameMenuController.getCurrentEmpire().setFoodRate(0);
+                } else if (allFood > allPeople * 0.5) {
+                    GameMenuController.getCurrentEmpire().setFoodRate(-1);
+                } else {
+                    GameMenuController.getCurrentEmpire().setFoodRate(-2);
+                }
+            }
+        }
+        GameMenuController.getCurrentEmpire().calculateReductionInTheFoodStock();
+        if (GameMenuController.getCurrentEmpire().getTaxRate() == -1) {
+            if (gold < allPeople * 0.6) {
+                GameMenuController.getCurrentEmpire().setTaxRate(0);
+            }
+        } else if (GameMenuController.getCurrentEmpire().getTaxRate() == -2) {
+            if (gold < allPeople * 0.8) {
+                if (gold < allPeople * 0.6) {
+                    GameMenuController.getCurrentEmpire().setTaxRate(0);
+                } else {
+                    GameMenuController.getCurrentEmpire().setTaxRate(-1);
+                }
+            }
+        } else if (GameMenuController.getCurrentEmpire().getTaxRate() == -3) {
+            if (gold < allPeople ) {
+                if (gold > allPeople * 0.8) {
+                    GameMenuController.getCurrentEmpire().setTaxRate(-2);
+                } else if (gold > allPeople * 0.6) {
+                    GameMenuController.getCurrentEmpire().setTaxRate(-1);
+                } else {
+                    GameMenuController.getCurrentEmpire().setTaxRate(0);
+                }
+            }
+        }
+        GameMenuController.getCurrentEmpire().calculateTaxRate();
+    }
+
+    public static void checkEffectOfFearRate() {// fear rate cause buildings and units do better
+        int fearRate = GameMenuController.getCurrentEmpire().getFearRate();
+        for (int i = 0; i < GameMenuController.getCurrentEmpire().getUnits().size(); i++) {
+            int defaultAttackPower = GameMenuController.getCurrentEmpire().getUnits().get(i).getUnitType().getAttackPower();
+            GameMenuController.getCurrentEmpire().getUnits().get(i).setAttackPower((int) (defaultAttackPower * (1 + (fearRate * 0.1))));
+        }
+        for (int i = 0; i < GameMenuController.getCurrentEmpire().getBuildings().size(); i++) {
+            int defaultWorkingRate = GameMenuController.getCurrentEmpire().getBuildings().get(i).getBuildingType().getRate();
+            GameMenuController.getCurrentEmpire().getBuildings().get(i).setRate(defaultWorkingRate + (int) (-0.5 * fearRate));
+        }
     }
 
     public String showPopularityFactors() {
@@ -93,19 +167,7 @@ public class EmpireMenuController {
         return GameMenuController.getCurrentEmpire().getFearRate();
     }
 
-    public static void checkEffectOfFearRate() {// fear rate cause buildings and units do better
-        int fearRate = GameMenuController.getCurrentEmpire().getFearRate();
-        for (int i = 0; i < GameMenuController.getCurrentEmpire().getUnits().size(); i++) {
-            int defaultAttackPower = GameMenuController.getCurrentEmpire().getUnits().get(i).getUnitType().getAttackPower();
-            GameMenuController.getCurrentEmpire().getUnits().get(i).setAttackPower((int) (defaultAttackPower * (1 + (fearRate * 0.1))));
-        }
-        for (int i = 0; i < GameMenuController.getCurrentEmpire().getBuildings().size(); i++) {
-            int defaultWorkingRate = GameMenuController.getCurrentEmpire().getBuildings().get(i).getBuildingType().getRate();
-            GameMenuController.getCurrentEmpire().getBuildings().get(i).setRate(defaultWorkingRate + (int) (-0.5 * fearRate));
-        }
-    }
-
-    public String showArmoury() {//TODO complete this part
+    public String showArmoury() {
         return "bow->" + GameMenuController.getCurrentEmpire().getArmoury().getArmouryAmount("bow") + '\n' +
                 "crossbow->" + GameMenuController.getCurrentEmpire().getArmoury().getArmouryAmount("crossbow") + '\n' +
                 "spear->" + GameMenuController.getCurrentEmpire().getArmoury().getArmouryAmount("spear") + '\n' +
