@@ -22,6 +22,7 @@ public class GameMenu {
                 return;
             }
             result = gameMenuController.startANewGame(command);
+            System.out.println(result);
         } while (!result.contains("success"));
         while (true) {
             System.out.println("please enter the numbers of the turns that you want to play");
@@ -73,7 +74,7 @@ public class GameMenu {
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.SELECT_BUILDING_REGEX)) != null) {
                 System.out.println(gameMenuController.selectBuilding(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.POUR_OIL_REGEX)) != null) {
-                System.out.println(gameMenuController.pourOil(matcher));
+                System.out.println(gameMenuController.pourOil(matcher.group("direction")));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.SET_UNIT_MODE_REGEX)) != null) {
                 System.out.println(gameMenuController.setUnitMode(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.CREATE_UNIT_REGEX)) != null) {

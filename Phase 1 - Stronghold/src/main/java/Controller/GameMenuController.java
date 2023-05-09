@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 
-public class GameMenuController {
+public class GameMenuController {//TODO add function for dig moat
     private static Game game;
     private static Empire currentEmpire;
     private static Map map;//zero base
@@ -209,6 +209,22 @@ public class GameMenuController {
                 }
             }
         }
+        if (BuildingType.getBuildingByName(buildingName).getGold() > currentEmpire.getResources().getGold()) {
+            return "not enough gold for this building";
+        }
+        if (BuildingType.getBuildingByName(buildingName).getIron() > currentEmpire.getResources().getIron()) {
+            return "not enough iron for this building";
+        }
+        if (BuildingType.getBuildingByName(buildingName).getWood() > currentEmpire.getResources().getWood()) {
+            return "not enough wood for this building";
+        }
+        if (BuildingType.getBuildingByName(buildingName).getStone() > currentEmpire.getResources().getStone()) {
+            return "not enough stone for this building";
+        }
+        currentEmpire.getResources().addGold(-1 * BuildingType.getBuildingByName(buildingName).getGold());
+        currentEmpire.getResources().addIron(-1 * BuildingType.getBuildingByName(buildingName).getIron());
+        currentEmpire.getResources().addWood(-1 * BuildingType.getBuildingByName(buildingName).getWood());
+        currentEmpire.getResources().addStone(-1 * BuildingType.getBuildingByName(buildingName).getStone());
         map.getMap()[x][y].setBuilding(new Building(BuildingType.getBuildingByName(buildingName), currentEmpire));
         currentEmpire.getBuildings().add(map.getMap()[x][y].getBuilding());
         return "success";
@@ -442,8 +458,7 @@ public class GameMenuController {
         return "success";
     }
 
-    public String pourOil(Matcher matcher) {
-        String dir = matcher.group("direction");
+    public String pourOil(String dir) {
         int damage = UnitType.ENGINEER_WITH_OIL.getAttackPower();
         if (!dir.equals("up") && !dir.equals("down") && !dir.equals("left") && !dir.equals("right")) {
             return "invalid direction";
@@ -514,6 +529,8 @@ public class GameMenuController {
             currentEmpire.getUnits().remove(unit);
             map.getMap()[x][y].getUnits().add(new Unit(UnitType.ENGINEER, currentEmpire));
             currentEmpire.getUnits().add(map.getMap()[x][y].getUnits().get(map.getMap()[x][y].getUnits().size() - 1));
+        } else {
+            currentEmpire.getResources().addPitch(-1);
         }
         return "success";
     }
@@ -903,10 +920,10 @@ public class GameMenuController {
     }
 
     private void attackNextTurnByMode(int x, int y, Unit unit) {//TODO after any movement and in the start of the turn it should be called
-        if (!unit.getOwner().equals(currentEmpire)) {
+        if (!unit.getOwner().equals(currentEmpire)) {//TODO call this part in the drop and create building
             return;
         }
-        int damage = unit.getAttackPower();//TODO add functions for engineer with oil
+        int damage = unit.getAttackPower();
         if (unit.getUnitType().getType().equals("Archer")) {
             int attackRange = unit.getUnitType().getAttackRange();
             for (int i = x - attackRange; i < attackRange + x; i++) {
@@ -958,6 +975,37 @@ public class GameMenuController {
                 case "defensive" -> 3;
                 default -> 0;
             };
+            for (int i = 0; i < neighbors(x, y).size(); i++) {
+                for (int j = 0; j < neighbors(x, y).get(i).getUnits().size(); j++) {
+                    if (neighbors(x, y).get(i).getUnits().get(j).getOwner() != currentEmpire) {
+                        neededEnemyForAttack--;
+                    }
+                }
+            }
+            if (neededEnemyForAttack <= 0) {
+                for (int i = 0; i < neighbors(x, y).size(); i++) {
+                    for (int j = 0; j < neighbors(x, y).get(i).getUnits().size(); j++) {
+                        if (neighbors(x, y).get(i).getUnits().get(j).getOwner() != currentEmpire) {
+                            neighbors(x, y).get(i).getUnits().get(j).getDamage(damage);
+                        }
+                    }
+                }
+                boolean bool = false;
+                for (int i = 0; i < currentEmpire.getBuildings().size(); i++) {
+                    if (currentEmpire.getBuildings().get(i).getBuildingType().equals(BuildingType.OIL_SMELTER)) {
+                        bool = true;
+                        break;
+                    }
+                }
+                if (!(bool && currentEmpire.getResources().getPitch() > 0)) {
+                    map.getMap()[x][y].getUnits().remove(unit);
+                    currentEmpire.getUnits().remove(unit);
+                    map.getMap()[x][y].getUnits().add(new Unit(UnitType.ENGINEER, currentEmpire));
+                    currentEmpire.getUnits().add(map.getMap()[x][y].getUnits().get(map.getMap()[x][y].getUnits().size() - 1));
+                } else {
+                    currentEmpire.getResources().addPitch(-1);
+                }
+            }
         }
         checkDeadUnitsLocation(x, y);
     }
@@ -1106,8 +1154,22 @@ public class GameMenuController {
         }
     }
 
-    private void checkEndOfTheGame() {//TODO complete and give the empires their points
-
+    private String checkEndOfTheGame() {//TODO complete and give the empires their points
+        int[] scores = new int[game.getEmpires().size()];
+        for (int i = 0; i < game.getEmpires().size(); i++) {
+            for (int j = 0; j < game.getEmpires().get(i).getBuildings().size(); j++) {
+                scores[i] += game.getEmpires().get(i).getBuildings().get(j).getHp();
+            }
+            for (int k = 0; k < game.getEmpires().get(i).getUnits().size(); k++) {
+                scores[i] += game.getEmpires().get(i).getUnits().get(k).getHp();
+            }
+        }
+        StringBuilder output = new StringBuilder();
+        output.append("scores :").append("\n");
+        for (int i = 0; i < scores.length; i++) {
+            output.append(game.getEmpires().get(i).getUser().getUsername()).append(" : ").append(scores[i]).append("\n");
+        }
+        return output.toString();
     }
 
     public String nextTurn() {
@@ -1132,8 +1194,7 @@ public class GameMenuController {
         }
         //TODO end of the game should be checked
         if (game.getTurnsCounter() == 0) {
-            checkEndOfTheGame();
-            return "end of the game";
+            return "end of the game" + '\n' + checkEndOfTheGame();
         }
         return currentEmpire.getUser().getUsername() + " is now playing";
     }

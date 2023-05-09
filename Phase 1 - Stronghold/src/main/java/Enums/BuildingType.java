@@ -1,8 +1,8 @@
 package Enums;
 
 public enum BuildingType {//fireRange will boost the range of the archers  || capacity is equal to the amount that in one time the worker bring to the storages
-    SMALL_STONE_GATEHOUSE(10000, "SmallStoneGatehouse", 0, 0, 0, 0, 20, "CastleBuildings", 25, 0, 10),
-    BIG_STONE_GATEHOUSE(20000, "BigStoneGatehouse", 0, 0, 0, 0, 10, "CastleBuildings", 50, 0, 15),
+    SMALL_STONE_GATEHOUSE(10000, "SmallStoneGatehouse", 0, 0, 0, 0, 10, "CastleBuildings", 25, 0, 10),
+    BIG_STONE_GATEHOUSE(20000, "BigStoneGatehouse", 0, 0, 0, 0, 20, "CastleBuildings", 50, 0, 15),
     DRAW_BRIDGE(0, "DrawBridge", 0, 0, 10, 0, 0, "CastleBuildings", 0, 0, 0),
     LOOKOUT_TOWER(2500, "LookoutTower", 0, 0, 0, 0, 10, "CastleBuildings", 5, 0, 25),
     PERIMETER_TOWER(10000, "PerimeterTower", 0, 0, 0, 0, 10, "CastleBuildings", 15, 0, 10),
