@@ -20,6 +20,8 @@ public class GameMenuController {
     private final HashMap<String, int[]> selectedCoordinates;//keys are building , unit
     private Building selectedBuilding;
 
+    ;
+
     public GameMenuController() {
         selectedUnits = new ArrayList<>();
         selectedCoordinates = new HashMap<>();
@@ -35,6 +37,12 @@ public class GameMenuController {
 
     public static Map getMap() {
         return map;
+    }
+
+    public String showKeepCoordinates() {
+        int x = map.getEmpireCoordinates().get(currentEmpire.getEmpireId())[0];
+        int y = map.getEmpireCoordinates().get(currentEmpire.getEmpireId())[1];
+        return "x: " + x + " y: " + y;
     }
 
     ;
@@ -452,40 +460,45 @@ public class GameMenuController {
         }
         int x = selectedCoordinates.get("unit")[0];
         int y = selectedCoordinates.get("unit")[1];
-        if (dir.equals("up")) {
-            if (y + 1 > map.getSize() - 1) {
-                return "EndOfTheMap!";
-            }
-            for (int i = 0; i < map.getMap()[x][y + 1].getUnits().size(); i++) {
-                if (!map.getMap()[x][y + 1].getUnits().get(i).getOwner().equals(currentEmpire)) {
-                    map.getMap()[x][y + 1].getUnits().get(i).getDamage(damage);
+        switch (dir) {
+            case "up" -> {
+                if (y + 1 > map.getSize() - 1) {
+                    return "EndOfTheMap!";
+                }
+                for (int i = 0; i < map.getMap()[x][y + 1].getUnits().size(); i++) {
+                    if (!map.getMap()[x][y + 1].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                        map.getMap()[x][y + 1].getUnits().get(i).getDamage(damage);
+                    }
                 }
             }
-        } else if (dir.equals("down")) {
-            if (y == 0) {
-                return "EndOfTheMap!";
-            }
-            for (int i = 0; i < map.getMap()[x][y - 1].getUnits().size(); i++) {
-                if (!map.getMap()[x][y - 1].getUnits().get(i).getOwner().equals(currentEmpire)) {
-                    map.getMap()[x][y - 1].getUnits().get(i).getDamage(damage);
+            case "down" -> {
+                if (y == 0) {
+                    return "EndOfTheMap!";
+                }
+                for (int i = 0; i < map.getMap()[x][y - 1].getUnits().size(); i++) {
+                    if (!map.getMap()[x][y - 1].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                        map.getMap()[x][y - 1].getUnits().get(i).getDamage(damage);
+                    }
                 }
             }
-        } else if (dir.equals("left")) {
-            if (x == 0) {
-                return "EndOfTheMap!";
-            }
-            for (int i = 0; i < map.getMap()[x - 1][y].getUnits().size(); i++) {
-                if (!map.getMap()[x - 1][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
-                    map.getMap()[x - 1][y].getUnits().get(i).getDamage(damage);
+            case "left" -> {
+                if (x == 0) {
+                    return "EndOfTheMap!";
+                }
+                for (int i = 0; i < map.getMap()[x - 1][y].getUnits().size(); i++) {
+                    if (!map.getMap()[x - 1][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                        map.getMap()[x - 1][y].getUnits().get(i).getDamage(damage);
+                    }
                 }
             }
-        } else if (dir.equals("right")) {
-            if (x + 1 > map.getSize() - 1) {
-                return "EndOfTheMap!";
-            }
-            for (int i = 0; i < map.getMap()[x + 1][y].getUnits().size(); i++) {
-                if (!map.getMap()[x + 1][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
-                    map.getMap()[x + 1][y].getUnits().get(i).getDamage(damage);
+            case "right" -> {
+                if (x + 1 > map.getSize() - 1) {
+                    return "EndOfTheMap!";
+                }
+                for (int i = 0; i < map.getMap()[x + 1][y].getUnits().size(); i++) {
+                    if (!map.getMap()[x + 1][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                        map.getMap()[x + 1][y].getUnits().get(i).getDamage(damage);
+                    }
                 }
             }
         }
@@ -938,10 +951,14 @@ public class GameMenuController {
                     }
                 }
             }//TODO complete
+        } else if (unit.getUnitType().equals(UnitType.ENGINEER_WITH_OIL)) {
+            int neededEnemyForAttack = switch (unit.getMode()) {
+                case "offensive" -> 1;
+                case "standing" -> 2;
+                case "defensive" -> 3;
+                default -> 0;
+            };
         }
-//        else if (unit.getUnitType().equals(UnitType.ENGINEER_WITH_OIL)) {
-//            if(unit.getMode().)
-//        }
         checkDeadUnitsLocation(x, y);
     }
 

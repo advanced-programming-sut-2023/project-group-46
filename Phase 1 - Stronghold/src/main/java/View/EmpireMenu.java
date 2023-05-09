@@ -35,12 +35,19 @@ public class EmpireMenu {
                 empireMenuController.changeFearRate(matcher);
             } else if (command.matches("^fear rate show$")) {
                 System.out.println(empireMenuController.fearRateShow());
-            } else if (command.matches("back")) {
+            } else if (command.equals("back")) {
                 System.out.println("Back to GameMenu");
                 return;
-            } else if (command.matches("show current menu")) {
+            } else if (command.equals("show armoury status")) {
+                System.out.println(empireMenuController.showArmoury());
+            } else if (command.equals("show foodstock status")) {
+                System.out.println(empireMenuController.showFoodStock());
+            } else if (command.equals("show stockpile status")) {
+                System.out.println(empireMenuController.showStockpile());
+            }
+            if (command.equals("show current menu")) {
                 System.out.println("EmpireMenu");
-            }  else {
+            } else {
                 System.out.println("Invalid command!");
             }
         }

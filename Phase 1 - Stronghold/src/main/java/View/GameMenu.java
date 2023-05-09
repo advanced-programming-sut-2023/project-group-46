@@ -90,6 +90,8 @@ public class GameMenu {
                 System.out.println(gameMenuController.repair());
             } else if (command.matches("disband unit")) {
                 gameMenuController.disbandUnit();
+            } else if (command.matches("where is my keep")) {
+                System.out.println(gameMenuController.showKeepCoordinates());
             } else if (command.matches("show current menu")) {
                 System.out.println("GameMenu");
             } else if (command.matches("next turn")) {
