@@ -18,10 +18,8 @@ public class GameMenuController {
     private static Empire currentEmpire;
     private static Map map;//zero base
     private final ArrayList<Unit> selectedUnits;
-    private final HashMap<String, int[]> selectedCoordinates;//keys are building , unit
+    private final HashMap<String, int[]> selectedCoordinates;//keys are "building" , "unit"
     private Building selectedBuilding;
-
-    ;
 
     public GameMenuController() {
         selectedUnits = new ArrayList<>();
@@ -173,6 +171,9 @@ public class GameMenuController {
                 if (!bool) {
                     return "DrawBridge must be built near Gates";
                 }
+                if (!map.getMap()[x][y].getType().equals("moat")) {
+                    return "DrawBridge must be built on moat";
+                }
             }
             if (buildingName.equalsIgnoreCase("Armoury") && currentEmpire.haveThisBuilding(buildingName)) {
                 boolean bool = false;
@@ -225,9 +226,9 @@ public class GameMenuController {
         }
         currentEmpire.addEmployedPeople(BuildingType.getBuildingByName(buildingName).getWorkers());
         currentEmpire.getResources().addGold(-1 * BuildingType.getBuildingByName(buildingName).getGold());
-        currentEmpire.getResources().addIron(-1 * BuildingType.getBuildingByName(buildingName).getIron());
-        currentEmpire.getResources().addWood(-1 * BuildingType.getBuildingByName(buildingName).getWood());
-        currentEmpire.getResources().addStone(-1 * BuildingType.getBuildingByName(buildingName).getStone());
+        currentEmpire.getResources().addResource("iron", -1 * BuildingType.getBuildingByName(buildingName).getIron());
+        currentEmpire.getResources().addResource("wood", -1 * BuildingType.getBuildingByName(buildingName).getWood());
+        currentEmpire.getResources().addResource("stone", -1 * BuildingType.getBuildingByName(buildingName).getStone());
         map.getMap()[x][y].setBuilding(new Building(BuildingType.getBuildingByName(buildingName), currentEmpire));
         currentEmpire.getBuildings().add(map.getMap()[x][y].getBuilding());
         return "success";
@@ -546,7 +547,7 @@ public class GameMenuController {
             map.getMap()[x][y].getUnits().add(new Unit(UnitType.ENGINEER, currentEmpire));
             currentEmpire.getUnits().add(map.getMap()[x][y].getUnits().get(map.getMap()[x][y].getUnits().size() - 1));
         } else {
-            currentEmpire.getResources().addPitch(-1);
+            currentEmpire.getResources().addResource("pitch", -1);
         }
         return "success";
     }
@@ -673,9 +674,8 @@ public class GameMenuController {
         for (int i = 0; i < count; i++) {
             map.getMap()[x][y].getUnits().add(new Unit(UnitType.getUnitByName(type), currentEmpire));
             currentEmpire.getUnits().add(map.getMap()[x][y].getUnits().get(size + i));
+            attackNextTurnByMode(x, y, map.getMap()[x][y].getUnits().get(size + i));
         }
-
-
         return "success";
     }
 
@@ -776,6 +776,7 @@ public class GameMenuController {
         for (int i = 0; i < count; i++) {
             map.getMap()[currentEmpire.getKeepCoordinates()[0]][currentEmpire.getKeepCoordinates()[1]].getUnits().add(new Unit(UnitType.getUnitByName(type), currentEmpire));
             currentEmpire.getUnits().add(map.getMap()[currentEmpire.getKeepCoordinates()[0]][currentEmpire.getKeepCoordinates()[1]].getUnits().get(size + i));
+            attackNextTurnByMode(currentEmpire.getKeepCoordinates()[0], currentEmpire.getKeepCoordinates()[1], map.getMap()[currentEmpire.getKeepCoordinates()[0]][currentEmpire.getKeepCoordinates()[1]].getUnits().get(size + i));
         }
         return "success";
     }
@@ -1019,7 +1020,7 @@ public class GameMenuController {
                     map.getMap()[x][y].getUnits().add(new Unit(UnitType.ENGINEER, currentEmpire));
                     currentEmpire.getUnits().add(map.getMap()[x][y].getUnits().get(map.getMap()[x][y].getUnits().size() - 1));
                 } else {
-                    currentEmpire.getResources().addPitch(-1);
+                    currentEmpire.getResources().addResource("pitch", -1);
                 }
             }
         }
