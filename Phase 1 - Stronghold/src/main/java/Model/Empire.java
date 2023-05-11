@@ -28,7 +28,6 @@ public class Empire {
     private int religionPopularity;
     private int aleCoverage;
     private Resources resources;// it should be given to empires in start of the game
-    private int kingHp;
     private int[] keepCoordinates;
     private int maxPopulation;
 
@@ -172,10 +171,6 @@ public class Empire {
         return resources;
     }
 
-    public void setResources(Resources resources) {
-        this.resources = resources;
-    }
-
     public void addUnemployedPeople(int unemployedPeople) {
         this.unemployedPeople += unemployedPeople;
     }
@@ -185,28 +180,12 @@ public class Empire {
         this.unemployedPeople -= employedPeople;
     }
 
-    public int getKingHp() {
-        return kingHp;
-    }
-
-    public void setKingHp(int kingHp) {
-        this.kingHp = kingHp;
-    }
-
     public void addReligionPopularity(int religionPopularity) {
         this.religionPopularity += religionPopularity;
     }
 
     public ArrayList<Building> getBuildings() {
         return buildings;
-    }
-
-    public Building getBuildingByName(String name) {
-        for (Building building : buildings) {
-            if (building.getBuildingType().getName().equals(name))
-                return building;
-        }
-        return null;
     }
 
     public ArrayList<Unit> getUnits() {

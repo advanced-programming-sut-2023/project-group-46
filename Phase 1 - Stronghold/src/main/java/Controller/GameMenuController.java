@@ -41,7 +41,7 @@ public class GameMenuController {
     public String showKeepCoordinates() {
         int x = map.getEmpireCoordinates().get(currentEmpire.getEmpireId())[0];
         int y = map.getEmpireCoordinates().get(currentEmpire.getEmpireId())[1];
-        return "x: " + x + " y: " + y;
+        return "x-> " + x + " y-> " + y;
     }
 
     private ArrayList<Cell> neighbors(int x, int y) {
@@ -88,12 +88,21 @@ public class GameMenuController {
         readMap();
         command = command.concat("/" + LoginMenuController.getLoggedInUser().getUsername());
         String[] usernames = command.split("/");
-        int players = 0;
+        int players = 0, errorFinder = 0;
         for (String username : usernames) {
+            for (String name : usernames) {
+                if (name.equals(username)) {
+                    errorFinder++;
+                }
+            }
+            if (errorFinder >= 2) {
+                return "duplicate usernames";
+            }
             if (User.getUserByUsername(username) == null) {
                 return username + " doesn't exist";
             }
             players++;
+            errorFinder = 0;
         }
         if (players < 2) {
             return "choose more players";
@@ -619,7 +628,7 @@ public class GameMenuController {
         if (count <= 0) {
             return "invalid number for count";
         }
-        if (UnitType.getUnitByName(type) == null) {
+        if (UnitType.getUnitByName(type) == null || UnitType.getUnitByName(type).getType().equals("Machine")) {
             return "invalid type for unit";
         }
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
@@ -958,8 +967,11 @@ public class GameMenuController {
             int attackRange = unit.getUnitType().getAttackRange();
             for (int i = x - attackRange; i < attackRange + x; i++) {
                 for (int j = y - attackRange; j < y + attackRange; j++) {
-                    if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
+                    if (j > map.getSize() - 1 || j < 0) {
                         continue;
+                    }
+                    if (i > map.getSize() - 1 || i < 0) {
+                        break;
                     }
                     for (int k = 0; k < map.getMap()[i][j].getUnits().size(); k++) {
                         if (!map.getMap()[i][j].getUnits().get(k).getOwner().equals(currentEmpire)) {
@@ -988,8 +1000,11 @@ public class GameMenuController {
                 }
                 for (int i = x - attackRange; i < attackRange + x; i++) {
                     for (int j = y - attackRange; j < y + attackRange; j++) {
-                        if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
+                        if (j > map.getSize() - 1 || j < 0) {
                             continue;
+                        }
+                        if (i > map.getSize() - 1 || i < 0) {
+                            break;
                         }
                         //TODO add the is passable function
                         for (int k = 0; k < map.getMap()[i][j].getUnits().size(); k++) {
@@ -1229,6 +1244,9 @@ public class GameMenuController {
     }
 
     public String nextTurn() {
+        selectedUnits.clear();
+        selectedBuilding = null;
+
         checkFoodProductiveBuildings();
         checkArmourProductiveBuildings();
         checkResourceProductiveBuildings();

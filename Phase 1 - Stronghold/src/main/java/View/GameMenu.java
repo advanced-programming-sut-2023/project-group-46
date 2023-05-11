@@ -39,19 +39,19 @@ public class GameMenu {
         }
         while (true) {
             command = Menu.getScanner().nextLine();
-            if (command.matches("EmpireMenu")) {
+            if (command.equalsIgnoreCase("EmpireMenu")) {
                 EmpireMenu empireMenu = new EmpireMenu(new EmpireMenuController());
                 System.out.println("Entered EmpireMenu");
                 empireMenu.run();
-            } else if (command.matches("MapMenu")) {
+            } else if (command.equalsIgnoreCase("MapMenu")) {
                 MapMenu mapMenu = new MapMenu(new MapMenuController());
                 System.out.println("Entered MapMenu");
                 mapMenu.run();
-            } else if (command.matches("TradeMenu")) {
+            } else if (command.equalsIgnoreCase("TradeMenu")) {
                 TradeMenu tradeMenu = new TradeMenu(new TradeMenuController());
                 System.out.println("Entered TradeMenu");
                 tradeMenu.run();
-            } else if (command.matches("ShopMenu")) {
+            } else if (command.equalsIgnoreCase("ShopMenu")) {
                 ShopMenu shopMenu = new ShopMenu(new ShopMenuController());
                 System.out.println("Entered ShopMenu");
                 shopMenu.run();
@@ -104,6 +104,14 @@ public class GameMenu {
                 System.out.println(result);
                 if (result.contains("end of the game")) {
                     return;
+                }
+            } else if (command.equals("back")) {
+                System.out.println("Are you sure you want to exit the game?");
+                result = Menu.getScanner().nextLine();
+                if (result.equalsIgnoreCase("yes")) {
+                    return;
+                } else {
+                    System.out.println("Invalid command!");
                 }
             } else {
                 System.out.println("Invalid command!");

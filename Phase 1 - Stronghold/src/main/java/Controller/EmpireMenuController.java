@@ -211,4 +211,8 @@ public class EmpireMenuController {
                 "pitch->" + GameMenuController.getCurrentEmpire().getResources().getResourceAmount("pitch") + '\n';
 
     }
+
+    public String showColor() {
+       return GameMenuController.getCurrentEmpire().getColor();
+    }
 }

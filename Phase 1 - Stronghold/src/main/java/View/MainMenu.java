@@ -9,17 +9,17 @@ public class MainMenu {
         String command;
 
         while (true) {
-            System.out.println("choose one of menus: 1)EditMapMenu 2)GameMenu 3)ProfileMenu");
+            System.out.println("choose number of one of these menus: 1)EditMapMenu 2)GameMenu 3)ProfileMenu");
             command = Menu.getScanner().nextLine();
-            if (command.matches("ProfileMenu")) {
+            if (command.equals("3")) {
                 ProfileMenu profileMenu = new ProfileMenu(new ProfileMenuController());
                 System.out.println("Entered ProfileMenu");
                 profileMenu.run();
-            } else if (command.matches("EditMapMenu")) {
+            } else if (command.equals("1")) {
                 EditMapMenu editMapMenu = new EditMapMenu(new EditMapMenuController());
                 System.out.println("Entered EditMapMenu");
                 editMapMenu.run();
-            } else if (command.matches("GameMenu")) {
+            } else if (command.equals("2")) {
                 GameMenu gameMenu = new GameMenu(new GameMenuController());
                 System.out.println("Entered GameMenu");
                 gameMenu.run();
