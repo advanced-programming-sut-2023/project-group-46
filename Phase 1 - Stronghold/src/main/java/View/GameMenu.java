@@ -23,7 +23,20 @@ public class GameMenu {
             }
             result = gameMenuController.startANewGame(command);
             System.out.println(result);
-        } while (!result.contains("Game Started"));
+        } while (!result.contains("success"));
+        while (true) {
+            System.out.println("please enter the numbers of the turns that you want to play");
+            command = Menu.getScanner().nextLine();
+            if ((matcher = Menu.getMatcher(command, "(?<num>\\d+)")) != null) {
+                result = gameMenuController.checkNumberOfTheTurns(Integer.parseInt(matcher.group("num")));
+                System.out.println(result);
+                if (result.contains("Game Started")) {
+                    break;
+                }
+            } else {
+                System.out.println("Invalid command!");
+            }
+        }
         while (true) {
             command = Menu.getScanner().nextLine();
             if (command.matches("EmpireMenu")) {
@@ -61,7 +74,7 @@ public class GameMenu {
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.SELECT_BUILDING_REGEX)) != null) {
                 System.out.println(gameMenuController.selectBuilding(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.POUR_OIL_REGEX)) != null) {
-                System.out.println(gameMenuController.pourOil(matcher));
+                System.out.println(gameMenuController.pourOil(matcher.group("direction")));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.SET_UNIT_MODE_REGEX)) != null) {
                 System.out.println(gameMenuController.setUnitMode(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.CREATE_UNIT_REGEX)) != null) {
@@ -74,17 +87,27 @@ public class GameMenu {
                 System.out.println(gameMenuController.dropUnit(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.ATTACK_MACHINES_REGEX)) != null) {
                 System.out.println(gameMenuController.attackMachines(matcher));
+            } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.DIG_MOAT)) != null) {
+                System.out.println(gameMenuController.digMoat(matcher));
+            } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.NO_MOAT)) != null) {
+                System.out.println(gameMenuController.noMoat(matcher));
             } else if (command.matches("repair")) {
                 System.out.println(gameMenuController.repair());
             } else if (command.matches("disband unit")) {
                 gameMenuController.disbandUnit();
+            } else if (command.matches("where is my keep")) {
+                System.out.println(gameMenuController.showKeepCoordinates());
+            } else if (command.matches("show current menu")) {
+                System.out.println("GameMenu");
             } else if (command.matches("next turn")) {
-                //gameMenuController.nextTurn();
+                result = gameMenuController.nextTurn();
+                System.out.println(result);
+                if (result.contains("end of the game")) {
+                    return;
+                }
             } else {
                 System.out.println("Invalid command!");
-            }//TODO find a way for invalid numbers like this 12a2
-            //TODO add command for changing the mode of the armour producers
-
+            }
         }
     }
 }

@@ -5,7 +5,6 @@ public class FoodStock {
     private double apple;
     private double cheese;
     private double bread;
-
     private double freeCapacityFoodStock;
 
     public FoodStock(double meat, double apple, double cheese, double bread, double freeCapacityFoodStock) {

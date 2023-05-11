@@ -23,7 +23,7 @@ public class Building {
             owner.addReligionPopularity(2);
         }
         if (buildingType.getName().equals("Hovel")) {
-            owner.addUnemployedPeople(8);
+            owner.addMaxPopulation(8);
         }
         if (buildingType.getName().equals("Fletcher")) {
             this.mode = "bow";
@@ -47,7 +47,7 @@ public class Building {
             GameMenuController.getCurrentEmpire().getResources().addFreeCapacityStockpile(190);
         }
         if (buildingType.getName().equals("Inn")) {
-            //TODO check for the change of popularity
+            GameMenuController.getCurrentEmpire().addAleCoverage(1);
         }
     }
 

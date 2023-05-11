@@ -313,7 +313,7 @@ public class ProfileMenuController {
         // replace the old JSONObject with the updated User's JSONObject
         if (userIndex != -1) {
 
-            loggedInUser.setEmail(newSlogan);
+            loggedInUser.setSlogan(newSlogan);
 
             JSONObject updatedUser = new JSONObject(loggedInUser);
             usersArray.put(userIndex, updatedUser);

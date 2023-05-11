@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.GameMenuController;
 import Enums.EmpireColors;
 import Model.Goods.Armoury;
 import Model.Goods.FoodStock;
@@ -25,14 +26,18 @@ public class Empire {
     private int fearPopularity;
     private int taxPopularity;
     private int religionPopularity;
+    private int aleCoverage;
     private Resources resources;// it should be given to empires in start of the game
     private int kingHp;
     private int[] keepCoordinates;
+    private int maxPopulation;
 
-    public Empire(User user, int empireId, int x, int y) {//TODO check for the rates in the start of the game
+    public Empire(User user, int empireId, int x, int y) {
         this.user = user;
         this.unemployedPeople = 10;
         this.employedPeople = 0;
+        this.maxPopulation = 10;
+        this.aleCoverage = 0;
         this.foodRate = 0;
         this.taxRate = 0;
         this.fearRate = 0;
@@ -50,6 +55,22 @@ public class Empire {
     }
 
     public Empire() {
+    }
+
+    public int getMaxPopulation() {
+        return maxPopulation;
+    }
+
+    public void addMaxPopulation(int maxPopulation) {
+        this.maxPopulation += maxPopulation;
+    }
+
+    public int getAleCoverage() {
+        return aleCoverage;
+    }
+
+    public void addAleCoverage(int aleCoverage) {
+        this.aleCoverage += aleCoverage;
     }
 
     public int[] getKeepCoordinates() {
@@ -70,6 +91,10 @@ public class Empire {
 
     public int getUnemployedPeople() {
         return unemployedPeople;
+    }
+
+    public void setUnemployedPeople(int unemployedPeople) {
+        this.unemployedPeople = unemployedPeople;
     }
 
     public int getEmployedPeople() {
@@ -157,6 +182,7 @@ public class Empire {
 
     public void addEmployedPeople(int employedPeople) {
         this.employedPeople += employedPeople;
+        this.unemployedPeople -= employedPeople;
     }
 
     public int getKingHp() {
@@ -194,5 +220,70 @@ public class Empire {
             }
         }
         return false;
+    }
+
+    public void calculateReductionInTheFoodStock() {
+        int allPeople = unemployedPeople + employedPeople;
+        double foodNeeded = ((foodRate * 0.5) + 1) * allPeople;
+        while (foodNeeded > 0) {
+            if (GameMenuController.getCurrentEmpire().getFoodStock().getBread() > 0.0) {
+                GameMenuController.getCurrentEmpire().getFoodStock().addFood("bread", -1 * 0.5);
+                foodNeeded -= 0.5;
+                continue;
+            }
+            if (GameMenuController.getCurrentEmpire().getFoodStock().getMeat() > 0.0) {
+                GameMenuController.getCurrentEmpire().getFoodStock().addFood("meat", -1 * 0.5);
+                foodNeeded -= 0.5;
+                continue;
+            }
+            if (GameMenuController.getCurrentEmpire().getFoodStock().getCheese() > 0.0) {
+                GameMenuController.getCurrentEmpire().getFoodStock().addFood("cheese", -1 * 0.5);
+                foodNeeded -= 0.5;
+                continue;
+            }
+            if (GameMenuController.getCurrentEmpire().getFoodStock().getApple() > 0.0) {
+                GameMenuController.getCurrentEmpire().getFoodStock().addFood("apple", -1 * 0.5);
+                foodNeeded -= 0.5;
+            }
+        }
+    }
+
+    public void calculateTaxRate() {
+        int allPeople = unemployedPeople + employedPeople;
+        switch (taxRate) {
+            case -3 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold(-1 * allPeople);
+            }
+            case -2 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold((int) (-1 * 0.8 * allPeople));
+            }
+            case -1 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold((int) (-1 * 0.6 * allPeople));
+            }
+            case 1 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold((int) (0.6 * allPeople));
+            }
+            case 2 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold((int) (0.8 * allPeople));
+            }
+            case 3 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold(allPeople);
+            }
+            case 4 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold((int) (allPeople * 1.2));
+            }
+            case 5 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold((int) (allPeople * 1.4));
+            }
+            case 6 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold((int) (allPeople * 1.6));
+            }
+            case 7 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold((int) (allPeople * 1.8));
+            }
+            case 8 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold(allPeople * 2);
+            }
+        }
     }
 }

@@ -4,7 +4,7 @@ import Enums.UnitType;
 
 public class Unit {
     private UnitType unitType;
-    private  Empire owner;
+    private Empire owner;
     private int hp;
     private String mode;
     private int attackPower;

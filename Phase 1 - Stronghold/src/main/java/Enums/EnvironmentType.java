@@ -16,7 +16,8 @@ public enum EnvironmentType {
     SMALL_POND("smallPond", "\u001b[44m", false, false),
     LARGE_POND("largePond", "\u001b[44m", false, false),
     BEACH("beach", "\u001b[43m", false, true),
-    SEA("sea", "\u001b[44m", false, false);
+    SEA("sea", "\u001b[44m", false, false),
+    MOAT("moat", "\u001b[44m", false, false);
 
 
     private final String name;

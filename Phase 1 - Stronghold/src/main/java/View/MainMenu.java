@@ -25,8 +25,10 @@ public class MainMenu {
                 gameMenu.run();
             } else if (command.matches("log out")) {
                 System.out.println("logged out");
-                //TODO kiarash should check this part in loginMenu
+                //TODO kiarash should check this part in loginMenu // stay log in double check
                 return;
+            }  else if (command.matches("show current menu")) {
+                System.out.println("MainMenu");
             } else {
                 System.out.println("invalid command!");
             }

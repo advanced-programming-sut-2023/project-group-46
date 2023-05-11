@@ -19,8 +19,9 @@ public enum GameMenuCommands {
     CHANGE_MODE_ARMOUR_BUILDING_REGEX("^change mode -m (?<mode>\\S+)$"),
     DROP_UNIT_REGEX("(?=.* -x (?<x>\\S+))(?=.* -y (?<y>\\S+))(?=.* -t (?<type>\\S+))(?=.* -c (?<count>\\S+))^dropunit( *-[xytc]+ \\S+){4}$"),
     ATTACK_MACHINES_REGEX("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^attack machines( *-[xy] \\d+){2}$"),
-    SET_OIL_FOR_ENGINEER("set oil for engineers -c (?<count>\\d+)");//count is number of engineers that you want to do this task
-
+    SET_OIL_FOR_ENGINEER("set oil for engineers -c (?<count>\\d+)"),//count is number of engineers that you want to do this task
+    DIG_MOAT("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^dig moat( *-[xy] \\d+){2}$"),
+    NO_MOAT("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^no moat( *-[xy] \\d+){2}$");
     private final String regex;
 
     GameMenuCommands(String regex) {

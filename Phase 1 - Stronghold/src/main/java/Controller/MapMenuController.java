@@ -136,7 +136,8 @@ public class MapMenuController {
         if (map.getMap()[x][y].getBuilding() != null)
             stringShowDetail += "\nbuilding : " + map.getMap()[x][y].getBuilding().getBuildingType().getName() + " owner:" + map.getMap()[x][y].getBuilding().getOwner().getUser().getUsername();
         for (Unit unit : map.getMap()[x][y].getUnits()) {
-            if (unit != null) stringShowDetail += "\nUnit : " + unit.getUnitType().getName();
+            if (unit != null)
+                stringShowDetail += "\nUnit : " + unit.getUnitType().getName() + "(hp:" + unit.getHp() + ")" + " owner: " + unit.getOwner().getUser().getUsername();
         }
         if (map.getMap()[x][y].getEnvironmentName() != null && !map.getMap()[x][y].getEnvironmentName().equals("rock"))
             stringShowDetail += "\nrecourse : wood";

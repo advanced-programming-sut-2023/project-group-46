@@ -1,9 +1,9 @@
 package Enums;
 
 public enum BuildingType {//fireRange will boost the range of the archers  || capacity is equal to the amount that in one time the worker bring to the storages
-    SMALL_STONE_GATEHOUSE(10000, "SmallStoneGatehouse", 0, 0, 0, 0, 20, "CastleBuildings", 25, 0, 10),
-    BIG_STONE_GATEHOUSE(20000, "BigStoneGatehouse", 0, 0, 0, 0, 10, "CastleBuildings", 50, 0, 15),
-    DRAW_BRIDGE(0, "DrawBridge", 0, 0, 10, 0, 0, "CastleBuildings", 0, 0, 0),
+    SMALL_STONE_GATEHOUSE(10000, "SmallStoneGatehouse", 0, 0, 0, 0, 10, "CastleBuildings", 25, 0, 10),
+    BIG_STONE_GATEHOUSE(20000, "BigStoneGatehouse", 0, 0, 0, 0, 20, "CastleBuildings", 50, 0, 15),
+    DRAW_BRIDGE(5000, "DrawBridge", 0, 0, 10, 0, 0, "CastleBuildings", 0, 0, 0),
     LOOKOUT_TOWER(2500, "LookoutTower", 0, 0, 0, 0, 10, "CastleBuildings", 5, 0, 25),
     PERIMETER_TOWER(10000, "PerimeterTower", 0, 0, 0, 0, 10, "CastleBuildings", 15, 0, 10),
     DEFENCIVE_TURRET(12000, "DefenciveTurret", 0, 0, 0, 0, 15, "CastleBuildings", 20, 0, 15),
@@ -13,7 +13,7 @@ public enum BuildingType {//fireRange will boost the range of the archers  || ca
     BARRACK(450, "Barrack", 0, 0, 0, 0, 15, "CastleBuildings", 0, 0, 0),
     MERCENARY_POST(450, "MercenaryPost", 0, 0, 10, 0, 0, "CastleBuildings", 0, 0, 0),
     ENGINEER_GUILD(450, "EngineerGuild", 0, 100, 10, 0, 0, "CastleBuildings", 0, 0, 0),
-    KILLING_PIT(0, "KillingPit", 0, 0, 6, 0, 0, "CastleBuildings", 0, 0, 0),
+    KILLING_PIT((int) Double.POSITIVE_INFINITY, "KillingPit", 0, 0, 6, 0, 0, "CastleBuildings", 0, 0, 0),
     INN(300, "Inn", 1, 100, 20, 0, 0, "FoodProcessingBuildings", 0, 8, 0),
     MILL(300, "Mill", 3, 0, 20, 0, 0, "FoodProcessingBuildings", 3, 16, 0),
     IRON_MINE(250, "IronMine", 2, 0, 20, 0, 0, "Industry", 1, 12, 0),
@@ -21,7 +21,7 @@ public enum BuildingType {//fireRange will boost the range of the archers  || ca
     OX_TETHER(100, "OxTether", 1, 0, 5, 0, 0, "Industry", 12, 8, 0),
     PITCH_RIG(250, "PitchRig", 1, 0, 20, 0, 0, "Industry", 1, 8, 0),
     QUARRY(250, "Quarry", 3, 0, 20, 0, 0, "Industry", 20, 8, 0),
-    STOCKPILE(0, "Stockpile", 0, 0, 0, 0, 0, "Industry", 190, 0, 0),
+    STOCKPILE(250, "Stockpile", 0, 0, 0, 0, 0, "Industry", 190, 0, 0),
     WOODCUTTER(100, "Woodcutter", 1, 0, 3, 0, 0, "Industry", 18, 8, 0),
     HOVEL(100, "Hovel", 0, 0, 6, 0, 0, "TownBuildings", 0, 0, 0),
     CHURCH(700, "Church", 0, 250, 0, 0, 0, "TownBuildings", 0, 0, 0),
@@ -44,7 +44,7 @@ public enum BuildingType {//fireRange will boost the range of the archers  || ca
     SHORT_WALL(400, "ShortWall", 0, 0, 0, 0, 1, "CastleBuildings", 1, 0, 0),
     TALL_WALL(600, "TallWall", 0, 0, 0, 0, 2, "CastleBuildings", 1, 0, 0),
     STAIRS(400, "Stairs", 0, 0, 0, 0, 3, "CastleBuildings", 1, 0, 0),
-    KEEP(0, "Keep", 0, 0, 0, 0, 0, "CastleBuildings", 40, 0, 15),
+    KEEP((int) Double.POSITIVE_INFINITY, "Keep", 0, 0, 0, 0, 0, "CastleBuildings", 40, 0, 15),
     FOOD_STOCK(250, "FoodStock", 0, 0, 5, 0, 0, "FoodProcessingBuildings", 250, 0, 0);
 
 

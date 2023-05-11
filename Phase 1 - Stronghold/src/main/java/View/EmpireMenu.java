@@ -18,11 +18,11 @@ public class EmpireMenu {
         while (true) {
             command = Menu.getScanner().nextLine();
             if (command.matches("^show popularity factors$")) {
-                System.out.println(empireMenuController.showPopularityFactors());
+                System.out.print(empireMenuController.showPopularityFactors());
             } else if (command.matches("^show popularity$")) {
                 System.out.println(empireMenuController.showPopularity());
             } else if (command.matches("^show food list$")) {
-                System.out.println(empireMenuController.showFoodList());
+                System.out.print(empireMenuController.showFoodList());
             } else if ((matcher = EmpireMenuCommands.getMatcher(command, EmpireMenuCommands.FOOD_RATE_REGEX)) != null) {
                 empireMenuController.changeFoodRate(matcher);
             } else if (command.matches("^food rate show$")) {
@@ -35,9 +35,16 @@ public class EmpireMenu {
                 empireMenuController.changeFearRate(matcher);
             } else if (command.matches("^fear rate show$")) {
                 System.out.println(empireMenuController.fearRateShow());
-            } else if (command.matches("back")) {
+            } else if (command.equals("back")) {
                 System.out.println("Back to GameMenu");
                 return;
+            } else if (command.equals("show armoury status")) {
+                System.out.println(empireMenuController.showArmoury());
+            } else if (command.equals("show stockpile status")) {
+                System.out.print(empireMenuController.showStockpile());
+            }
+            else if (command.equals("show current menu")) {
+                System.out.println("EmpireMenu");
             } else {
                 System.out.println("Invalid command!");
             }

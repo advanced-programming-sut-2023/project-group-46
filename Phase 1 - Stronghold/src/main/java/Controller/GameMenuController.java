@@ -13,11 +13,12 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 
 public class GameMenuController {
+    //TODO in the move functions killing pit use it and remove it
     private static Game game;
     private static Empire currentEmpire;
     private static Map map;//zero base
     private final ArrayList<Unit> selectedUnits;
-    private final HashMap<String, int[]> selectedCoordinates;//keys are building , unit
+    private final HashMap<String, int[]> selectedCoordinates;//keys are "building" , "unit"
     private Building selectedBuilding;
 
     public GameMenuController() {
@@ -37,7 +38,11 @@ public class GameMenuController {
         return map;
     }
 
-    ;
+    public String showKeepCoordinates() {
+        int x = map.getEmpireCoordinates().get(currentEmpire.getEmpireId())[0];
+        int y = map.getEmpireCoordinates().get(currentEmpire.getEmpireId())[1];
+        return "x: " + x + " y: " + y;
+    }
 
     private ArrayList<Cell> neighbors(int x, int y) {
         ArrayList<Cell> cells = new ArrayList<>();
@@ -107,13 +112,22 @@ public class GameMenuController {
                 game.getEmpires().get(i).getBuildings().add(map.getMap()[map.getEmpireCoordinates().get(i)[0] + 1][map.getEmpireCoordinates().get(i)[1]].getBuilding());
                 map.getMap()[map.getEmpireCoordinates().get(i)[0] - 1][map.getEmpireCoordinates().get(i)[1]].setBuilding(new Building(BuildingType.FOOD_STOCK, game.getEmpires().get(i)));//add foodStock for start of the game
                 game.getEmpires().get(i).getBuildings().add(map.getMap()[map.getEmpireCoordinates().get(i)[0] - 1][map.getEmpireCoordinates().get(i)[1]].getBuilding());
+                EmpireMenuController.calculatePopularityFactors();
             }
             currentEmpire = game.getEmpires().get(0);
-            return "Game Started";
+            return "success";
         }
     }
 
+    public String checkNumberOfTheTurns(int number) {
+        game.setTurnsCounter(number);
+        return "Game Started  " + currentEmpire.getUser().getUsername() + "  is now playing";
+    }
+
     public String dropBuilding(Matcher matcher) {
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         String buildingName = matcher.group("type");
@@ -140,7 +154,7 @@ public class GameMenuController {
                 return "Quarry must be built on Boulder";
             }
         } else if (buildingName.equalsIgnoreCase("PitchRig")) {
-            if (!cellType.equals("oil")) {//TODO check for environment type
+            if (!cellType.equals("oil")) {
                 return "PitchRig must be built on Oil";
             }
         } else {//regular buildings
@@ -156,6 +170,9 @@ public class GameMenuController {
                 }
                 if (!bool) {
                     return "DrawBridge must be built near Gates";
+                }
+                if (!map.getMap()[x][y].getType().equals("moat")) {
+                    return "DrawBridge must be built on moat";
                 }
             }
             if (buildingName.equalsIgnoreCase("Armoury") && currentEmpire.haveThisBuilding(buildingName)) {
@@ -192,12 +209,35 @@ public class GameMenuController {
                 }
             }
         }
+        if (BuildingType.getBuildingByName(buildingName).getGold() > currentEmpire.getResources().getGold()) {
+            return "not enough gold for this building";
+        }
+        if (BuildingType.getBuildingByName(buildingName).getIron() > currentEmpire.getResources().getIron()) {
+            return "not enough iron for this building";
+        }
+        if (BuildingType.getBuildingByName(buildingName).getWood() > currentEmpire.getResources().getWood()) {
+            return "not enough wood for this building";
+        }
+        if (BuildingType.getBuildingByName(buildingName).getStone() > currentEmpire.getResources().getStone()) {
+            return "not enough stone for this building";
+        }
+        if (currentEmpire.getUnemployedPeople() < BuildingType.getBuildingByName(buildingName).getWorkers()) {
+            return "not enough worker for this building";
+        }
+        currentEmpire.addEmployedPeople(BuildingType.getBuildingByName(buildingName).getWorkers());
+        currentEmpire.getResources().addGold(-1 * BuildingType.getBuildingByName(buildingName).getGold());
+        currentEmpire.getResources().addResource("iron", -1 * BuildingType.getBuildingByName(buildingName).getIron());
+        currentEmpire.getResources().addResource("wood", -1 * BuildingType.getBuildingByName(buildingName).getWood());
+        currentEmpire.getResources().addResource("stone", -1 * BuildingType.getBuildingByName(buildingName).getStone());
         map.getMap()[x][y].setBuilding(new Building(BuildingType.getBuildingByName(buildingName), currentEmpire));
         currentEmpire.getBuildings().add(map.getMap()[x][y].getBuilding());
         return "success";
     }
 
     public String selectBuilding(Matcher matcher) {
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
@@ -239,19 +279,29 @@ public class GameMenuController {
     }
 
     public String selectUnit(Matcher matcher) {
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         String type = matcher.group("type");
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
             return "invalid coordinate";
         }
+        if (type != null && UnitType.getUnitByName(type) == null) {
+            return "invalid type for units";
+        }
         selectedUnits.clear();
         selectedCoordinates.put("unit", new int[]{x, y});
         for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
             if (map.getMap()[x][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
-                if (type == null) {//TODO add types for units in this part imp
-                    selectedUnits.add(map.getMap()[x][y].getUnits().get(i));
+                if (type != null) {
+                    if (map.getMap()[x][y].getUnits().get(i).getUnitType().getName().equals(type)) {
+                        selectedUnits.add(map.getMap()[x][y].getUnits().get(i));
+                    }
+                    continue;
                 }
+                selectedUnits.add(map.getMap()[x][y].getUnits().get(i));
             }
         }
         return "success";
@@ -269,6 +319,9 @@ public class GameMenuController {
     }
 
     public String attackEnemy(Matcher matcher) {//archers will stay and give damage them and other will go and damage one of the enemies randomly
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
@@ -280,11 +333,11 @@ public class GameMenuController {
         int distance = distance(x, y, selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1]);
         for (Unit selectedUnit : selectedUnits) {
             int damage = selectedUnit.getUnitType().getAttackPower();
-            if (selectedUnit.getUnitType().equals(UnitType.LADDER_MAN)) {
+            if (selectedUnit.getUnitType().equals(UnitType.LADDER_MAN) && map.getMap()[x][y].getBuilding() != null) {
                 if (distance <= selectedUnit.getUnitType().getSpeed()) {
                     String name = map.getMap()[x][y].getBuilding().getBuildingType().getName();
                     if (name.equals("ShortWall") || name.equals("TallWall")) {
-                        if (map.getMap()[x][y].getBuilding() != null && !map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
+                        if (!map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
                             map.getMap()[x][y].getBuilding().setIsPassableForEnemies(true);
                         }
                     }
@@ -298,6 +351,10 @@ public class GameMenuController {
 //            }
             else if (selectedUnit.getUnitType().getType().equals("Sword")) {
                 if (distance <= selectedUnit.getUnitType().getSpeed()) {//TODO check is there any way to that location or not
+                    if (map.getMap()[x][y].getBuilding() != null && !map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
+                        map.getMap()[x][y].getBuilding().getDamage(damage);
+                        continue;
+                    }
                     boolean bool = true;
                     while (bool) {
                         int index = (int) (Math.random() * map.getMap()[x][y].getUnits().size());
@@ -308,6 +365,10 @@ public class GameMenuController {
                     }
                 }
             } else if (selectedUnit.getUnitType().getType().equals("Archer") && distance <= selectedUnit.getUnitType().getAttackRange()) {
+                if (map.getMap()[x][y].getBuilding() != null && !map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
+                    map.getMap()[x][y].getBuilding().getDamage(damage);
+                    continue;
+                }
                 boolean bool = true;
                 while (bool) {
                     int index = (int) (Math.random() * map.getMap()[x][y].getUnits().size());
@@ -338,11 +399,15 @@ public class GameMenuController {
             if (map.getMap()[x][y].getUnits().get(i).getHp() <= 0) {
                 forDelete.add(map.getMap()[x][y].getUnits().get(i));
             }
-
+        }
+        if (forDelete.size() == 0) {
+            return;
         }
         for (Unit unit : forDelete) {
             map.getMap()[x][y].getUnits().remove(unit);
-            unit.getOwner().getUnits().remove(unit);
+            if (unit.getOwner() != null) {
+                unit.getOwner().getUnits().remove(unit);
+            }
         }
     }
 
@@ -351,7 +416,23 @@ public class GameMenuController {
             return;
         }
         if (map.getMap()[x][y].getBuilding().getHp() <= 0) {
-            map.getMap()[x][y].getBuilding().getOwner().getBuildings().remove(map.getMap()[x][y].getBuilding());
+            if (map.getMap()[x][y].getBuilding().getOwner() != null) {
+                map.getMap()[x][y].getBuilding().getOwner().getBuildings().remove(map.getMap()[x][y].getBuilding());
+                map.getMap()[x][y].getBuilding().getOwner().addEmployedPeople(-1 * map.getMap()[x][y].getBuilding().getBuildingType().getWorkers());
+                if (map.getMap()[x][y].getBuilding().getBuildingType().equals(BuildingType.CHURCH) || map.getMap()[x][y].getBuilding().getBuildingType().equals(BuildingType.CATHEDRAL)) {
+                    map.getMap()[x][y].getBuilding().getOwner().addReligionPopularity(-2);
+                } else if (map.getMap()[x][y].getBuilding().getBuildingType().equals(BuildingType.INN)) {
+                    map.getMap()[x][y].getBuilding().getOwner().addAleCoverage(-1);
+                } else if (map.getMap()[x][y].getBuilding().getBuildingType().equals(BuildingType.HOVEL)) {
+                    map.getMap()[x][y].getBuilding().getOwner().addMaxPopulation(-8);
+                } else if (map.getMap()[x][y].getBuilding().getBuildingType().equals(BuildingType.ARMOURY)) {
+                    map.getMap()[x][y].getBuilding().getOwner().getArmoury().addFreeCapacityArmoury(-50);
+                } else if (map.getMap()[x][y].getBuilding().getBuildingType().equals(BuildingType.FOOD_STOCK)) {
+                    map.getMap()[x][y].getBuilding().getOwner().getFoodStock().addFreeCapacityFoodStock(-250);
+                } else if (map.getMap()[x][y].getBuilding().getBuildingType().equals(BuildingType.STOCKPILE)) {
+                    map.getMap()[x][y].getBuilding().getOwner().getResources().addFreeCapacityStockpile(-190);
+                }
+            }
             map.getMap()[x][y].setBuilding(null);
         }
     }
@@ -361,6 +442,9 @@ public class GameMenuController {
     }
 
     public String attackLocation(Matcher matcher) {
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
@@ -376,10 +460,14 @@ public class GameMenuController {
             }
             if (distance <= selectedUnit.getUnitType().getAttackRange()) {
                 int damage = selectedUnit.getUnitType().getAttackPower();
+                if (map.getMap()[x][y].getBuilding() != null && !map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
+                    map.getMap()[x][y].getBuilding().getDamage(damage);
+                    continue;
+                }
                 boolean bool = true;
                 while (bool) {
                     int index = (int) (Math.random() * map.getMap()[x][y].getUnits().size());
-                    if (!map.getMap()[x][y].getUnits().get(index).getOwner().equals(currentEmpire)) {
+                    if (!map.getMap()[x][y].getUnits().get(index).getOwner().equals(currentEmpire) && !map.getMap()[x][y].getUnits().get(index).getUnitType().equals(UnitType.ASSASSIN)) {
                         for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
                             if (map.getMap()[x][y].getUnits().get(i).getUnitType().equals(UnitType.PORTABLE_SHIELD) && map.getMap()[x][y].getUnits().get(index).getOwner().equals(map.getMap()[x][y].getUnits().get(i).getOwner())) {
                                 map.getMap()[x][y].getUnits().get(i).getDamage(damage);
@@ -400,8 +488,7 @@ public class GameMenuController {
         return "success";
     }
 
-    public String pourOil(Matcher matcher) {
-        String dir = matcher.group("direction");
+    public String pourOil(String dir) {
         int damage = UnitType.ENGINEER_WITH_OIL.getAttackPower();
         if (!dir.equals("up") && !dir.equals("down") && !dir.equals("left") && !dir.equals("right")) {
             return "invalid direction";
@@ -418,40 +505,45 @@ public class GameMenuController {
         }
         int x = selectedCoordinates.get("unit")[0];
         int y = selectedCoordinates.get("unit")[1];
-        if (dir.equals("up")) {
-            if (y + 1 > map.getSize() - 1) {
-                return "EndOfTheMap!";
-            }
-            for (int i = 0; i < map.getMap()[x][y + 1].getUnits().size(); i++) {
-                if (!map.getMap()[x][y + 1].getUnits().get(i).getOwner().equals(currentEmpire)) {
-                    map.getMap()[x][y + 1].getUnits().get(i).getDamage(damage);
+        switch (dir) {
+            case "up" -> {
+                if (y + 1 > map.getSize() - 1) {
+                    return "EndOfTheMap!";
+                }
+                for (int i = 0; i < map.getMap()[x][y + 1].getUnits().size(); i++) {
+                    if (!map.getMap()[x][y + 1].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                        map.getMap()[x][y + 1].getUnits().get(i).getDamage(damage);
+                    }
                 }
             }
-        } else if (dir.equals("down")) {
-            if (y == 0) {
-                return "EndOfTheMap!";
-            }
-            for (int i = 0; i < map.getMap()[x][y - 1].getUnits().size(); i++) {
-                if (!map.getMap()[x][y - 1].getUnits().get(i).getOwner().equals(currentEmpire)) {
-                    map.getMap()[x][y - 1].getUnits().get(i).getDamage(damage);
+            case "down" -> {
+                if (y == 0) {
+                    return "EndOfTheMap!";
+                }
+                for (int i = 0; i < map.getMap()[x][y - 1].getUnits().size(); i++) {
+                    if (!map.getMap()[x][y - 1].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                        map.getMap()[x][y - 1].getUnits().get(i).getDamage(damage);
+                    }
                 }
             }
-        } else if (dir.equals("left")) {
-            if (x == 0) {
-                return "EndOfTheMap!";
-            }
-            for (int i = 0; i < map.getMap()[x - 1][y].getUnits().size(); i++) {
-                if (!map.getMap()[x - 1][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
-                    map.getMap()[x - 1][y].getUnits().get(i).getDamage(damage);
+            case "left" -> {
+                if (x == 0) {
+                    return "EndOfTheMap!";
+                }
+                for (int i = 0; i < map.getMap()[x - 1][y].getUnits().size(); i++) {
+                    if (!map.getMap()[x - 1][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                        map.getMap()[x - 1][y].getUnits().get(i).getDamage(damage);
+                    }
                 }
             }
-        } else if (dir.equals("right")) {
-            if (x + 1 > map.getSize() - 1) {
-                return "EndOfTheMap!";
-            }
-            for (int i = 0; i < map.getMap()[x + 1][y].getUnits().size(); i++) {
-                if (!map.getMap()[x + 1][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
-                    map.getMap()[x + 1][y].getUnits().get(i).getDamage(damage);
+            case "right" -> {
+                if (x + 1 > map.getSize() - 1) {
+                    return "EndOfTheMap!";
+                }
+                for (int i = 0; i < map.getMap()[x + 1][y].getUnits().size(); i++) {
+                    if (!map.getMap()[x + 1][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                        map.getMap()[x + 1][y].getUnits().get(i).getDamage(damage);
+                    }
                 }
             }
         }
@@ -467,11 +559,16 @@ public class GameMenuController {
             currentEmpire.getUnits().remove(unit);
             map.getMap()[x][y].getUnits().add(new Unit(UnitType.ENGINEER, currentEmpire));
             currentEmpire.getUnits().add(map.getMap()[x][y].getUnits().get(map.getMap()[x][y].getUnits().size() - 1));
+        } else {
+            currentEmpire.getResources().addResource("pitch", -1);
         }
         return "success";
     }
 
     public String attackMachines(Matcher matcher) {//fire ballista attack in group of archers not here
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
@@ -512,6 +609,9 @@ public class GameMenuController {
     }
 
     public String dropUnit(Matcher matcher) {
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         String type = matcher.group("type");
@@ -587,9 +687,8 @@ public class GameMenuController {
         for (int i = 0; i < count; i++) {
             map.getMap()[x][y].getUnits().add(new Unit(UnitType.getUnitByName(type), currentEmpire));
             currentEmpire.getUnits().add(map.getMap()[x][y].getUnits().get(size + i));
+            attackNextTurnByMode(x, y, map.getMap()[x][y].getUnits().get(size + i));
         }
-
-
         return "success";
     }
 
@@ -690,11 +789,15 @@ public class GameMenuController {
         for (int i = 0; i < count; i++) {
             map.getMap()[currentEmpire.getKeepCoordinates()[0]][currentEmpire.getKeepCoordinates()[1]].getUnits().add(new Unit(UnitType.getUnitByName(type), currentEmpire));
             currentEmpire.getUnits().add(map.getMap()[currentEmpire.getKeepCoordinates()[0]][currentEmpire.getKeepCoordinates()[1]].getUnits().get(size + i));
+            attackNextTurnByMode(currentEmpire.getKeepCoordinates()[0], currentEmpire.getKeepCoordinates()[1], map.getMap()[currentEmpire.getKeepCoordinates()[0]][currentEmpire.getKeepCoordinates()[1]].getUnits().get(size + i));
         }
         return "success";
     }
 
     public String digTunnel(Matcher matcher) {//Tunnelers can dig tunnel in range 10 & damage that building 15000
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
@@ -847,7 +950,10 @@ public class GameMenuController {
     }
 
     private void attackNextTurnByMode(int x, int y, Unit unit) {//TODO after any movement and in the start of the turn it should be called
-        int damage = unit.getAttackPower();//TODO add functions for engineer with oil
+        if (!unit.getOwner().equals(currentEmpire)) {
+            return;
+        }
+        int damage = unit.getAttackPower();
         if (unit.getUnitType().getType().equals("Archer")) {
             int attackRange = unit.getUnitType().getAttackRange();
             for (int i = x - attackRange; i < attackRange + x; i++) {
@@ -856,8 +962,11 @@ public class GameMenuController {
                         continue;
                     }
                     for (int k = 0; k < map.getMap()[i][j].getUnits().size(); k++) {
-                        if (!map.getMap()[i][j].getUnits().get(i).getOwner().equals(currentEmpire)) {
-                            map.getMap()[i][j].getUnits().get(i).getDamage(damage);
+                        if (!map.getMap()[i][j].getUnits().get(k).getOwner().equals(currentEmpire)) {
+                            if (map.getMap()[i][j].getUnits().get(k).getUnitType().equals(UnitType.ASSASSIN) && (x != i || y != j)) {
+                                continue;
+                            }
+                            map.getMap()[i][j].getUnits().get(k).getDamage(damage);
                         }
                     }
                     checkDeadUnitsLocation(i, j);
@@ -884,18 +993,57 @@ public class GameMenuController {
                         }
                         //TODO add the is passable function
                         for (int k = 0; k < map.getMap()[i][j].getUnits().size(); k++) {
-                            if (!map.getMap()[i][j].getUnits().get(i).getOwner().equals(currentEmpire)) {
-                                map.getMap()[i][j].getUnits().get(i).getDamage(damage);
+                            if (!map.getMap()[i][j].getUnits().get(k).getOwner().equals(currentEmpire)) {
+                                if (map.getMap()[i][j].getUnits().get(k).getUnitType().equals(UnitType.ASSASSIN) && (x != i || y != j)) {
+                                    continue;
+                                }
+                                map.getMap()[i][j].getUnits().get(k).getDamage(damage);
                             }
                         }
                         checkDeadUnitsLocation(i, j);
                     }
                 }
-            }//TODO complete
+            }
+        } else if (unit.getUnitType().equals(UnitType.ENGINEER_WITH_OIL)) {
+            int neededEnemyForAttack = switch (unit.getMode()) {
+                case "offensive" -> 1;
+                case "standing" -> 2;
+                case "defensive" -> 3;
+                default -> 0;
+            };
+            for (int i = 0; i < neighbors(x, y).size(); i++) {
+                for (int j = 0; j < neighbors(x, y).get(i).getUnits().size(); j++) {
+                    if (neighbors(x, y).get(i).getUnits().get(j).getOwner() != currentEmpire && !neighbors(x, y).get(i).getUnits().get(j).getUnitType().equals(UnitType.ASSASSIN)) {
+                        neededEnemyForAttack--;
+                    }
+                }
+            }
+            if (neededEnemyForAttack <= 0) {
+                for (int i = 0; i < neighbors(x, y).size(); i++) {
+                    for (int j = 0; j < neighbors(x, y).get(i).getUnits().size(); j++) {
+                        if (neighbors(x, y).get(i).getUnits().get(j).getOwner() != currentEmpire) {
+                            neighbors(x, y).get(i).getUnits().get(j).getDamage(damage);
+                        }
+                    }
+                }
+                boolean bool = false;
+                for (int i = 0; i < currentEmpire.getBuildings().size(); i++) {
+                    if (currentEmpire.getBuildings().get(i).getBuildingType().equals(BuildingType.OIL_SMELTER)) {
+                        bool = true;
+                        break;
+                    }
+                }
+                if (!(bool && currentEmpire.getResources().getPitch() > 0)) {
+                    map.getMap()[x][y].getUnits().remove(unit);
+                    currentEmpire.getUnits().remove(unit);
+                    map.getMap()[x][y].getUnits().add(new Unit(UnitType.ENGINEER, currentEmpire));
+                    currentEmpire.getUnits().add(map.getMap()[x][y].getUnits().get(map.getMap()[x][y].getUnits().size() - 1));
+                } else {
+                    currentEmpire.getResources().addResource("pitch", -1);
+                }
+            }
         }
-//        else if (unit.getUnitType().equals(UnitType.ENGINEER_WITH_OIL)) {
-//            if(unit.getMode().)
-//        }
+        checkDeadUnitsLocation(x, y);
     }
 
     public void checkFoodProductiveBuildings() {// each building produces if there is enough free space in the foodStock
@@ -984,6 +1132,8 @@ public class GameMenuController {
     }
 
     public void checkResourceProductiveBuildings() {
+        int oxTethers = 0;
+        int quarry = 0;
         for (int i = 0; i < currentEmpire.getBuildings().size(); i++) {
             int rate = currentEmpire.getBuildings().get(i).getRate();
             int productEachRate = currentEmpire.getBuildings().get(i).getBuildingType().getCapacity();
@@ -1038,17 +1188,74 @@ public class GameMenuController {
                     currentEmpire.getResources().addResource("ale", productEachRate * rate);
                     currentEmpire.getResources().addResource("hop", -1 * rate);
                 }
-            }//TODO add quarry and OxTether
+                case "Quarry" -> {
+                    quarry++;
+                }
+                case "OxTether" -> {
+                    oxTethers++;
+                }
+            }
         }
+        int productOfAllQuarries = quarry * BuildingType.QUARRY.getRate() * BuildingType.QUARRY.getCapacity();
+        int transitAllOxTethers = oxTethers * BuildingType.OX_TETHER.getCapacity() * BuildingType.OX_TETHER.getRate();
+        if (transitAllOxTethers > productOfAllQuarries) {
+            transitAllOxTethers = productOfAllQuarries;
+        }
+        if (transitAllOxTethers > currentEmpire.getResources().getFreeCapacityStockpile()) {
+            transitAllOxTethers = currentEmpire.getResources().getFreeCapacityStockpile();
+        }
+        currentEmpire.getResources().addResource("stone", transitAllOxTethers);
     }
 
-    private void removeDestroyedThings() {
+    private String checkEndOfTheGame() {
+        int[] scores = new int[game.getEmpires().size()];
+        for (int i = 0; i < game.getEmpires().size(); i++) {
+            for (int j = 0; j < game.getEmpires().get(i).getBuildings().size(); j++) {
+                scores[i] += game.getEmpires().get(i).getBuildings().get(j).getHp();
+            }
+            for (int k = 0; k < game.getEmpires().get(i).getUnits().size(); k++) {
+                scores[i] += game.getEmpires().get(i).getUnits().get(k).getHp();
+            }
+        }
+        for (int i = 0; i < scores.length; i++) {
+            game.getEmpires().get(i).getUser().addScore(scores[i]);
+        }
+        StringBuilder output = new StringBuilder();
+        output.append("scores :").append("\n");
+        for (int i = 0; i < scores.length; i++) {
+            output.append(game.getEmpires().get(i).getUser().getUsername()).append(" : ").append(scores[i]).append("\n");
+        }
+        return output.toString();
     }
 
-    private void findDirectionForMovements() {
-    }
-
-    private void checkEndOfTheGame() {
+    public String nextTurn() {
+        checkFoodProductiveBuildings();
+        checkArmourProductiveBuildings();
+        checkResourceProductiveBuildings();
+        EmpireMenuController.checkEffectOfFearRate();
+        EmpireMenuController.calculateFoodAndTax();
+        EmpireMenuController.calculatePopularityFactors();
+        EmpireMenuController.calculatePopulation();
+        int id = currentEmpire.getEmpireId();
+        if (id == game.getEmpires().size() - 1) {
+            currentEmpire = game.getEmpires().get(0);
+            game.setTurnsCounter(game.getTurnsCounter() - 1);
+        } else {
+            currentEmpire = game.getEmpires().get(id + 1);
+        }
+        if (game.getTurnsCounter() == 0) {
+            return "end of the game" + '\n' + checkEndOfTheGame();
+        }
+        for (int i = 0; i < map.getSize(); i++) {
+            for (int j = 0; j < map.getSize(); j++) {
+                checkDeadUnitsLocation(i, j);
+                checkDestroyedBuildingLocation(i, j);
+                for (int k = 0; k < map.getMap()[i][j].getUnits().size(); k++) {
+                    attackNextTurnByMode(i, j, map.getMap()[i][j].getUnits().get(k));
+                }
+            }
+        }
+        return currentEmpire.getUser().getUsername() + " is now playing";
     }
 
     public String setOilForEngineers(Matcher matcher) {
@@ -1097,5 +1304,66 @@ public class GameMenuController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String digMoat(Matcher matcher) {//spearman and slaves can dig moat
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
+        int x = Integer.parseInt(matcher.group("x"));
+        int y = Integer.parseInt(matcher.group("y"));
+        if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
+            return "invalid coordinate";
+        }
+        if (selectedUnits.size() == 0) {
+            return "you should select a unit first";
+        }
+        boolean bool = false;
+        for (Unit selectedUnit : selectedUnits) {
+            if (selectedUnit.getUnitType().equals(UnitType.SPEARMAN) || selectedUnit.getUnitType().equals(UnitType.SLAVES)) {
+                bool = true;
+            }
+        }
+        //TODO add passable function for this part
+        if (map.getMap()[x][y].getBuilding() != null || map.getMap()[x][y].getUnits().size() > 0 || map.getMap()[x][y].getEnvironmentName() != null) {
+            return "there are some other things in this place";
+        }
+        if (!bool) {
+            return "you should select a unit with spearman or slave";
+        }
+        map.getMap()[x][y].setType("moat");
+        return "success";
+    }
+
+    public String noMoat(Matcher matcher) {
+        if (!matcher.group("x").matches("\\d+") || !matcher.group("y").matches("\\d+")) {
+            return "x & y should be positive numbers";
+        }
+        int x = Integer.parseInt(matcher.group("x"));
+        int y = Integer.parseInt(matcher.group("y"));
+        if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
+            return "invalid coordinate";
+        }
+        if (selectedUnits.size() == 0) {
+            return "you should select a unit first";
+        }
+        boolean bool = false;
+        for (Unit selectedUnit : selectedUnits) {
+            if (selectedUnit.getUnitType().equals(UnitType.SPEARMAN) || selectedUnit.getUnitType().equals(UnitType.SLAVES)) {
+                bool = true;
+            }
+        }
+        //TODO add passable function for this part
+        if (map.getMap()[x][y].getBuilding() != null || map.getMap()[x][y].getUnits().size() > 0 || map.getMap()[x][y].getEnvironmentName() != null) {
+            return "there are some other things in this place";
+        }
+        if (!bool) {
+            return "you should select a unit with spearman or slave";
+        }
+        if (!map.getMap()[x][y].getType().equals("moat")) {
+            return "there is no moa in that coordinate";
+        }
+        map.getMap()[x][y].setType("earth");
+        return "success";
     }
 }
