@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 
 public class GameMenuController {
-    //TODO in the move functions killing pit
+    //TODO in the move functions killing pit use it and remove it
     private static Game game;
     private static Empire currentEmpire;
     private static Map map;//zero base
@@ -154,7 +154,7 @@ public class GameMenuController {
                 return "Quarry must be built on Boulder";
             }
         } else if (buildingName.equalsIgnoreCase("PitchRig")) {
-            if (!cellType.equals("oil")) {//TODO check for environment type
+            if (!cellType.equals("oil")) {
                 return "PitchRig must be built on Oil";
             }
         } else {//regular buildings
@@ -419,6 +419,19 @@ public class GameMenuController {
             if (map.getMap()[x][y].getBuilding().getOwner() != null) {
                 map.getMap()[x][y].getBuilding().getOwner().getBuildings().remove(map.getMap()[x][y].getBuilding());
                 map.getMap()[x][y].getBuilding().getOwner().addEmployedPeople(-1 * map.getMap()[x][y].getBuilding().getBuildingType().getWorkers());
+                if (map.getMap()[x][y].getBuilding().getBuildingType().equals(BuildingType.CHURCH) || map.getMap()[x][y].getBuilding().getBuildingType().equals(BuildingType.CATHEDRAL)) {
+                    map.getMap()[x][y].getBuilding().getOwner().addReligionPopularity(-2);
+                } else if (map.getMap()[x][y].getBuilding().getBuildingType().equals(BuildingType.INN)) {
+                    map.getMap()[x][y].getBuilding().getOwner().addAleCoverage(-1);
+                } else if (map.getMap()[x][y].getBuilding().getBuildingType().equals(BuildingType.HOVEL)) {
+                    map.getMap()[x][y].getBuilding().getOwner().addMaxPopulation(-8);
+                } else if (map.getMap()[x][y].getBuilding().getBuildingType().equals(BuildingType.ARMOURY)) {
+                    map.getMap()[x][y].getBuilding().getOwner().getArmoury().addFreeCapacityArmoury(-50);
+                } else if (map.getMap()[x][y].getBuilding().getBuildingType().equals(BuildingType.FOOD_STOCK)) {
+                    map.getMap()[x][y].getBuilding().getOwner().getFoodStock().addFreeCapacityFoodStock(-250);
+                } else if (map.getMap()[x][y].getBuilding().getBuildingType().equals(BuildingType.STOCKPILE)) {
+                    map.getMap()[x][y].getBuilding().getOwner().getResources().addFreeCapacityStockpile(-190);
+                }
             }
             map.getMap()[x][y].setBuilding(null);
         }
@@ -937,7 +950,7 @@ public class GameMenuController {
     }
 
     private void attackNextTurnByMode(int x, int y, Unit unit) {//TODO after any movement and in the start of the turn it should be called
-        if (!unit.getOwner().equals(currentEmpire)) {//TODO call this part in the drop and create unit
+        if (!unit.getOwner().equals(currentEmpire)) {
             return;
         }
         int damage = unit.getAttackPower();
@@ -949,7 +962,10 @@ public class GameMenuController {
                         continue;
                     }
                     for (int k = 0; k < map.getMap()[i][j].getUnits().size(); k++) {
-                        if (!map.getMap()[i][j].getUnits().get(k).getOwner().equals(currentEmpire) && !map.getMap()[x][y].getUnits().get(k).getUnitType().equals(UnitType.ASSASSIN)) {
+                        if (!map.getMap()[i][j].getUnits().get(k).getOwner().equals(currentEmpire)) {
+                            if (map.getMap()[i][j].getUnits().get(k).getUnitType().equals(UnitType.ASSASSIN) && (x != i || y != j)) {
+                                continue;
+                            }
                             map.getMap()[i][j].getUnits().get(k).getDamage(damage);
                         }
                     }
@@ -977,7 +993,10 @@ public class GameMenuController {
                         }
                         //TODO add the is passable function
                         for (int k = 0; k < map.getMap()[i][j].getUnits().size(); k++) {
-                            if (!map.getMap()[i][j].getUnits().get(k).getOwner().equals(currentEmpire) && !map.getMap()[x][y].getUnits().get(k).getUnitType().equals(UnitType.ASSASSIN)) {
+                            if (!map.getMap()[i][j].getUnits().get(k).getOwner().equals(currentEmpire)) {
+                                if (map.getMap()[i][j].getUnits().get(k).getUnitType().equals(UnitType.ASSASSIN) && (x != i || y != j)) {
+                                    continue;
+                                }
                                 map.getMap()[i][j].getUnits().get(k).getDamage(damage);
                             }
                         }
@@ -1113,6 +1132,8 @@ public class GameMenuController {
     }
 
     public void checkResourceProductiveBuildings() {
+        int oxTethers = 0;
+        int quarry = 0;
         for (int i = 0; i < currentEmpire.getBuildings().size(); i++) {
             int rate = currentEmpire.getBuildings().get(i).getRate();
             int productEachRate = currentEmpire.getBuildings().get(i).getBuildingType().getCapacity();
@@ -1167,11 +1188,26 @@ public class GameMenuController {
                     currentEmpire.getResources().addResource("ale", productEachRate * rate);
                     currentEmpire.getResources().addResource("hop", -1 * rate);
                 }
-            }//TODO add quarry and OxTether
+                case "Quarry" -> {
+                    quarry++;
+                }
+                case "OxTether" -> {
+                    oxTethers++;
+                }
+            }
         }
+        int productOfAllQuarries = quarry * BuildingType.QUARRY.getRate() * BuildingType.QUARRY.getCapacity();
+        int transitAllOxTethers = oxTethers * BuildingType.OX_TETHER.getCapacity() * BuildingType.OX_TETHER.getRate();
+        if (transitAllOxTethers > productOfAllQuarries) {
+            transitAllOxTethers = productOfAllQuarries;
+        }
+        if (transitAllOxTethers > currentEmpire.getResources().getFreeCapacityStockpile()) {
+            transitAllOxTethers = currentEmpire.getResources().getFreeCapacityStockpile();
+        }
+        currentEmpire.getResources().addResource("stone", transitAllOxTethers);
     }
 
-    private String checkEndOfTheGame() {//TODO complete and give the empires their points
+    private String checkEndOfTheGame() {
         int[] scores = new int[game.getEmpires().size()];
         for (int i = 0; i < game.getEmpires().size(); i++) {
             for (int j = 0; j < game.getEmpires().get(i).getBuildings().size(); j++) {
@@ -1180,6 +1216,9 @@ public class GameMenuController {
             for (int k = 0; k < game.getEmpires().get(i).getUnits().size(); k++) {
                 scores[i] += game.getEmpires().get(i).getUnits().get(k).getHp();
             }
+        }
+        for (int i = 0; i < scores.length; i++) {
+            game.getEmpires().get(i).getUser().addScore(scores[i]);
         }
         StringBuilder output = new StringBuilder();
         output.append("scores :").append("\n");
@@ -1196,6 +1235,7 @@ public class GameMenuController {
         EmpireMenuController.checkEffectOfFearRate();
         EmpireMenuController.calculateFoodAndTax();
         EmpireMenuController.calculatePopularityFactors();
+        EmpireMenuController.calculatePopulation();
         int id = currentEmpire.getEmpireId();
         if (id == game.getEmpires().size() - 1) {
             currentEmpire = game.getEmpires().get(0);

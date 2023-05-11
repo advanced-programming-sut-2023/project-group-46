@@ -26,14 +26,18 @@ public class Empire {
     private int fearPopularity;
     private int taxPopularity;
     private int religionPopularity;
+    private int aleCoverage;
     private Resources resources;// it should be given to empires in start of the game
     private int kingHp;
     private int[] keepCoordinates;
+    private int maxPopulation;
 
-    public Empire(User user, int empireId, int x, int y) {//TODO check for the rates in the start of the game
+    public Empire(User user, int empireId, int x, int y) {
         this.user = user;
         this.unemployedPeople = 10;
         this.employedPeople = 0;
+        this.maxPopulation = 10;
+        this.aleCoverage = 0;
         this.foodRate = 0;
         this.taxRate = 0;
         this.fearRate = 0;
@@ -44,7 +48,6 @@ public class Empire {
         this.religionPopularity = 0;
         this.keepCoordinates[0] = x;
         this.keepCoordinates[1] = y;
-        //TODo add number to popularity factors
         this.resources = new Resources(5000, 0, 0, 0, 0, 50, 0, 100, 0, -150);
         this.armoury = new Armoury(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         this.foodStock = new FoodStock(0, 0, 0, 60, -60);
@@ -52,6 +55,22 @@ public class Empire {
     }
 
     public Empire() {
+    }
+
+    public int getMaxPopulation() {
+        return maxPopulation;
+    }
+
+    public void addMaxPopulation(int maxPopulation) {
+        this.maxPopulation += maxPopulation;
+    }
+
+    public int getAleCoverage() {
+        return aleCoverage;
+    }
+
+    public void addAleCoverage(int aleCoverage) {
+        this.aleCoverage += aleCoverage;
     }
 
     public int[] getKeepCoordinates() {
@@ -72,6 +91,10 @@ public class Empire {
 
     public int getUnemployedPeople() {
         return unemployedPeople;
+    }
+
+    public void setUnemployedPeople(int unemployedPeople) {
+        this.unemployedPeople = unemployedPeople;
     }
 
     public int getEmployedPeople() {
@@ -199,7 +222,7 @@ public class Empire {
         return false;
     }
 
-    public void calculateReductionInTheFoodStock() {//TODO after this call the function that calculates variety of foods
+    public void calculateReductionInTheFoodStock() {
         int allPeople = unemployedPeople + employedPeople;
         double foodNeeded = ((foodRate * 0.5) + 1) * allPeople;
         while (foodNeeded > 0) {

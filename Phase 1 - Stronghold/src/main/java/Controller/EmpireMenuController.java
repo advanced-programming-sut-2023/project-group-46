@@ -31,6 +31,24 @@ public class EmpireMenuController {
         GameMenuController.getCurrentEmpire().setFearPopularity(GameMenuController.getCurrentEmpire().getFearRate());
     }
 
+    public static void calculatePopulation() {
+        int maxPopulation = GameMenuController.getCurrentEmpire().getMaxPopulation();
+        int unemployedPeople = GameMenuController.getCurrentEmpire().getUnemployedPeople();
+        int popularity = GameMenuController.getCurrentEmpire().getFearPopularity();
+        popularity += GameMenuController.getCurrentEmpire().getFoodPopularity();
+        popularity += GameMenuController.getCurrentEmpire().getReligionPopularity();
+        popularity += GameMenuController.getCurrentEmpire().getTaxPopularity();
+        popularity += GameMenuController.getCurrentEmpire().getAleCoverage();
+        popularity *= 3;// 3*popularity effects our unemployedPeople
+        if (unemployedPeople + popularity >= maxPopulation) {
+            GameMenuController.getCurrentEmpire().addUnemployedPeople(maxPopulation - unemployedPeople);
+        } else if (unemployedPeople + popularity <= 0) {
+            GameMenuController.getCurrentEmpire().setUnemployedPeople(0);
+        } else {
+            GameMenuController.getCurrentEmpire().addUnemployedPeople(popularity);
+        }
+    }
+
     public static void calculateFoodAndTax() {// if your empire doesn't have enough food or gold your food and your tax rate will be change and you should use change rate commands to set them in another rate
         int allPeople = GameMenuController.getCurrentEmpire().getUnemployedPeople() + GameMenuController.getCurrentEmpire().getEmployedPeople();
         double allFood = GameMenuController.getCurrentEmpire().getFoodStock().getApple() + GameMenuController.getCurrentEmpire().getFoodStock().getBread() + GameMenuController.getCurrentEmpire().getFoodStock().getMeat() + GameMenuController.getCurrentEmpire().getFoodStock().getCheese();
@@ -84,7 +102,7 @@ public class EmpireMenuController {
                 }
             }
         } else if (GameMenuController.getCurrentEmpire().getTaxRate() == -3) {
-            if (gold < allPeople ) {
+            if (gold < allPeople) {
                 if (gold > allPeople * 0.8) {
                     GameMenuController.getCurrentEmpire().setTaxRate(-2);
                 } else if (gold > allPeople * 0.6) {
@@ -119,6 +137,8 @@ public class EmpireMenuController {
         output += (GameMenuController.getCurrentEmpire().getFearPopularity()) + "\n";
         output += "Religion : ";
         output += (GameMenuController.getCurrentEmpire().getReligionPopularity()) + "\n";
+        output += "aleCoverage : ";
+        output += (GameMenuController.getCurrentEmpire().getAleCoverage()) + "\n";
         return output;
     }
 
@@ -127,6 +147,7 @@ public class EmpireMenuController {
         popularity += GameMenuController.getCurrentEmpire().getFoodPopularity();
         popularity += GameMenuController.getCurrentEmpire().getReligionPopularity();
         popularity += GameMenuController.getCurrentEmpire().getTaxPopularity();
+        popularity += GameMenuController.getCurrentEmpire().getAleCoverage();
         return popularity;
     }
 
@@ -190,6 +211,4 @@ public class EmpireMenuController {
                 "pitch->" + GameMenuController.getCurrentEmpire().getResources().getResourceAmount("pitch") + '\n';
 
     }
-    //TODO check if the empire doesn't have enough food set the rate -2 (look at the getFoodPopularity  method)
-    //TODO check for money(tax) and food that increases and decreases in resources (dependency <-> foodRate & taxRate)
 }

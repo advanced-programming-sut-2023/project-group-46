@@ -41,7 +41,7 @@ public class EmpireMenu {
             } else if (command.equals("show armoury status")) {
                 System.out.println(empireMenuController.showArmoury());
             } else if (command.equals("show stockpile status")) {
-                System.out.println(empireMenuController.showStockpile());
+                System.out.print(empireMenuController.showStockpile());
             }
             else if (command.equals("show current menu")) {
                 System.out.println("EmpireMenu");
