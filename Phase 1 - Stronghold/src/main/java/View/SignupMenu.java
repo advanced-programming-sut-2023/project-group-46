@@ -33,10 +33,19 @@ public class SignupMenu {
                         if ((matcher1 = SignupMenuCommands.getMatcher(command, SignupMenuCommands.PICK_A_SECURITY_QUESTION)) != null) {
                             result = signUpMenuController.chooseSecurityQuestion(matcher, matcher1);
                             System.out.println(result);
-                            if (result.charAt(0) == 'Y')
+                            if (result.charAt(0) == 'Y') {
+                                while (true) {
+                                    if (Captcha.verifyCaptcha(true)) {
+                                        System.out.println("Registration was successful!");
+                                        break;
+                                    }
+                                }
                                 break;
+                            }
                         } else
                             System.out.println("Please choose your security question and answer it!");
+
+
                     }
                 }
             } else if ((matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER_WITH_RANDOM_PASSWORD)) != null) {
@@ -70,12 +79,21 @@ public class SignupMenu {
                         if ((matcher1 = SignupMenuCommands.getMatcher(command, SignupMenuCommands.PICK_A_SECURITY_QUESTION)) != null) {
                             result = signUpMenuController.chooseSecurityQuestion(matcher, matcher1);
                             System.out.println(result);
-                            if (result.charAt(0) == 'Y')
+                            if (result.charAt(0) == 'Y') {
+                                while (true) {
+                                    if (Captcha.verifyCaptcha(true)) {
+                                        System.out.println("Registration was successful!");
+                                        break;
+                                    }
+                                }
                                 break;
+                            }
                         } else
                             System.out.println("Please choose your security question and answer it!");
                     }
 
+                } else if (command.matches("show current menu")) {
+                    System.out.println("SignupMenu");
                 }
             } else if (command.matches("^back$")) {
                 System.out.println("Back to login menu!");

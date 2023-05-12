@@ -10,17 +10,20 @@ public class Building {
     private int rate;
     private int freeCapacity;
     private String mode;//this is for the buildings like armourers that can produce different things
+    private boolean isPassableForEnemies;
+
     public Building(BuildingType buildingType, Empire owner) {
         this.owner = owner;
         this.hp = buildingType.getHp();
         this.freeCapacity = buildingType.getCapacity();
         this.buildingType = buildingType;
         this.rate = buildingType.getRate() + (int) (-0.5 * owner.getFearRate());
+        this.isPassableForEnemies = false;
         if (buildingType.getName().equals("Church") || buildingType.getName().equals("Cathedral")) {
             owner.addReligionPopularity(2);
         }
         if (buildingType.getName().equals("Hovel")) {
-            owner.addUnemployedPeople(8);
+            owner.addMaxPopulation(8);
         }
         if (buildingType.getName().equals("Fletcher")) {
             this.mode = "bow";
@@ -44,14 +47,23 @@ public class Building {
             GameMenuController.getCurrentEmpire().getResources().addFreeCapacityStockpile(190);
         }
         if (buildingType.getName().equals("Inn")) {
-            //TODO check for the change of popularity
+            GameMenuController.getCurrentEmpire().addAleCoverage(1);
         }
     }
+
     public Building(BuildingType buildingType) {
         this.buildingType = buildingType;
     }
 
     public Building() {
+    }
+
+    public boolean isIsPassableForEnemies() {
+        return isPassableForEnemies;
+    }
+
+    public void setIsPassableForEnemies(boolean isPassableForEnemies) {
+        this.isPassableForEnemies = isPassableForEnemies;
     }
 
     public int getHp() {
@@ -66,16 +78,8 @@ public class Building {
         return buildingType;
     }
 
-    public void setBuildingType(BuildingType buildingType) {
-        this.buildingType = buildingType;
-    }
-
     public Empire getOwner() {
         return owner;
-    }
-
-    public void setOwner(Empire owner) {
-        this.owner = owner;
     }
 
     public int getFreeCapacity() {
@@ -104,5 +108,9 @@ public class Building {
 
     public void setMode(String mode) {
         this.mode = mode;
+    }
+
+    public void getDamage(int hp) {
+        this.hp -= hp;
     }
 }

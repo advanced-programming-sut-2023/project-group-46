@@ -18,15 +18,18 @@ public class TradeMenu {
         while (true) {
             command = Menu.getScanner().nextLine();
             if (command.matches("^trade list$")) {
-                System.out.println(tradeMenuController.tradeList());
+                System.out.print(tradeMenuController.tradeList());
             } else if (command.matches("^trade history$")) {
-                System.out.println(tradeMenuController.tradeHistory());
+                System.out.print(tradeMenuController.tradeHistory());
             } else if ((matcher = TradeMenuCommands.getMatcher(command, TradeMenuCommands.TRADE_ACCEPT_REGEX)) != null) {
                 System.out.println(tradeMenuController.tradeAccept(matcher));
             } else if ((matcher = TradeMenuCommands.getMatcher(command, TradeMenuCommands.TRADE_REGEX)) != null) {
                 System.out.println(tradeMenuController.trade(matcher));
             } else if (command.matches("back")) {
+                System.out.println("Back to GameMenu");
                 return;
+            }  else if (command.matches("show current menu")) {
+                System.out.println("TradeMenu");
             } else {
                 System.out.println("Invalid command!");
             }

@@ -1,16 +1,11 @@
 package Controller;
 
-import Enums.Commands.MapMenuCommands;
 import Enums.EnvironmentType;
 import Model.Cell;
 import Model.Map;
 import Model.Unit;
 import View.MapMenu;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.regex.Matcher;
 
 public class MapMenuController {
@@ -22,19 +17,9 @@ public class MapMenuController {
     private int x;
     private int y;
 
-
-    {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        try {
-            map = objectMapper.readValue(new File(username + ".json"), Map.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public MapMenuController() {
         mapMenu = new MapMenu(this);
+        map = GameMenuController.getMap();
     }
 
     public String showMap(Matcher matcher) {
@@ -90,7 +75,7 @@ public class MapMenuController {
             stringCellForShow += "S";
         } else if (cell.getBuilding() != null) {
             stringCellForShow += "B";
-        }else if (cell.getEnvironmentName() != null && !cell.getEnvironmentName().equals("rock")) {
+        } else if (cell.getEnvironmentName() != null && !cell.getEnvironmentName().equals("rock")) {
             stringCellForShow += "T";
         } else if (cell.getEnvironmentName() != null && cell.getEnvironmentName().equals("rock")) {
             stringCellForShow += "R";
@@ -125,24 +110,14 @@ public class MapMenuController {
     public String moveInMap(Matcher matcher) {
         int x = 0;
         int y = 0;
-        String command = matcher.group("command");
-        Matcher up = MapMenuCommands.getMatcher(command, MapMenuCommands.UP);
-        Matcher down = MapMenuCommands.getMatcher(command, MapMenuCommands.DOWN);
-        Matcher left = MapMenuCommands.getMatcher(command, MapMenuCommands.LEFT);
-        Matcher right = MapMenuCommands.getMatcher(command, MapMenuCommands.RIGHT);
-        if(up != null){
-            if ((up.group("count") == null || up.group("count").isEmpty())) y += 1;
-            else y +=  Integer.parseInt(up.group("count"));
-        }else if(down != null){
-            if ((down.group("count") == null || down.group("count").isEmpty())) y -= 1;
-            else y -=  Integer.parseInt(down.group("count"));
-        } else if(right != null){
-            if ((right.group("count") == null || right.group("count").isEmpty())) x += 1;
-            else x +=  Integer.parseInt(right.group("count"));
-        } else if(left != null){
-            if ((left.group("count") == null || left.group("count").isEmpty())) x -= 1;
-            else x -=  Integer.parseInt(left.group("count"));
-        } else return "Invalid command";
+        while (matcher.find()) {
+            String type = matcher.group("type");
+            int count = Integer.parseInt(matcher.group("count"));
+            if (type.equals("up")) y += count;
+            else if (type.equals("down")) y -= count;
+            else if (type.equals("right")) x += count;
+            else if (type.equals("left")) x -= count;
+        }
         if (!checkMove(x, y)) return "Invalid move";
         this.x += x;
         this.y += y;
@@ -159,15 +134,20 @@ public class MapMenuController {
         int y = Integer.parseInt(matcher.group("y"));
         String stringShowDetail = "type : " + map.getMap()[x][y].getType();
         if (map.getMap()[x][y].getBuilding() != null)
-            stringShowDetail += "\nbuilding : " + map.getMap()[x][y].getBuilding().getBuildingType().getName();
+            stringShowDetail += "\nbuilding : " + map.getMap()[x][y].getBuilding().getBuildingType().getName() + "(hp:" + map.getMap()[x][y].getBuilding().getHp() + ")";
+        if (map.getMap()[x][y].getBuilding().getOwner() != null)
+            stringShowDetail += map.getMap()[x][y].getBuilding().getOwner().getUser().getUsername();
         for (Unit unit : map.getMap()[x][y].getUnits()) {
-            if (unit != null) stringShowDetail += "\nUnit : " + unit.getUnitType().getName();
+            if (unit != null) {
+                stringShowDetail += "\nUnit : " + unit.getUnitType().getName() + "(hp:" + unit.getHp() + ")";
+                if (unit.getOwner() != null) stringShowDetail += " owner: " + unit.getOwner().getUser().getUsername();
+            }
         }
         if (map.getMap()[x][y].getEnvironmentName() != null && !map.getMap()[x][y].getEnvironmentName().equals("rock"))
-            stringShowDetail += "\nrecourse : wood";
-        if (map.getMap()[x][y].getType().equals("rockTexture")) stringShowDetail += "\nrecourse : stone";
-        if (map.getMap()[x][y].getType().equals("oil")) stringShowDetail += "\nrecourse : pitch";
-        if (map.getMap()[x][y].getType().equals("ironTexture")) stringShowDetail += "\nrecourse : iron";
+            stringShowDetail += "\nresource : wood";
+        if (map.getMap()[x][y].getType().equals("rockTexture")) stringShowDetail += "\nresource : stone";
+        if (map.getMap()[x][y].getType().equals("oil")) stringShowDetail += "\nresource : pitch";
+        if (map.getMap()[x][y].getType().equals("ironTexture")) stringShowDetail += "\nresource : iron";
         return stringShowDetail;
     }
 }

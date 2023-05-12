@@ -18,7 +18,7 @@ public class User {
     private String nickname;
     private String email;
     private String slogan;
-    private int highScore;
+    private int score;
     private int numberOfSecurityQuestion;
     private String answerToSecurityQuestion;
     private boolean isStayedLoggedIn;
@@ -32,6 +32,7 @@ public class User {
         this.numberOfSecurityQuestion = 0;
         this.answerToSecurityQuestion = null;
         this.isStayedLoggedIn = false;
+        this.score = 0;
     }
 
     public static User getUserByUsername(String username) throws Exception {
@@ -108,11 +109,11 @@ public class User {
     }
 
     public int getHighScore() {
-        return highScore;
+        return score;
     }
 
-    public void setHighScore(int highScore) {
-        this.highScore = highScore;
+    public void addScore(int score) {
+        this.score += score;
     }
 
     public int getNumberOfSecurityQuestion() {

@@ -12,11 +12,9 @@ public enum ProfileMenuCommands {
     CHANGE_SLOGAN("^profile change \\-s (?<slogan>.+)$"),
     ;
     private final String regex;
-
-    ProfileMenuCommands(String regex) {
+    private ProfileMenuCommands(String regex) {
         this.regex = regex;
     }
-
     public static Matcher getMatcher(String input, ProfileMenuCommands command) {
         Matcher matcher = Pattern.compile(command.regex).matcher(input);
         if (matcher.matches())

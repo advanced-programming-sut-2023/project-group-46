@@ -5,16 +5,15 @@ import java.util.HashMap;
 
 public class Game {
     private static HashMap<String, Integer> shopItems = new HashMap<>();
-    private final Cell[][] map;
-    private final ArrayList<Trade> availableTrades;
-    private final ArrayList<Trade> historyTrades;
+    private ArrayList<Trade> availableTrades;
+    private ArrayList<Trade> historyTrades;
     private ArrayList<Empire> empires;
     private int turnsCounter;
 
-    public Game(Cell[][] map) {
-        this.map = map;
+    public Game() {
         availableTrades = new ArrayList<>();
         historyTrades = new ArrayList<>();
+        empires = new ArrayList<>();
         shopItems = new HashMap<>();
         shopItems.put("meat", 8);
         shopItems.put("bread", 8);
@@ -38,6 +37,7 @@ public class Game {
         shopItems.put("metalArmor", 58);
     }
 
+
     public static HashMap<String, Integer> getShopItems() {
         return shopItems;
     }
@@ -59,10 +59,6 @@ public class Game {
                 return empire;
         }
         return null;
-    }
-
-    public Cell[][] getMap() {
-        return map;
     }
 
     public int getTurnsCounter() {

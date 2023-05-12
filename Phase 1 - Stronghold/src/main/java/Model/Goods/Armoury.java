@@ -26,6 +26,9 @@ Armoury {
         this.horse = horse;
     }
 
+    public Armoury() {
+    }
+
     public boolean isArmouryType(String name) {
         return name.equals("bow") || name.equals("crossbow") || name.equals("spear") || name.equals("pike") || name.equals("mace") || name.equals("sword") ||
                 name.equals("leatherArmor") || name.equals("metalArmor");

@@ -4,6 +4,7 @@ import Enums.BuildingType;
 import Enums.EnvironmentType;
 import Enums.UnitType;
 import Model.Building;
+import Model.Cell;
 import Model.Map;
 import Model.Unit;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -18,6 +20,23 @@ import java.util.regex.Matcher;
 public class EditMapMenuController {
     private Map map;
     private String username = LoginMenuController.getLoggedInUser().getUsername();
+
+    private ArrayList<Cell> neighbors(int x, int y) {
+        ArrayList<Cell> cells = new ArrayList<>();
+        if (x > 0) {
+            cells.add(map.getMap()[x - 1][y]);
+        }
+        if (x < map.getSize() - 1) {
+            cells.add(map.getMap()[x + 1][y]);
+        }
+        if (y > 0) {
+            cells.add(map.getMap()[x][y - 1]);
+        }
+        if (y < map.getSize() - 1) {
+            cells.add(map.getMap()[x][y + 1]);
+        }
+        return cells;
+    }
 
     public String setTexture(Matcher matcher) {
         readMap();
@@ -118,7 +137,7 @@ public class EditMapMenuController {
         if (BuildingType.getBuildingByName(buildingName) == null) {
             return "invalid building type";
         }
-        if (x > map.getSize() || x < 0 || y > map.getSize() || y < 0) {
+        if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
             return "invalid coordinate";
         }
         if (map.getMap()[x][y].getBuilding() != null || map.getMap()[x][y].getUnits().size() > 0 || map.getMap()[x][y].getEnvironmentName() != null) {
@@ -129,15 +148,15 @@ public class EditMapMenuController {
             if (!cellType.equals("thickGrass") && !cellType.equals("oasisGrass")) {
                 return "can't drop farm buildings in this place";
             }
-        } else if (buildingName.equals("IronMine")) {
+        } else if (buildingName.equalsIgnoreCase("IronMine")) {
             if (!cellType.equals("ironTexture")) {
                 return "IronMine must be built on IronTexture";
             }
-        } else if (buildingName.equals("Quarry")) {
+        } else if (buildingName.equalsIgnoreCase("Quarry")) {
             if (!cellType.equals("boulder")) {
                 return "Quarry must be built on Boulder";
             }
-        } else if (buildingName.equals("PitchRig")) {
+        } else if (buildingName.equalsIgnoreCase("PitchRig")) {
             if (!cellType.equals("oil")) {//TODO check for environment type
                 return "PitchRig must be built on Oil";
             }
@@ -145,11 +164,19 @@ public class EditMapMenuController {
             if (!cellType.equals("earth") && !cellType.equals("earthAndStone") && !cellType.equals("scrub") && !cellType.equals("thickGrass") && !cellType.equals("oasisGrass") && !cellType.equals("beach")) {
                 return "can't drop this building in this place";
             }
-            if (buildingName.equals("keep") && map.getEmpireCoordinates().size() == 8) {
+            if (buildingName.equalsIgnoreCase("keep") && map.getEmpireCoordinates().size() == 8) {
                 return "Too much keepBuildings";
             }
         }
         if (buildingName.equalsIgnoreCase("keep")) {
+            if (x == map.getSize() - 1 || y == map.getSize() - 1) {
+                return "keep building won't place in the corner of the map";
+            }
+            for (int i = 0; i < neighbors(x, y).size(); i++) {
+                if (neighbors(x, y).get(i).getBuilding() != null || neighbors(x, y).get(i).getUnits().size() > 0) {
+                    return "Cells near the keep should be empty";
+                }
+            }
             int[] coordinates = {x, y};
             map.getEmpireCoordinates().add(coordinates);
         }

@@ -13,6 +13,7 @@ public class ProfileMenu {
     }
 
     public void run() throws Exception {
+
         Matcher matcher;
         String command;
 
@@ -46,11 +47,16 @@ public class ProfileMenu {
             else if (command.matches("^profile display highscore$"))
                 System.out.println(profileMenuController.showUserHighScore());
 
-            else if (command.matches("^profile display$")) System.out.println(profileMenuController.showProfileInfo());
+            else if (command.matches("^profile display$"))
+                System.out.println(profileMenuController.showProfileInfo());
 
-            else if (command.matches("^back$")) return;
+            else if (command.matches("^back$"))
+                return;
 
-            else System.out.println("invalid command!");
+            else if (command.matches("show current menu")) {
+                System.out.println("ProfileMenu");
+            } else
+                System.out.println("invalid command!");
 
         }
 

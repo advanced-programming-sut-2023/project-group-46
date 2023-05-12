@@ -37,6 +37,8 @@ public class EditMapMenu {
                 if (checkBack.equals("Need more keepBuilding"))
                     System.out.println(checkBack);
                 else break;
+            } else if (command.matches("show current menu")) {
+                System.out.println("EditMapMenu");
             } else System.out.println("Invalid command!");
             command = scanner.nextLine();
         }

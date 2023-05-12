@@ -1,6 +1,6 @@
 package Model;
 
-import Enums.BuildingType;
+import Controller.GameMenuController;
 import Enums.EmpireColors;
 import Model.Goods.Armoury;
 import Model.Goods.FoodStock;
@@ -10,13 +10,13 @@ import java.util.ArrayList;
 
 public class Empire {
 
-    private final ArrayList<Building> buildings;
-    private final ArrayList<Unit> units;
-    private final User user;
-    private final int empireId;//this is equal to index of the arraylist of empires in the Game
-    private final String color;
-    private final Armoury armoury;
-    private final FoodStock foodStock;
+    private ArrayList<Building> buildings;
+    private ArrayList<Unit> units;
+    private User user;
+    private int empireId;//this is equal to index of the arraylist of empires in the Game
+    private String color;
+    private Armoury armoury;
+    private FoodStock foodStock;
     private int unemployedPeople;
     private int employedPeople;
     private int foodRate;
@@ -26,28 +26,50 @@ public class Empire {
     private int fearPopularity;
     private int taxPopularity;
     private int religionPopularity;
+    private int aleCoverage;
     private Resources resources;// it should be given to empires in start of the game
-    private int kingHp;
     private int[] keepCoordinates;
+    private int maxPopulation;
 
-    public Empire(User user, int empireId, int x, int y) {//TODO check for the rates in the start of the game
+    public Empire(User user, int empireId, int x, int y) {
         this.user = user;
-        this.unemployedPeople = 0;
+        this.unemployedPeople = 10;
         this.employedPeople = 0;
+        this.maxPopulation = 10;
+        this.aleCoverage = 0;
         this.foodRate = 0;
         this.taxRate = 0;
         this.fearRate = 0;
         this.buildings = new ArrayList<>();
-        this.buildings.add(new Building(BuildingType.getBuildingByName("Stockpile"), this));//TODO in the map first stockpile should be placed
         this.units = new ArrayList<>();
+        keepCoordinates = new int[2];
         this.empireId = empireId;
         this.religionPopularity = 0;
         this.keepCoordinates[0] = x;
         this.keepCoordinates[1] = y;
-        this.resources = new Resources(500, 0, 0, 0, 0, 0, 0, 0, 0, 0);//TODO check what to give in the start of the game and the free capacity stockpile
-        this.armoury = new Armoury(0, 0, 0, 0, 0, 0, 0, 0, 0,0);
-        this.foodStock = new FoodStock(0, 0, 0, 0, 0);
+        this.resources = new Resources(5000, 0, 0, 0, 0, 50, 0, 100, 0, -150);
+        this.armoury = new Armoury(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        this.foodStock = new FoodStock(0, 0, 0, 60, -60);
         this.color = EmpireColors.getEmpireColorByNumber(empireId).getName();
+    }
+
+    public Empire() {
+    }
+
+    public int getMaxPopulation() {
+        return maxPopulation;
+    }
+
+    public void addMaxPopulation(int maxPopulation) {
+        this.maxPopulation += maxPopulation;
+    }
+
+    public int getAleCoverage() {
+        return aleCoverage;
+    }
+
+    public void addAleCoverage(int aleCoverage) {
+        this.aleCoverage += aleCoverage;
     }
 
     public int[] getKeepCoordinates() {
@@ -68,6 +90,10 @@ public class Empire {
 
     public int getUnemployedPeople() {
         return unemployedPeople;
+    }
+
+    public void setUnemployedPeople(int unemployedPeople) {
+        this.unemployedPeople = unemployedPeople;
     }
 
     public int getEmployedPeople() {
@@ -145,24 +171,13 @@ public class Empire {
         return resources;
     }
 
-    public void setResources(Resources resources) {
-        this.resources = resources;
-    }
-
     public void addUnemployedPeople(int unemployedPeople) {
         this.unemployedPeople += unemployedPeople;
     }
 
     public void addEmployedPeople(int employedPeople) {
         this.employedPeople += employedPeople;
-    }
-
-    public int getKingHp() {
-        return kingHp;
-    }
-
-    public void setKingHp(int kingHp) {
-        this.kingHp = kingHp;
+        this.unemployedPeople -= employedPeople;
     }
 
     public void addReligionPopularity(int religionPopularity) {
@@ -173,24 +188,81 @@ public class Empire {
         return buildings;
     }
 
-    public Building getBuildingByName(String name) {
-        for (Building building : buildings) {
-            if (building.getBuildingType().getName().equals(name))
-                return building;
-        }
-        return null;
-    }
-
     public ArrayList<Unit> getUnits() {
         return units;
     }
 
     public Boolean haveThisBuilding(String name) {
         for (Building building : buildings) {
-            if (building.getBuildingType().getName().equals(name)) {
+            if (building.getBuildingType().getName().equalsIgnoreCase(name)) {
                 return true;
             }
         }
         return false;
+    }
+
+    public void calculateReductionInTheFoodStock() {
+        int allPeople = unemployedPeople + employedPeople;
+        double foodNeeded = ((foodRate * 0.5) + 1) * allPeople;
+        while (foodNeeded > 0) {
+            if (GameMenuController.getCurrentEmpire().getFoodStock().getBread() > 0.0) {
+                GameMenuController.getCurrentEmpire().getFoodStock().addFood("bread", -1 * 0.5);
+                foodNeeded -= 0.5;
+                continue;
+            }
+            if (GameMenuController.getCurrentEmpire().getFoodStock().getMeat() > 0.0) {
+                GameMenuController.getCurrentEmpire().getFoodStock().addFood("meat", -1 * 0.5);
+                foodNeeded -= 0.5;
+                continue;
+            }
+            if (GameMenuController.getCurrentEmpire().getFoodStock().getCheese() > 0.0) {
+                GameMenuController.getCurrentEmpire().getFoodStock().addFood("cheese", -1 * 0.5);
+                foodNeeded -= 0.5;
+                continue;
+            }
+            if (GameMenuController.getCurrentEmpire().getFoodStock().getApple() > 0.0) {
+                GameMenuController.getCurrentEmpire().getFoodStock().addFood("apple", -1 * 0.5);
+                foodNeeded -= 0.5;
+            }
+        }
+    }
+
+    public void calculateTaxRate() {
+        int allPeople = unemployedPeople + employedPeople;
+        switch (taxRate) {
+            case -3 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold(-1 * allPeople);
+            }
+            case -2 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold((int) (-1 * 0.8 * allPeople));
+            }
+            case -1 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold((int) (-1 * 0.6 * allPeople));
+            }
+            case 1 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold((int) (0.6 * allPeople));
+            }
+            case 2 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold((int) (0.8 * allPeople));
+            }
+            case 3 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold(allPeople);
+            }
+            case 4 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold((int) (allPeople * 1.2));
+            }
+            case 5 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold((int) (allPeople * 1.4));
+            }
+            case 6 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold((int) (allPeople * 1.6));
+            }
+            case 7 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold((int) (allPeople * 1.8));
+            }
+            case 8 -> {
+                GameMenuController.getCurrentEmpire().getResources().addGold(allPeople * 2);
+            }
+        }
     }
 }
