@@ -1,5 +1,6 @@
 package Controller;
 
+import Enums.Commands.MapMenuCommands;
 import Enums.EnvironmentType;
 import Model.Cell;
 import Model.Map;
@@ -110,14 +111,24 @@ public class MapMenuController {
     public String moveInMap(Matcher matcher) {
         int x = 0;
         int y = 0;
-        while (matcher.find()) {
-            String type = matcher.group("type");
-            int count = Integer.parseInt(matcher.group("count"));
-            if (type.equals("up")) y += count;
-            else if (type.equals("down")) y -= count;
-            else if (type.equals("right")) x += count;
-            else if (type.equals("left")) x -= count;
-        }
+        String command = matcher.group("command");
+        Matcher up = MapMenuCommands.getMatcher(command, MapMenuCommands.UP);
+        Matcher down = MapMenuCommands.getMatcher(command, MapMenuCommands.DOWN);
+        Matcher left = MapMenuCommands.getMatcher(command, MapMenuCommands.LEFT);
+        Matcher right = MapMenuCommands.getMatcher(command, MapMenuCommands.RIGHT);
+        if(up != null){
+            if ((up.group("count") == null || up.group("count").isEmpty())) y += 1;
+            else y +=  Integer.parseInt(up.group("count"));
+        }else if(down != null){
+            if ((down.group("count") == null || down.group("count").isEmpty())) y -= 1;
+            else y -=  Integer.parseInt(down.group("count"));
+        } else if(right != null){
+            if ((right.group("count") == null || right.group("count").isEmpty())) x += 1;
+            else x +=  Integer.parseInt(right.group("count"));
+        } else if(left != null){
+            if ((left.group("count") == null || left.group("count").isEmpty())) x -= 1;
+            else x -=  Integer.parseInt(left.group("count"));
+        } else return "Invalid command";
         if (!checkMove(x, y)) return "Invalid move";
         this.x += x;
         this.y += y;
