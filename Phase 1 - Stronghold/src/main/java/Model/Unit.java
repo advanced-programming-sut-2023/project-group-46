@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class Unit {
     private ArrayList<MoveController.Pair<Integer, Integer>> path;
-    private ArrayList<MoveController.Pair<Integer, Integer>> secondPath;
     private int currentCell;
     private UnitType unitType;
     private Empire owner;
@@ -87,13 +86,5 @@ public class Unit {
 
     public void setPatrol(boolean patrol) {
         isPatrol = patrol;
-    }
-
-    public ArrayList<MoveController.Pair<Integer, Integer>> getSecondPath() {
-        return secondPath;
-    }
-
-    public void setSecondPath(ArrayList<MoveController.Pair<Integer, Integer>> secondPath) {
-        this.secondPath = secondPath;
     }
 }

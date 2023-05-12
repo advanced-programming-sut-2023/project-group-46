@@ -86,7 +86,7 @@ public class MoveController {
 
     public String aStarSearch(Cell[][] map, Pair<Integer, Integer> src, Pair<Integer, Integer> dest, ArrayList<Unit> units) {
         for (Unit unit : units){
-            if(unit.getPath() != null) return "Unit moving";
+            if(unit.getPath().size() != 0) return "Unit moving";
         }
         int[][] grid = grid(map);
         int capacity = capacity(map, grid, dest.getObject1(), dest.getObject2());
@@ -309,18 +309,21 @@ public class MoveController {
                     if (raise < unit.getPath().size() - 1) unit.setCurrentCell(raise);
                     else {
                         unit.setCurrentCell(unit.getPath().size());
-                        unit.setCurrentCell(-1);
+                        unit.getPath().clear();
                     }
                     map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
+                    unit.setCurrentCell(-1);
                 }
             }else {
                 if(!unit.isPatrol()) return;
-                MoveController moveController = new MoveController();
-                String stringMoveUnit= moveController.aStarSearch(map.getMap(), dest1, dest2, selectedUnits);
-                if(!stringMoveUnit.equals("Success")) return stringMoveUnit;
-                moveController = new MoveController();
-                stringMoveUnit= moveController.aStarSearch(map.getMap(), dest2, dest1, selectedUnits);
-                if(!stringMoveUnit.equals("Success")) return stringMoveUnit;
+                ArrayList<Pair<Integer, Integer>> path = unit.getPath();
+                if (unit.getCurrentCell() != -1) {
+                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
+                    int raise = unit.getCurrentCell() + unit.getUnitType().getSpeed();
+                    if (raise < unit.getPath().size() - 1) unit.setCurrentCell(raise);
+                    else unit.setCurrentCell(unit.getPath().size());
+                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
+                }
             }
         }
     }
