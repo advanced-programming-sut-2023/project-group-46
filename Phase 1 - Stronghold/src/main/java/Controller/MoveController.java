@@ -10,7 +10,6 @@ import Model.Unit;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Stack;
 
 public class MoveController {
     Map map;
@@ -20,10 +19,6 @@ public class MoveController {
 
     private boolean isValid(int row, int col) {
         return row >= 0 && col >= 0 && row < map.getSize() && col < map.getSize();
-    }
-
-    private boolean isUnBlocked(int[][] grid, int row, int col) {
-        return grid[row][col] != 0;
     }
 
     private boolean isDestination(int row, int col, Pair<Integer, Integer> dest) {
@@ -71,11 +66,11 @@ public class MoveController {
         return grid;
     }
 
-    private void checkTraps(ArrayList<Unit> units){
-        for (Pair<Integer, Integer> pair : path){
-            if(map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding() != null &&
-                    map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding().getBuildingType().equals(BuildingType.KILLING_PIT)){
-                for (Unit unit : units){
+    private void checkTraps(ArrayList<Unit> units) {
+        for (Pair<Integer, Integer> pair : path) {
+            if (map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding() != null &&
+                    map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding().getBuildingType().equals(BuildingType.KILLING_PIT)) {
+                for (Unit unit : units) {
                     unit.getDamage(100);
                 }
                 map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding().getOwner().getBuildings().remove(map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding());
@@ -84,11 +79,11 @@ public class MoveController {
         }
     }
 
-    private void initializeAfterSuccess(CellInMove[][] cellDetails, Pair<Integer, Integer> dest){
-        path= tracePath(cellDetails, dest);
-        currentCell= new int[path.size()];
+    private void initializeAfterSuccess(CellInMove[][] cellDetails, Pair<Integer, Integer> dest) {
+        path = tracePath(cellDetails, dest);
+        currentCell = new int[path.size()];
         for (int k = 0; k < path.size(); k++) {
-            currentCell[k]= 0;
+            currentCell[k] = 0;
         }
     }
 
@@ -97,7 +92,7 @@ public class MoveController {
         int capacity = capacity(map, grid, dest.getObject1(), dest.getObject2());
         if (!isValid(src.getObject1(), src.getObject2())) return "Source is invalid";
         if (!isValid(dest.getObject1(), dest.getObject2())) return "Destination is invalid";
-        if (!isUnBlocked(grid, src.getObject1(), src.getObject2()) || !isUnBlocked(grid, dest.getObject1(), dest.getObject2()))
+        if (grid[src.getObject1()][src.getObject2()] == 0 || grid[dest.getObject1()][dest.getObject2()] == 0)
             return "Source or the destination is blocked";
         if (isDestination(src.getObject1(), src.getObject2(), dest)) return "We are already at the destination";
         if (capacity <= units.size()) return "No capacity";
@@ -154,22 +149,25 @@ public class MoveController {
                         break;
                     }
                 }
-                if ((map[i][j].getBuilding().getBuildingType().getName().equals("Stairs") || flag == 1) && grid[i - 1][j] != 0)
-                    grid[i - 1][j] = 1;
+                if ((map[i][j].getBuilding().getBuildingType().getName().equals("Stairs") || flag == 1) && grid[i - 1][j] == 2)
+                    grid[i - 1][j] = 3;
                 flag = 0;
-                if (grid[i][j] == 2 && grid[i - 1][j] == 2) grid[i - 1][j] = 1;
+                if (grid[i][j] == 3 && grid[i - 1][j] == 2) grid[i - 1][j] = 3;
+                if ((grid[i - 1][j] == 2 || grid[i - 1][j] == 3) && map[i - 1][j].getBuilding().getBuildingType().equals(BuildingType.SMALL_STONE_GATEHOUSE)
+                        && map[i - 1][j].getBuilding().getOwner().equals(units.get(0).getOwner())) grid[i - 1][j] = 4;
+
                 if (isDestination(i - 1, j, dest)) {
                     cellDetails[i - 1][j].parent_i = i;
                     cellDetails[i - 1][j].parent_j = j;
-                    if (grid[src.getObject1()][src.getObject2()] == 2)
+                    if (map[src.getObject1()][src.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
-                    if (grid[dest.getObject1()][dest.getObject2()] == 2)
+                    if (map[dest.getObject1()][dest.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
                     initializeAfterSuccess(cellDetails, dest);
                     checkTraps(units);
                     return "Success";
 
-                } else if (!closedList[i - 1][j] && isUnBlocked(grid, i - 1, j)) {
+                } else if (!closedList[i - 1][j] && grid[i - 1][j] != 0 && grid[i - 1][j] != 2) {
                     gNew = cellDetails[i][j].g + 1.0;
                     hNew = calculateHValue(i - 1, j, dest);
                     fNew = gNew + hNew;
@@ -191,21 +189,23 @@ public class MoveController {
                         break;
                     }
                 }
-                if ((map[i][j].getBuilding().getBuildingType().getName().equals("Stairs") || flag == 1) && grid[i + 1][j] != 0)
-                    grid[i + 1][j] = 1;
+                if ((map[i][j].getBuilding().getBuildingType().getName().equals("Stairs") || flag == 1) && grid[i + 1][j] == 2)
+                    grid[i + 1][j] = 3;
                 flag = 0;
-                if (grid[i][j] == 2 && grid[i - 1][j] == 2) grid[i - 1][j] = 1;
+                if (grid[i][j] == 3 && grid[i + 1][j] == 2) grid[i + 1][j] = 3;
+                if ((grid[i + 1][j] == 2 || grid[i + 1][j] == 3) && map[i + 1][j].getBuilding().getBuildingType().equals(BuildingType.SMALL_STONE_GATEHOUSE)
+                        && map[i + 1][j].getBuilding().getOwner().equals(units.get(0).getOwner())) grid[i + 1][j] = 4;
                 if (isDestination(i + 1, j, dest)) {
                     cellDetails[i + 1][j].parent_i = i;
                     cellDetails[i + 1][j].parent_j = j;
-                    if (grid[src.getObject1()][src.getObject2()] == 2)
+                    if (map[src.getObject1()][src.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
-                    if (grid[dest.getObject1()][dest.getObject2()] == 2)
+                    if (map[dest.getObject1()][dest.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
                     initializeAfterSuccess(cellDetails, dest);
                     checkTraps(units);
                     return "Success";
-                } else if (closedList[i + 1][j] && isUnBlocked(grid, i + 1, j)) {
+                } else if (closedList[i + 1][j] && grid[i + 1][j] != 0 && grid[i + 1][j] != 2) {
                     gNew = cellDetails[i][j].g + 1.0;
                     hNew = calculateHValue(i + 1, j, dest);
                     fNew = gNew + hNew;
@@ -227,21 +227,23 @@ public class MoveController {
                         break;
                     }
                 }
-                if ((map[i][j].getBuilding().getBuildingType().getName().equals("Stairs") || flag == 1) && grid[i][j + 1] != 0)
-                    grid[i][j + 1] = 1;
+                if ((map[i][j].getBuilding().getBuildingType().getName().equals("Stairs") || flag == 1) && grid[i][j + 1] == 2)
+                    grid[i][j + 1] = 3;
                 flag = 0;
-                if (grid[i][j] == 2 && grid[i - 1][j] == 2) grid[i - 1][j] = 1;
+                if (grid[i][j] == 3 && grid[i][j + 1] == 2) grid[i][j + 1] = 3;
+                if ((grid[i][j + 1] == 2 || grid[i][j + 1] == 3) && map[i][j +1].getBuilding().getBuildingType().equals(BuildingType.SMALL_STONE_GATEHOUSE)
+                        && map[i][j + 1].getBuilding().getOwner().equals(units.get(0).getOwner())) grid[i][j + 1] = 4;
                 if (isDestination(i, j + 1, dest)) {
                     cellDetails[i][j + 1].parent_i = i;
                     cellDetails[i][j + 1].parent_j = j;
-                    if (grid[src.getObject1()][src.getObject2()] == 2)
+                    if (map[src.getObject1()][src.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
-                    if (grid[dest.getObject1()][dest.getObject2()] == 2)
+                    if (map[dest.getObject1()][dest.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
                     initializeAfterSuccess(cellDetails, dest);
                     checkTraps(units);
                     return "Success";
-                } else if (closedList[i][j + 1] && isUnBlocked(grid, i, j + 1)) {
+                } else if (closedList[i][j + 1] && grid[i][j + 1] != 0 && grid[i][j + 1] != 2) {
                     gNew = cellDetails[i][j].g + 1.0;
                     hNew = calculateHValue(i, j + 1, dest);
                     fNew = gNew + hNew;
@@ -263,21 +265,23 @@ public class MoveController {
                         break;
                     }
                 }
-                if ((map[i][j].getBuilding().getBuildingType().getName().equals("Stairs") || flag == 1) && grid[i][j - 1] != 0)
-                    grid[i][j - 1] = 1;
+                if ((map[i][j].getBuilding().getBuildingType().getName().equals("Stairs") || flag == 1) && grid[i][j - 1] == 2)
+                    grid[i][j - 1] = 3;
                 flag = 0;
-                if (grid[i][j] == 2 && grid[i - 1][j] == 2) grid[i - 1][j] = 1;
+                if (grid[i][j] == 3 && grid[i][j - 1] == 2) grid[i][j - 1] = 3;
+                if ((grid[i][j - 1] == 2 || grid[i][j - 1] == 3) && map[i][j - 1].getBuilding().getBuildingType().equals(BuildingType.SMALL_STONE_GATEHOUSE)
+                        && map[i][j - 1].getBuilding().getOwner().equals(units.get(0).getOwner())) grid[i][j - 1] = 4;
                 if (isDestination(i, j - 1, dest)) {
                     cellDetails[i][j - 1].parent_i = i;
                     cellDetails[i][j - 1].parent_j = j;
-                    if (grid[src.getObject1()][src.getObject2()] == 2)
+                    if (map[src.getObject1()][src.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
-                    if (grid[dest.getObject1()][dest.getObject2()] == 2)
+                    if (map[dest.getObject1()][dest.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
                     initializeAfterSuccess(cellDetails, dest);
                     checkTraps(units);
                     return "Success";
-                } else if (closedList[i][j - 1] && isUnBlocked(grid, i, j - 1)) {
+                } else if (closedList[i][j - 1] && grid[i][j - 1] != 0 && grid[i][j - 1] != 2) {
                     gNew = cellDetails[i][j].g + 1.0;
                     hNew = calculateHValue(i, j - 1, dest);
                     fNew = gNew + hNew;
@@ -295,9 +299,9 @@ public class MoveController {
         return "Failed to find the Destination Cell";
     }
 
-    public void moveUnits(ArrayList<Unit> units){
-        for(int i= 0; i < units.size(); i++){
-            if(currentCell[i] != path.size()) {
+    public void moveUnits(ArrayList<Unit> units) {
+        for (int i = 0; i < units.size(); i++) {
+            if (currentCell[i] != path.size()) {
                 map.getMap()[path.get(currentCell[i]).getObject1()][path.get(currentCell[i]).getObject2()].getUnits().remove(units.get(i));
                 currentCell[i] += units.get(i).getUnitType().getSpeed();
                 map.getMap()[path.get(currentCell[i]).getObject1()][path.get(currentCell[i]).getObject2()].getUnits().add(units.get(i));

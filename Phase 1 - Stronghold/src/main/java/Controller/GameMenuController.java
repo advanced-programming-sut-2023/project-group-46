@@ -1092,16 +1092,35 @@ public class GameMenuController {
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         MoveController.Pair<Integer, Integer> dest = new MoveController.Pair<>(x, y);
-        MoveController.Pair<Integer, Integer> src = new MoveController.Pair<>();
+        MoveController.Pair<Integer, Integer> src = new MoveController.Pair<>(selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[0]);
         MoveController moveController = new MoveController();
         String stringMoveUnit= moveController.aStarSearch(map.getMap(), src, dest, selectedUnits);
-        if(stringMoveUnit.equals("Success")){
-            moveController.getPath()
-        }
+        if(stringMoveUnit.equals("Success")) moveController.moveUnits(selectedUnits);
+        return stringMoveUnit;
     }
 
     public String patrolUnit(Matcher matcher) {
-
+        int x1 = Integer.parseInt(matcher.group("x1"));
+        int x2 = Integer.parseInt(matcher.group("x2"));
+        int y1 = Integer.parseInt(matcher.group("y1"));
+        int y2 = Integer.parseInt(matcher.group("y2"));
+        MoveController.Pair<Integer, Integer> dest1 = new MoveController.Pair<>(x1, y1);
+        MoveController.Pair<Integer, Integer> dest2 = new MoveController.Pair<>(x2, y2);
+        MoveController.Pair<Integer, Integer> src = new MoveController.Pair<>(selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[0]);
+        MoveController moveController = new MoveController();
+        String stringMoveUnit= moveController.aStarSearch(map.getMap(), src, dest1, selectedUnits);
+        if(stringMoveUnit.equals("Success")) moveController.moveUnits(selectedUnits);
+        while(true){
+            moveController = new MoveController();
+            stringMoveUnit= moveController.aStarSearch(map.getMap(), dest1, dest2, selectedUnits);
+            if(stringMoveUnit.equals("Success")) moveController.moveUnits(selectedUnits);
+            else return stringMoveUnit;
+            moveController = new MoveController();
+            stringMoveUnit= moveController.aStarSearch(map.getMap(), dest2, dest1, selectedUnits);
+            if(stringMoveUnit.equals("Success")) moveController.moveUnits(selectedUnits);
+            else return stringMoveUnit;
+        }
+        return "Success";
     }
 
     private void readMap() {
