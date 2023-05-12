@@ -3,9 +3,7 @@ package Controller;
 import Enums.BuildingType;
 import Enums.EnvironmentType;
 import Enums.UnitType;
-import Model.Cell;
-import Model.Map;
-import Model.Unit;
+import Model.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,9 +11,7 @@ import java.util.Set;
 
 public class MoveController {
     Map map;
-
-    private ArrayList<Pair<Integer, Integer>> path;
-    private int[] currentCell;
+    Empire empire;
 
     private boolean isValid(int row, int col) {
         return row >= 0 && col >= 0 && row < map.getSize() && col < map.getSize();
@@ -67,7 +63,7 @@ public class MoveController {
     }
 
     private void checkTraps(ArrayList<Unit> units) {
-        for (Pair<Integer, Integer> pair : path) {
+        for (Pair<Integer, Integer> pair : units.get(0).getPath()) {
             if (map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding() != null &&
                     map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding().getBuildingType().equals(BuildingType.KILLING_PIT)) {
                 for (Unit unit : units) {
@@ -79,15 +75,19 @@ public class MoveController {
         }
     }
 
-    private void initializeAfterSuccess(CellInMove[][] cellDetails, Pair<Integer, Integer> dest) {
-        path = tracePath(cellDetails, dest);
-        currentCell = new int[path.size()];
-        for (int k = 0; k < path.size(); k++) {
-            currentCell[k] = 0;
+    private void initializeAfterSuccess(CellInMove[][] cellDetails, Pair<Integer, Integer> dest, ArrayList<Unit> units) {
+        ArrayList<Pair<Integer, Integer>>  path= tracePath(cellDetails, dest);
+        int currentCell = 0;
+        for (Unit unit : units){
+            unit.setPath(path);
+            unit.setCurrentCell(currentCell);
         }
     }
 
     public String aStarSearch(Cell[][] map, Pair<Integer, Integer> src, Pair<Integer, Integer> dest, ArrayList<Unit> units) {
+        for (Unit unit : units){
+            if(unit.getPath() != null) return "Unit moving";
+        }
         int[][] grid = grid(map);
         int capacity = capacity(map, grid, dest.getObject1(), dest.getObject2());
         if (!isValid(src.getObject1(), src.getObject2())) return "Source is invalid";
@@ -163,7 +163,7 @@ public class MoveController {
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
                     if (map[dest.getObject1()][dest.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
-                    initializeAfterSuccess(cellDetails, dest);
+                    initializeAfterSuccess(cellDetails, dest, units);
                     checkTraps(units);
                     return "Success";
 
@@ -202,7 +202,7 @@ public class MoveController {
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
                     if (map[dest.getObject1()][dest.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
-                    initializeAfterSuccess(cellDetails, dest);
+                    initializeAfterSuccess(cellDetails, dest, units);
                     checkTraps(units);
                     return "Success";
                 } else if (closedList[i + 1][j] && grid[i + 1][j] != 0 && grid[i + 1][j] != 2) {
@@ -240,7 +240,7 @@ public class MoveController {
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
                     if (map[dest.getObject1()][dest.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
-                    initializeAfterSuccess(cellDetails, dest);
+                    initializeAfterSuccess(cellDetails, dest, units);
                     checkTraps(units);
                     return "Success";
                 } else if (closedList[i][j + 1] && grid[i][j + 1] != 0 && grid[i][j + 1] != 2) {
@@ -278,7 +278,7 @@ public class MoveController {
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
                     if (map[dest.getObject1()][dest.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
-                    initializeAfterSuccess(cellDetails, dest);
+                    initializeAfterSuccess(cellDetails, dest, units);
                     checkTraps(units);
                     return "Success";
                 } else if (closedList[i][j - 1] && grid[i][j - 1] != 0 && grid[i][j - 1] != 2) {
@@ -299,15 +299,30 @@ public class MoveController {
         return "Failed to find the Destination Cell";
     }
 
-    public void moveUnits(ArrayList<Unit> units) {
-        for (int i = 0; i < units.size(); i++) {
-            if (currentCell[i] != path.size()) {
-                map.getMap()[path.get(currentCell[i]).getObject1()][path.get(currentCell[i]).getObject2()].getUnits().remove(units.get(i));
-                currentCell[i] += units.get(i).getUnitType().getSpeed();
-                map.getMap()[path.get(currentCell[i]).getObject1()][path.get(currentCell[i]).getObject2()].getUnits().add(units.get(i));
+    public void moveUnits() {
+        for (Unit unit : empire.getUnits()){
+            if(!unit.isPatrol()) {
+                ArrayList<Pair<Integer, Integer>> path = unit.getPath();
+                if (unit.getCurrentCell() != -1) {
+                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
+                    int raise = unit.getCurrentCell() + unit.getUnitType().getSpeed();
+                    if (raise < unit.getPath().size() - 1) unit.setCurrentCell(raise);
+                    else {
+                        unit.setCurrentCell(unit.getPath().size());
+                        unit.setCurrentCell(-1);
+                    }
+                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
+                }
+            }else {
+                if(!unit.isPatrol()) return;
+                MoveController moveController = new MoveController();
+                String stringMoveUnit= moveController.aStarSearch(map.getMap(), dest1, dest2, selectedUnits);
+                if(!stringMoveUnit.equals("Success")) return stringMoveUnit;
+                moveController = new MoveController();
+                stringMoveUnit= moveController.aStarSearch(map.getMap(), dest2, dest1, selectedUnits);
+                if(!stringMoveUnit.equals("Success")) return stringMoveUnit;
             }
         }
-
     }
 
     public static class Pair<A, B> {
