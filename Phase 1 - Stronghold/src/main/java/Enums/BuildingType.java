@@ -1,14 +1,14 @@
 package Enums;
 
 public enum BuildingType {//fireRange will boost the range of the archers  || capacity is equal to the amount that in one time the worker bring to the storages
-    SMALL_STONE_GATEHOUSE(10000, "SmallStoneGatehouse", 0, 0, 0, 0, 10, "CastleBuildings", 25, 0, 10),
-    BIG_STONE_GATEHOUSE(20000, "BigStoneGatehouse", 0, 0, 0, 0, 20, "CastleBuildings", 50, 0, 15),
+    SMALL_STONE_GATEHOUSE(10000, "SmallStoneGatehouse", 0, 0, 0, 0, 10, "Towers", 25, 0, 10),
+    BIG_STONE_GATEHOUSE(20000, "BigStoneGatehouse", 0, 0, 0, 0, 20, "Towers", 50, 0, 15),
     DRAW_BRIDGE(5000, "DrawBridge", 0, 0, 10, 0, 0, "CastleBuildings", 0, 0, 0),
-    LOOKOUT_TOWER(2500, "LookoutTower", 0, 0, 0, 0, 10, "CastleBuildings", 5, 0, 25),
-    PERIMETER_TOWER(10000, "PerimeterTower", 0, 0, 0, 0, 10, "CastleBuildings", 15, 0, 10),
-    DEFENCIVE_TURRET(12000, "DefenciveTurret", 0, 0, 0, 0, 15, "CastleBuildings", 20, 0, 15),
-    SQUARE_TOWER(16000, "SquareTower", 0, 0, 0, 0, 35, "CastleBuildings", 35, 0, 20),
-    ROUND_TOWER(20000, "RoundTower", 0, 0, 0, 0, 40, "CastleBuildings", 40, 0, 20),
+    LOOKOUT_TOWER(2500, "LookoutTower", 0, 0, 0, 0, 10, "Towers", 5, 0, 25),
+    PERIMETER_TOWER(10000, "PerimeterTower", 0, 0, 0, 0, 10, "Towers", 15, 0, 10),
+    DEFENCIVE_TURRET(12000, "DefenciveTurret", 0, 0, 0, 0, 15, "Towers", 20, 0, 15),
+    SQUARE_TOWER(16000, "SquareTower", 0, 0, 0, 0, 35, "Towers", 35, 0, 20),
+    ROUND_TOWER(20000, "RoundTower", 0, 0, 0, 0, 40, "Towers", 40, 0, 20),
     ARMOURY(450, "Armoury", 0, 0, 5, 0, 0, "CastleBuildings", 50, 0, 0),
     BARRACK(450, "Barrack", 0, 0, 0, 0, 15, "CastleBuildings", 0, 0, 0),
     MERCENARY_POST(450, "MercenaryPost", 0, 0, 10, 0, 0, "CastleBuildings", 0, 0, 0),

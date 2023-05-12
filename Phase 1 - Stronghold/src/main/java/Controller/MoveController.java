@@ -10,11 +10,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class MoveController {
-    Map map;
+    Map map1;
     Empire empire;
 
     private boolean isValid(int row, int col) {
-        return row >= 0 && col >= 0 && row < map.getSize() && col < map.getSize();
+        return row >= 0 && col >= 0 && row < map1.getSize() && col < map1.getSize();
     }
 
     private boolean isDestination(int row, int col, Pair<Integer, Integer> dest) {
@@ -50,13 +50,13 @@ public class MoveController {
         int grid[][] = new int[100][100];
         for (int i = 0; i < 100; i++) {
             for (int j = 0; j < 100; j++) {
-                if (!EnvironmentType.getEnvironmentTypeByName(map[i][j].getEnvironmentName()).isPassable())
-                    grid[i][j] = 1;
+                if (!EnvironmentType.getEnvironmentTypeByName(map[i][j].getType()).isPassable())
+                    grid[i][j] = 0;
                 else if (map[i][j].getBuilding() != null) {
-                    grid[i][j] = 1;
-                    if (map[i][j].getBuilding().getBuildingType().getCapacity() != 0)
+                    grid[i][j] = 0;
+                    if (map[i][j].getBuilding().getBuildingType().getType().equals("Towers"))
                         grid[i][j] = map[i][j].getBuilding().getBuildingType().getCapacity();
-                } else grid[i][j] = 0;
+                } else grid[i][j] = 1;
             }
         }
         return grid;
@@ -64,13 +64,13 @@ public class MoveController {
 
     private void checkTraps(ArrayList<Unit> units) {
         for (Pair<Integer, Integer> pair : units.get(0).getPath()) {
-            if (map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding() != null &&
-                    map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding().getBuildingType().equals(BuildingType.KILLING_PIT)) {
+            if (map1.getMap()[pair.getObject1()][pair.getObject2()].getBuilding() != null &&
+                    map1.getMap()[pair.getObject1()][pair.getObject2()].getBuilding().getBuildingType().equals(BuildingType.KILLING_PIT)) {
                 for (Unit unit : units) {
                     unit.getDamage(100);
                 }
-                map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding().getOwner().getBuildings().remove(map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding());
-                map.getMap()[pair.getObject1()][pair.getObject2()].setBuilding(null);
+                map1.getMap()[pair.getObject1()][pair.getObject2()].getBuilding().getOwner().getBuildings().remove(map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding());
+                map1.getMap()[pair.getObject1()][pair.getObject2()].setBuilding(null);
             }
         }
     }
@@ -84,7 +84,9 @@ public class MoveController {
         }
     }
 
-    public String aStarSearch(Cell[][] map, Pair<Integer, Integer> src, Pair<Integer, Integer> dest, ArrayList<Unit> units) {
+    public String aStarSearch(Pair<Integer, Integer> src, Pair<Integer, Integer> dest, ArrayList<Unit> units) {
+        map1= GameMenuController.getMap();
+        Cell[][] map= map1.getMap();
         for (Unit unit : units){
             if(unit.getPath().size() != 0) return "Unit moving";
         }
@@ -159,9 +161,9 @@ public class MoveController {
                 if (isDestination(i - 1, j, dest)) {
                     cellDetails[i - 1][j].parent_i = i;
                     cellDetails[i - 1][j].parent_j = j;
-                    if (map[src.getObject1()][src.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
+                    if (map[src.getObject1()][src.getObject2()].getBuilding().getBuildingType().getType().equals("Towers"))
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
-                    if (map[dest.getObject1()][dest.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
+                    if (map[dest.getObject1()][dest.getObject2()].getBuilding().getBuildingType().getType().equals("Towers"))
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
                     initializeAfterSuccess(cellDetails, dest, units);
                     checkTraps(units);
@@ -198,9 +200,9 @@ public class MoveController {
                 if (isDestination(i + 1, j, dest)) {
                     cellDetails[i + 1][j].parent_i = i;
                     cellDetails[i + 1][j].parent_j = j;
-                    if (map[src.getObject1()][src.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
+                    if (map[src.getObject1()][src.getObject2()].getBuilding().getBuildingType().getType().equals("Towers"))
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
-                    if (map[dest.getObject1()][dest.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
+                    if (map[dest.getObject1()][dest.getObject2()].getBuilding().getBuildingType().getType().equals("Towers"))
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
                     initializeAfterSuccess(cellDetails, dest, units);
                     checkTraps(units);
@@ -236,9 +238,9 @@ public class MoveController {
                 if (isDestination(i, j + 1, dest)) {
                     cellDetails[i][j + 1].parent_i = i;
                     cellDetails[i][j + 1].parent_j = j;
-                    if (map[src.getObject1()][src.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
+                    if (map[src.getObject1()][src.getObject2()].getBuilding().getBuildingType().getType().equals("Towers"))
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
-                    if (map[dest.getObject1()][dest.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
+                    if (map[dest.getObject1()][dest.getObject2()].getBuilding().getBuildingType().getType().equals("Towers"))
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
                     initializeAfterSuccess(cellDetails, dest, units);
                     checkTraps(units);
@@ -274,9 +276,9 @@ public class MoveController {
                 if (isDestination(i, j - 1, dest)) {
                     cellDetails[i][j - 1].parent_i = i;
                     cellDetails[i][j - 1].parent_j = j;
-                    if (map[src.getObject1()][src.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
+                    if (map[src.getObject1()][src.getObject2()].getBuilding().getBuildingType().getType().equals("Towers"))
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
-                    if (map[dest.getObject1()][dest.getObject2()].getBuilding().getBuildingType().getCapacity() > 0)
+                    if (map[dest.getObject1()][dest.getObject2()].getBuilding().getBuildingType().getType().equals("Towers"))
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
                     initializeAfterSuccess(cellDetails, dest, units);
                     checkTraps(units);
@@ -304,25 +306,29 @@ public class MoveController {
             if(!unit.isPatrol()) {
                 ArrayList<Pair<Integer, Integer>> path = unit.getPath();
                 if (unit.getCurrentCell() != -1) {
-                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
+                    map1.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
                     int raise = unit.getCurrentCell() + unit.getUnitType().getSpeed();
                     if (raise < unit.getPath().size() - 1) unit.setCurrentCell(raise);
                     else {
                         unit.setCurrentCell(unit.getPath().size());
                         unit.getPath().clear();
                     }
-                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
+                    map1.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
                     unit.setCurrentCell(-1);
                 }
             }else {
                 if(!unit.isPatrol()) return;
                 ArrayList<Pair<Integer, Integer>> path = unit.getPath();
                 if (unit.getCurrentCell() != -1) {
-                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
+                    map1.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
                     int raise = unit.getCurrentCell() + unit.getUnitType().getSpeed();
                     if (raise < unit.getPath().size() - 1) unit.setCurrentCell(raise);
                     else unit.setCurrentCell(unit.getPath().size());
-                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
+                    map1.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
+                    unit.setCurrentCell(0);
+                    ArrayList<Pair<Integer, Integer>> revPath= new ArrayList<>();
+                    for()
+                    unit.setPath(unit.getPath());
                 }
             }
         }
