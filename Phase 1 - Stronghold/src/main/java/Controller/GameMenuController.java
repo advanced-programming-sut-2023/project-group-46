@@ -1108,6 +1108,8 @@ public class GameMenuController {
 
     public String Stop(Matcher matcher){
         for (Unit unit : selectedUnits){
+            unit.getPath().clear();
+            unit.setCurrentCell(-1);
             unit.setPatrol(false);
         }
         return "Success";

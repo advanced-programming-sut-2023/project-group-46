@@ -137,7 +137,7 @@ public class MoveController {
 
         while (!openList.isEmpty()) {
             Pair<Double, Pair<Integer, Integer>> p = openList.stream().findFirst().get();
-            openList.remove(openList.iterator().next());
+            openList.remove(p);
             i = p.getObject2().getObject1();
             j = p.getObject2().getObject2();
             closedList[i][j] = true;
