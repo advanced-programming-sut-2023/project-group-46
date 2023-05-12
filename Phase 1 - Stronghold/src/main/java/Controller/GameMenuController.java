@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 
 public class GameMenuController {
-    //TODO in the move functions killing pit use it and remove it
     private static Game game;
     private static Empire currentEmpire;
     private static Map map;//zero base
@@ -354,15 +353,13 @@ public class GameMenuController {
                         }
                     }
                 }
-            }//TODO the code under this comment should be added in the movement function
-//            else if (selectedUnit.getUnitType().equals(UnitType.ASSASSIN) && map.getMap()[x][y].getBuilding() != null) {
-//                String name = map.getMap()[x][y].getBuilding().getBuildingType().getName();
-//                if (name.equals("SmallStoneGatehouse") || name.equals("BigStoneGatehouse") || name.equals("TallWall") || name.equals("ShortWall")) {
-//                    map.getMap()[x][y].getBuilding().setIsPassableForEnemies(true);
-//                }
-//            }
-            else if (selectedUnit.getUnitType().getType().equals("Sword")) {
-                if (distance <= selectedUnit.getUnitType().getSpeed()) {//TODO check is there any way to that location or not
+            } else if (selectedUnit.getUnitType().getType().equals("Sword")) {
+                MoveController moveController = new MoveController();
+                MoveController.Pair<Integer, Integer> src = new MoveController.Pair<>(x, y);
+                MoveController.Pair<Integer, Integer> dest = new MoveController.Pair<>(selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1]);
+                ArrayList<Unit> units = new ArrayList<>();
+                units.add(selectedUnit);
+                if (moveController.aStarSearch(src, dest, units).equals("Success") && distance <= selectedUnit.getUnitType().getSpeed()) {
                     if (map.getMap()[x][y].getBuilding() != null && !map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
                         map.getMap()[x][y].getBuilding().getDamage(damage);
                         continue;
@@ -400,6 +397,7 @@ public class GameMenuController {
                     }
                 }
             }
+            selectedUnit.getPath().clear();
             checkDeadUnitsLocation(x, y);
         }
         return "success";
@@ -602,19 +600,18 @@ public class GameMenuController {
                         map.getMap()[x][y].getBuilding().getDamage(selectedUnit.getAttackPower());
                 }
                 case BATTERING_RAM -> {
-                    //TODO add function of movement and is there any way to that place or not
-                    //TODO remove this unit from the start location and add to the end location
-                    if (selectedUnit.getUnitType().getSpeed() >= distance)
-                        map.getMap()[x][y].getBuilding().getDamage(selectedUnit.getAttackPower());
-                }
-                case SIEGE_TOWER -> {
-                    //TODO add function of movement and is there any way to that place or not
-                    //TODO remove this unit from the start location and add to the end location
-                    if (selectedUnit.getUnitType().getSpeed() >= distance) {
-                        map.getMap()[x][y].getBuilding().setIsPassableForEnemies(true);
+                    MoveController moveController = new MoveController();
+                    MoveController.Pair<Integer, Integer> src = new MoveController.Pair<>(x, y);
+                    MoveController.Pair<Integer, Integer> dest = new MoveController.Pair<>(selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1]);
+                    ArrayList<Unit> units = new ArrayList<>();
+                    units.add(selectedUnit);
+                    if (moveController.aStarSearch(src, dest, units).equals("Success")) {
+                        if (selectedUnit.getUnitType().getSpeed() >= distance)
+                            map.getMap()[x][y].getBuilding().getDamage(selectedUnit.getAttackPower());
                     }
                 }
             }
+            selectedUnit.getPath().clear();
             checkDestroyedBuildingLocation(x, y);
         }
         return "success";
@@ -968,7 +965,7 @@ public class GameMenuController {
         return "success";
     }
 
-    private void attackNextTurnByMode(int x, int y, Unit unit) {//TODO after any movement and in the start of the turn it should be called
+    private void attackNextTurnByMode(int x, int y, Unit unit) {
         if (!unit.getOwner().equals(currentEmpire)) {
             return;
         }
@@ -1016,7 +1013,6 @@ public class GameMenuController {
                         if (i > map.getSize() - 1 || i < 0) {
                             break;
                         }
-                        //TODO add the is passable function
                         for (int k = 0; k < map.getMap()[i][j].getUnits().size(); k++) {
                             if (map.getMap()[i][j].getUnits().get(k).getOwner() == null && !map.getMap()[i][j].getUnits().get(k).getOwner().equals(currentEmpire)) {
                                 if (map.getMap()[i][j].getUnits().get(k).getUnitType().equals(UnitType.ASSASSIN) && (x != i || y != j)) {
@@ -1236,6 +1232,9 @@ public class GameMenuController {
         int[] scores = new int[game.getEmpires().size()];
         for (int i = 0; i < game.getEmpires().size(); i++) {
             for (int j = 0; j < game.getEmpires().get(i).getBuildings().size(); j++) {
+                if (game.getEmpires().get(i).getBuildings().get(j).getBuildingType().equals(BuildingType.KEEP) || game.getEmpires().get(i).getBuildings().get(j).getBuildingType().equals(BuildingType.KILLING_PIT)) {
+                    continue;
+                }
                 scores[i] += game.getEmpires().get(i).getBuildings().get(j).getHp();
             }
             for (int k = 0; k < game.getEmpires().get(i).getUnits().size(); k++) {
@@ -1256,7 +1255,6 @@ public class GameMenuController {
     public String nextTurn() {
         selectedUnits.clear();
         selectedBuilding = null;
-
         checkFoodProductiveBuildings();
         checkArmourProductiveBuildings();
         checkResourceProductiveBuildings();
@@ -1274,6 +1272,7 @@ public class GameMenuController {
         if (game.getTurnsCounter() == 0) {
             return "end of the game" + '\n' + checkEndOfTheGame();
         }
+        moveUnits();
         for (int i = 0; i < map.getSize(); i++) {
             for (int j = 0; j < map.getSize(); j++) {
                 checkDeadUnitsLocation(i, j);
@@ -1352,7 +1351,6 @@ public class GameMenuController {
                 bool = true;
             }
         }
-        //TODO add passable function for this part
         if (map.getMap()[x][y].getBuilding() != null || map.getMap()[x][y].getUnits().size() > 0 || map.getMap()[x][y].getEnvironmentName() != null) {
             return "there are some other things in this place";
         }
@@ -1361,6 +1359,15 @@ public class GameMenuController {
         }
         map.getMap()[x][y].setType("moat");
         return "success";
+    }
+
+
+    public String Stop(Matcher matcher) {
+        for (Unit unit : selectedUnits) {
+            unit.getPath().clear();
+            unit.setPatrol(false);
+        }
+        return "Success";
     }
 
     public String noMoat(Matcher matcher) {
@@ -1381,7 +1388,6 @@ public class GameMenuController {
                 bool = true;
             }
         }
-        //TODO add passable function for this part
         if (map.getMap()[x][y].getBuilding() != null || map.getMap()[x][y].getUnits().size() > 0 || map.getMap()[x][y].getEnvironmentName() != null) {
             return "there are some other things in this place";
         }
@@ -1420,5 +1426,63 @@ public class GameMenuController {
         map.getMap()[x][y].getBuilding().getOwner().getBuildings().remove(map.getMap()[x][y].getBuilding());
         map.getMap()[x][y].setBuilding(null);
         return "success";
+    }
+
+    public String moveUnit(Matcher matcher) {
+        int x = Integer.parseInt(matcher.group("x"));
+        int y = Integer.parseInt(matcher.group("y"));
+        MoveController.Pair<Integer, Integer> dest = new MoveController.Pair<>(x, y);
+        MoveController.Pair<Integer, Integer> src = new MoveController.Pair<>(selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1]);
+        MoveController moveController = new MoveController();
+        return moveController.aStarSearch(src, dest, selectedUnits);
+    }
+
+    public String patrolUnit(Matcher matcher) {
+        int x = Integer.parseInt(matcher.group("x"));
+        int y = Integer.parseInt(matcher.group("y"));
+        MoveController.Pair<Integer, Integer> dest = new MoveController.Pair<>(x, y);
+        MoveController.Pair<Integer, Integer> src = new MoveController.Pair<>(selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1]);
+        MoveController moveController = new MoveController();
+        return moveController.aStarSearch(src, dest, selectedUnits);
+    }
+
+    public void moveUnits() {
+        for (Unit unit : currentEmpire.getUnits()) {
+            if (!unit.isPatrol()) {
+                ArrayList<MoveController.Pair<Integer, Integer>> path = unit.getPath();
+                if (unit.getCurrentCell() != -1) {
+                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
+                    int raise = unit.getCurrentCell() + unit.getUnitType().getSpeed();
+                    if (raise < unit.getPath().size() - 1) unit.setCurrentCell(raise);
+                    else {
+                        unit.setCurrentCell(unit.getPath().size());
+                        unit.getPath().clear();
+                    }
+                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
+                    unit.setCurrentCell(-1);
+                }
+            } else {
+                if (!unit.isPatrol()) return;
+                ArrayList<MoveController.Pair<Integer, Integer>> path = unit.getPath();
+                if (unit.getCurrentCell() != -1) {
+                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
+                    int raise = unit.getCurrentCell() + unit.getUnitType().getSpeed();
+                    if (raise < unit.getPath().size() - 1) unit.setCurrentCell(raise);
+                    else unit.setCurrentCell(unit.getPath().size());
+                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
+                    unit.setCurrentCell(0);
+                    ArrayList<MoveController.Pair<Integer, Integer>> revPath = new ArrayList<>();
+                    for (int i = path.size() - 1; i >= 0; i--) {
+                        revPath.add(path.get(i));
+                    }
+                    unit.setPath(revPath);
+                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
+                    raise = unit.getCurrentCell() + unit.getUnitType().getSpeed();
+                    if (raise < unit.getPath().size() - 1) unit.setCurrentCell(raise);
+                    else unit.setCurrentCell(unit.getPath().size());
+                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
+                }
+            }
+        }
     }
 }

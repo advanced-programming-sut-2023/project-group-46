@@ -70,7 +70,7 @@ public class GameMenu {
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.PATROL_UNIT_REGEX)) != null) {
                 //gameMenuController.patrolUnit(matcher);
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.MOVE_UNIT_REGEX)) != null) {
-                //gameMenuController.moveUnit(matcher);
+                System.out.println(gameMenuController.moveUnit(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.SELECT_BUILDING_REGEX)) != null) {
                 System.out.println(gameMenuController.selectBuilding(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.POUR_OIL_REGEX)) != null) {
