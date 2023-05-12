@@ -32,6 +32,7 @@ public class EmpireMenuController {
     }
 
     public static void calculatePopulation() {
+        int employedPeople = GameMenuController.getCurrentEmpire().getEmployedPeople();
         int maxPopulation = GameMenuController.getCurrentEmpire().getMaxPopulation();
         int unemployedPeople = GameMenuController.getCurrentEmpire().getUnemployedPeople();
         int popularity = GameMenuController.getCurrentEmpire().getFearPopularity();
@@ -40,8 +41,8 @@ public class EmpireMenuController {
         popularity += GameMenuController.getCurrentEmpire().getTaxPopularity();
         popularity += GameMenuController.getCurrentEmpire().getAleCoverage();
         popularity *= 3;// 3*popularity effects our unemployedPeople
-        if (unemployedPeople + popularity >= maxPopulation) {
-            GameMenuController.getCurrentEmpire().addUnemployedPeople(maxPopulation - unemployedPeople);
+        if (unemployedPeople + employedPeople + popularity >= maxPopulation) {
+            GameMenuController.getCurrentEmpire().setUnemployedPeople(maxPopulation - employedPeople);
         } else if (unemployedPeople + popularity <= 0) {
             GameMenuController.getCurrentEmpire().setUnemployedPeople(0);
         } else {
@@ -213,6 +214,6 @@ public class EmpireMenuController {
     }
 
     public String showColor() {
-       return GameMenuController.getCurrentEmpire().getColor();
+        return GameMenuController.getCurrentEmpire().getColor();
     }
 }

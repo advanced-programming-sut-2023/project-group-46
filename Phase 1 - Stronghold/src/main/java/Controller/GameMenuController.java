@@ -63,6 +63,9 @@ public class GameMenuController {
 
     private boolean enemyInThisCell(Cell cell) {
         for (int i = 0; i < cell.getUnits().size(); i++) {
+            if (cell.getUnits().get(i).getOwner() == null) {
+                continue;
+            }
             if (!cell.getUnits().get(i).getOwner().equals(currentEmpire)) {
                 return true;
             }
@@ -256,7 +259,7 @@ public class GameMenuController {
             selectedBuilding = null;
             return "there is no building in this place";
         }
-        if (!map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
+        if (map.getMap()[x][y].getBuilding().getOwner() == null || !map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
             return "this building isn't yours";
         }
         selectedBuilding = map.getMap()[x][y].getBuilding();
@@ -303,7 +306,7 @@ public class GameMenuController {
         selectedUnits.clear();
         selectedCoordinates.put("unit", new int[]{x, y});
         for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
-            if (map.getMap()[x][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
+            if (map.getMap()[x][y].getUnits().get(i).getOwner() != null && map.getMap()[x][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
                 if (type != null) {
                     if (map.getMap()[x][y].getUnits().get(i).getUnitType().getName().equals(type)) {
                         selectedUnits.add(map.getMap()[x][y].getUnits().get(i));
@@ -346,7 +349,7 @@ public class GameMenuController {
                 if (distance <= selectedUnit.getUnitType().getSpeed()) {
                     String name = map.getMap()[x][y].getBuilding().getBuildingType().getName();
                     if (name.equals("ShortWall") || name.equals("TallWall")) {
-                        if (!map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
+                        if (map.getMap()[x][y].getBuilding().getOwner() != null && !map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
                             map.getMap()[x][y].getBuilding().setIsPassableForEnemies(true);
                         }
                     }
@@ -367,7 +370,7 @@ public class GameMenuController {
                     boolean bool = true;
                     while (bool) {
                         int index = (int) (Math.random() * map.getMap()[x][y].getUnits().size());
-                        if (!map.getMap()[x][y].getUnits().get(index).getOwner().equals(currentEmpire)) {
+                        if (map.getMap()[x][y].getUnits().get(index).getOwner() != null && !map.getMap()[x][y].getUnits().get(index).getOwner().equals(currentEmpire)) {
                             map.getMap()[x][y].getUnits().get(index).getDamage(damage);
                             bool = false;
                         }
@@ -381,7 +384,7 @@ public class GameMenuController {
                 boolean bool = true;
                 while (bool) {
                     int index = (int) (Math.random() * map.getMap()[x][y].getUnits().size());
-                    if (!map.getMap()[x][y].getUnits().get(index).getOwner().equals(currentEmpire)) {
+                    if (map.getMap()[x][y].getUnits().get(index).getOwner() != null && !map.getMap()[x][y].getUnits().get(index).getOwner().equals(currentEmpire)) {
                         for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
                             if (map.getMap()[x][y].getUnits().get(i).getUnitType().equals(UnitType.PORTABLE_SHIELD) && map.getMap()[x][y].getUnits().get(index).getOwner().equals(map.getMap()[x][y].getUnits().get(i).getOwner())) {
                                 map.getMap()[x][y].getUnits().get(i).getDamage(damage);
@@ -476,7 +479,7 @@ public class GameMenuController {
                 boolean bool = true;
                 while (bool) {
                     int index = (int) (Math.random() * map.getMap()[x][y].getUnits().size());
-                    if (!map.getMap()[x][y].getUnits().get(index).getOwner().equals(currentEmpire) && !map.getMap()[x][y].getUnits().get(index).getUnitType().equals(UnitType.ASSASSIN)) {
+                    if ((map.getMap()[x][y].getUnits().get(index).getOwner() == null || !map.getMap()[x][y].getUnits().get(index).getOwner().equals(currentEmpire)) && !map.getMap()[x][y].getUnits().get(index).getUnitType().equals(UnitType.ASSASSIN)) {
                         for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
                             if (map.getMap()[x][y].getUnits().get(i).getUnitType().equals(UnitType.PORTABLE_SHIELD) && map.getMap()[x][y].getUnits().get(index).getOwner().equals(map.getMap()[x][y].getUnits().get(i).getOwner())) {
                                 map.getMap()[x][y].getUnits().get(i).getDamage(damage);
@@ -520,7 +523,7 @@ public class GameMenuController {
                     return "EndOfTheMap!";
                 }
                 for (int i = 0; i < map.getMap()[x][y + 1].getUnits().size(); i++) {
-                    if (!map.getMap()[x][y + 1].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                    if (map.getMap()[x][y + 1].getUnits().get(i).getOwner() == null || !map.getMap()[x][y + 1].getUnits().get(i).getOwner().equals(currentEmpire)) {
                         map.getMap()[x][y + 1].getUnits().get(i).getDamage(damage);
                     }
                 }
@@ -530,7 +533,7 @@ public class GameMenuController {
                     return "EndOfTheMap!";
                 }
                 for (int i = 0; i < map.getMap()[x][y - 1].getUnits().size(); i++) {
-                    if (!map.getMap()[x][y - 1].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                    if (map.getMap()[x][y - 1].getUnits().get(i).getOwner() == null || !map.getMap()[x][y - 1].getUnits().get(i).getOwner().equals(currentEmpire)) {
                         map.getMap()[x][y - 1].getUnits().get(i).getDamage(damage);
                     }
                 }
@@ -540,7 +543,7 @@ public class GameMenuController {
                     return "EndOfTheMap!";
                 }
                 for (int i = 0; i < map.getMap()[x - 1][y].getUnits().size(); i++) {
-                    if (!map.getMap()[x - 1][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                    if (map.getMap()[x - 1][y].getUnits().get(i).getOwner() == null || !map.getMap()[x - 1][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
                         map.getMap()[x - 1][y].getUnits().get(i).getDamage(damage);
                     }
                 }
@@ -550,7 +553,7 @@ public class GameMenuController {
                     return "EndOfTheMap!";
                 }
                 for (int i = 0; i < map.getMap()[x + 1][y].getUnits().size(); i++) {
-                    if (!map.getMap()[x + 1][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                    if (map.getMap()[x + 1][y].getUnits().get(i).getOwner() == null || !map.getMap()[x + 1][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
                         map.getMap()[x + 1][y].getUnits().get(i).getDamage(damage);
                     }
                 }
@@ -588,7 +591,7 @@ public class GameMenuController {
         }
         if (map.getMap()[x][y].getBuilding() == null) {
             return "there is no building in that coordinate";
-        } else if (map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
+        } else if (map.getMap()[x][y].getBuilding().getOwner() != null && map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
             return "that building is yours";
         }
         int distance = distance(x, y, selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1]);
@@ -831,7 +834,7 @@ public class GameMenuController {
         if (map.getMap()[x][y].getBuilding() == null) {
             return "there is no building in that coordinate";
         }
-        if (map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
+        if (map.getMap()[x][y].getBuilding().getOwner() != null && map.getMap()[x][y].getBuilding().getOwner().equals(currentEmpire)) {
             return "the building in that coordinate is yours";
         }
         map.getMap()[x][y].getBuilding().getDamage(15000);
@@ -874,6 +877,9 @@ public class GameMenuController {
                 } else {
                     return "invalid mode for Gate building";
                 }
+            }
+            default -> {
+                return "you can't change the mode of this building";
             }
         }
         return "success";
@@ -942,7 +948,7 @@ public class GameMenuController {
 
     public Unit getUnit(Empire empire, String name) {
         for (Unit selectedUnit : selectedUnits) {
-            if (selectedUnit.getUnitType().getName().equals(name) && selectedUnit.getOwner().equals(empire)) {
+            if (selectedUnit.getUnitType().getName().equals(name) && selectedUnit.getOwner() != null && selectedUnit.getOwner().equals(empire)) {
                 return selectedUnit;
             }
         }
@@ -978,7 +984,7 @@ public class GameMenuController {
                         break;
                     }
                     for (int k = 0; k < map.getMap()[i][j].getUnits().size(); k++) {
-                        if (!map.getMap()[i][j].getUnits().get(k).getOwner().equals(currentEmpire)) {
+                        if (map.getMap()[i][j].getUnits().get(k).getOwner() == null || !map.getMap()[i][j].getUnits().get(k).getOwner().equals(currentEmpire)) {
                             if (map.getMap()[i][j].getUnits().get(k).getUnitType().equals(UnitType.ASSASSIN) && (x != i || y != j)) {
                                 continue;
                             }
@@ -991,7 +997,7 @@ public class GameMenuController {
         } else if (unit.getUnitType().getType().equals("Sword")) {
             if (unit.getMode().equals("standing")) {//just if they are in the same cell
                 for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
-                    if (!map.getMap()[x][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
+                    if (map.getMap()[x][y].getUnits().get(i).getOwner() == null || !map.getMap()[x][y].getUnits().get(i).getOwner().equals(currentEmpire)) {
                         map.getMap()[x][y].getUnits().get(i).getDamage(damage);
                     }
                 }
@@ -1012,7 +1018,7 @@ public class GameMenuController {
                         }
                         //TODO add the is passable function
                         for (int k = 0; k < map.getMap()[i][j].getUnits().size(); k++) {
-                            if (!map.getMap()[i][j].getUnits().get(k).getOwner().equals(currentEmpire)) {
+                            if (map.getMap()[i][j].getUnits().get(k).getOwner() == null && !map.getMap()[i][j].getUnits().get(k).getOwner().equals(currentEmpire)) {
                                 if (map.getMap()[i][j].getUnits().get(k).getUnitType().equals(UnitType.ASSASSIN) && (x != i || y != j)) {
                                     continue;
                                 }
