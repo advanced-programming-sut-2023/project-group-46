@@ -1094,7 +1094,7 @@ public class GameMenuController {
         MoveController.Pair<Integer, Integer> dest = new MoveController.Pair<>(x, y);
         MoveController.Pair<Integer, Integer> src = new MoveController.Pair<>();
         MoveController moveController = new MoveController();
-        return moveController.aStarSearch(map.getMap(), src, dest, unit);
+        return moveController.aStarSearch(map.getMap(), src, dest, selectedUnits);
     }
 
     public String patrolUnit(Matcher matcher) {
