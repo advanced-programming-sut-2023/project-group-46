@@ -28,7 +28,7 @@ public class MoveController {
     private int capacity(Cell[][] map, int[][] grid, int row, int col) {
         if (grid[row][col] == 2)
             return map[row][col].getBuilding().getFreeCapacity();
-        else return 1;
+        else return Integer.MAX_VALUE;
     }
 
     private ArrayList<Pair<Integer, Integer>> tracePath(CellInMove[][] cellDetails, Pair<Integer, Integer> dest) {
@@ -55,7 +55,7 @@ public class MoveController {
                 else if (map[i][j].getBuilding() != null) {
                     grid[i][j] = 0;
                     if (map[i][j].getBuilding().getBuildingType().getType().equals("Towers"))
-                        grid[i][j] = map[i][j].getBuilding().getBuildingType().getCapacity();
+                        grid[i][j] = 2;
                 } else grid[i][j] = 1;
             }
         }
@@ -69,7 +69,7 @@ public class MoveController {
                 for (Unit unit : units) {
                     unit.getDamage(100);
                 }
-                map1.getMap()[pair.getObject1()][pair.getObject2()].getBuilding().getOwner().getBuildings().remove(map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding());
+                map1.getMap()[pair.getObject1()][pair.getObject2()].getBuilding().getOwner().getBuildings().remove(map1.getMap()[pair.getObject1()][pair.getObject2()].getBuilding());
                 map1.getMap()[pair.getObject1()][pair.getObject2()].setBuilding(null);
             }
         }
@@ -327,8 +327,15 @@ public class MoveController {
                     map1.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
                     unit.setCurrentCell(0);
                     ArrayList<Pair<Integer, Integer>> revPath= new ArrayList<>();
-                    for()
-                    unit.setPath(unit.getPath());
+                    for (int i = path.size() - 1; i >= 0; i--) {
+                        revPath.add(path.get(i));
+                    }
+                    unit.setPath(revPath);
+                    map1.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
+                    raise = unit.getCurrentCell() + unit.getUnitType().getSpeed();
+                    if (raise < unit.getPath().size() - 1) unit.setCurrentCell(raise);
+                    else unit.setCurrentCell(unit.getPath().size());
+                    map1.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
                 }
             }
         }
