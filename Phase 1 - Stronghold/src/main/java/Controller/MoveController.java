@@ -15,11 +15,8 @@ import java.util.Stack;
 public class MoveController {
     Map map;
 
-    private Stack<Pair<Integer, Integer>> path;
-
-    public Stack<Pair<Integer, Integer>> getPath() {
-        return path;
-    }
+    private ArrayList<Pair<Integer, Integer>> path;
+    private int[] currentCell;
 
     private boolean isValid(int row, int col) {
         return row >= 0 && col >= 0 && row < map.getSize() && col < map.getSize();
@@ -43,18 +40,18 @@ public class MoveController {
         else return 1;
     }
 
-    private Stack<Pair<Integer, Integer>> tracePath(CellInMove[][] cellDetails, Pair<Integer, Integer> dest) {
+    private ArrayList<Pair<Integer, Integer>> tracePath(CellInMove[][] cellDetails, Pair<Integer, Integer> dest) {
         int row = dest.getObject1();
         int col = dest.getObject2();
-        Stack<Pair<Integer, Integer>> path = new Stack<>();
+        ArrayList<Pair<Integer, Integer>> path = new ArrayList<>();
         while (!(cellDetails[row][col].parent_i == row && cellDetails[row][col].parent_j == col)) {
-            path.push(new Pair<>(row, col));
+            path.add(new Pair<>(row, col));
             int temp_row = cellDetails[row][col].parent_i;
             int temp_col = cellDetails[row][col].parent_j;
             row = temp_row;
             col = temp_col;
         }
-        path.push(new Pair<>(row, col));
+        path.add(new Pair<>(row, col));
         return path;
     }
 
@@ -72,6 +69,27 @@ public class MoveController {
             }
         }
         return grid;
+    }
+
+    private void checkTraps(ArrayList<Unit> units){
+        for (Pair<Integer, Integer> pair : path){
+            if(map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding() != null &&
+                    map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding().getBuildingType().equals(BuildingType.KILLING_PIT)){
+                for (Unit unit : units){
+                    unit.getDamage(100);
+                }
+                map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding().getOwner().getBuildings().remove(map.getMap()[pair.getObject1()][pair.getObject2()].getBuilding());
+                map.getMap()[pair.getObject1()][pair.getObject2()].setBuilding(null);
+            }
+        }
+    }
+
+    private void initializeAfterSuccess(CellInMove[][] cellDetails, Pair<Integer, Integer> dest){
+        path= tracePath(cellDetails, dest);
+        currentCell= new int[path.size()];
+        for (int k = 0; k < path.size(); k++) {
+            currentCell[k]= 0;
+        }
     }
 
     public String aStarSearch(Cell[][] map, Pair<Integer, Integer> src, Pair<Integer, Integer> dest, ArrayList<Unit> units) {
@@ -147,16 +165,8 @@ public class MoveController {
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
                     if (grid[dest.getObject1()][dest.getObject2()] == 2)
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
-                    path= tracePath(cellDetails, dest);
-                    for (Pair<Integer, Integer> pair : path){
-                        if(map[pair.getObject1()][pair.getObject2()].getBuilding() != null &&
-                                map[pair.getObject1()][pair.getObject2()].getBuilding().getBuildingType().equals(BuildingType.KILLING_PIT)){
-                            for (Unit unit : units){
-                                unit.getDamage(100);
-                                map[pair.getObject1()][pair.getObject2()].setBuilding(null);
-                            }
-                        }
-                    }
+                    initializeAfterSuccess(cellDetails, dest);
+                    checkTraps(units);
                     return "Success";
 
                 } else if (!closedList[i - 1][j] && isUnBlocked(grid, i - 1, j)) {
@@ -192,16 +202,8 @@ public class MoveController {
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
                     if (grid[dest.getObject1()][dest.getObject2()] == 2)
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
-                    path= tracePath(cellDetails, dest);
-                    for (Pair<Integer, Integer> pair : path){
-                        if(map[pair.getObject1()][pair.getObject2()].getBuilding() != null &&
-                                map[pair.getObject1()][pair.getObject2()].getBuilding().getBuildingType().equals(BuildingType.KILLING_PIT)){
-                            for (Unit unit : units){
-                                unit.getDamage(100);
-                                map[pair.getObject1()][pair.getObject2()].setBuilding(null);
-                            }
-                        }
-                    }
+                    initializeAfterSuccess(cellDetails, dest);
+                    checkTraps(units);
                     return "Success";
                 } else if (closedList[i + 1][j] && isUnBlocked(grid, i + 1, j)) {
                     gNew = cellDetails[i][j].g + 1.0;
@@ -236,16 +238,8 @@ public class MoveController {
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
                     if (grid[dest.getObject1()][dest.getObject2()] == 2)
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
-                    path= tracePath(cellDetails, dest);
-                    for (Pair<Integer, Integer> pair : path){
-                        if(map[pair.getObject1()][pair.getObject2()].getBuilding() != null &&
-                                map[pair.getObject1()][pair.getObject2()].getBuilding().getBuildingType().equals(BuildingType.KILLING_PIT)){
-                            for (Unit unit : units){
-                                unit.getDamage(100);
-                                map[pair.getObject1()][pair.getObject2()].setBuilding(null);
-                            }
-                        }
-                    }
+                    initializeAfterSuccess(cellDetails, dest);
+                    checkTraps(units);
                     return "Success";
                 } else if (closedList[i][j + 1] && isUnBlocked(grid, i, j + 1)) {
                     gNew = cellDetails[i][j].g + 1.0;
@@ -280,16 +274,8 @@ public class MoveController {
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
                     if (grid[dest.getObject1()][dest.getObject2()] == 2)
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
-                    path= tracePath(cellDetails, dest);
-                    for (Pair<Integer, Integer> pair : path){
-                        if(map[pair.getObject1()][pair.getObject2()].getBuilding() != null &&
-                                map[pair.getObject1()][pair.getObject2()].getBuilding().getBuildingType().equals(BuildingType.KILLING_PIT)){
-                            for (Unit unit : units){
-                                unit.getDamage(100);
-                                map[pair.getObject1()][pair.getObject2()].setBuilding(null);
-                            }
-                        }
-                    }
+                    initializeAfterSuccess(cellDetails, dest);
+                    checkTraps(units);
                     return "Success";
                 } else if (closedList[i][j - 1] && isUnBlocked(grid, i, j - 1)) {
                     gNew = cellDetails[i][j].g + 1.0;
@@ -307,6 +293,17 @@ public class MoveController {
             }
         }
         return "Failed to find the Destination Cell";
+    }
+
+    public void moveUnits(ArrayList<Unit> units){
+        for(int i= 0; i < units.size(); i++){
+            if(currentCell[i] != path.size()) {
+                map.getMap()[path.get(currentCell[i]).getObject1()][path.get(currentCell[i]).getObject2()].getUnits().remove(units.get(i));
+                currentCell[i] += units.get(i).getUnitType().getSpeed();
+                map.getMap()[path.get(currentCell[i]).getObject1()][path.get(currentCell[i]).getObject2()].getUnits().add(units.get(i));
+            }
+        }
+
     }
 
     public static class Pair<A, B> {
