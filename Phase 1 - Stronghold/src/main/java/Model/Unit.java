@@ -87,4 +87,6 @@ public class Unit {
     public void setPatrol(boolean patrol) {
         isPatrol = patrol;
     }
+
+
 }

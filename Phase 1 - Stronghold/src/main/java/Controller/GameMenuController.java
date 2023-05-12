@@ -1103,8 +1103,14 @@ public class GameMenuController {
         MoveController.Pair<Integer, Integer> dest = new MoveController.Pair<>(x, y);
         MoveController.Pair<Integer, Integer> src = new MoveController.Pair<>(selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1]);
         MoveController moveController = new MoveController();
-        String stringMoveUnit= moveController.aStarSearch(src, dest, selectedUnits);
-        if(!stringMoveUnit.equals("Success")) return stringMoveUnit;
+        return moveController.aStarSearch(src, dest, selectedUnits);
+    }
+
+    public String Stop(Matcher matcher){
+        for (Unit unit : selectedUnits){
+            unit.setPatrol(false);
+        }
+        return "Success";
     }
 
     private void readMap() {
