@@ -13,7 +13,7 @@ public enum BuildingType {//fireRange will boost the range of the archers  || ca
     BARRACK(450, "Barrack", 0, 0, 0, 0, 15, "CastleBuildings", 0, 0, 0),
     MERCENARY_POST(450, "MercenaryPost", 0, 0, 10, 0, 0, "CastleBuildings", 0, 0, 0),
     ENGINEER_GUILD(450, "EngineerGuild", 0, 100, 10, 0, 0, "CastleBuildings", 0, 0, 0),
-    KILLING_PIT((int) Double.POSITIVE_INFINITY, "KillingPit", 0, 0, 6, 0, 0, "CastleBuildings", 0, 0, 0),
+    KILLING_PIT(Integer.MAX_VALUE, "KillingPit", 0, 0, 6, 0, 0, "CastleBuildings", 0, 0, 0),
     INN(300, "Inn", 1, 100, 20, 0, 0, "FoodProcessingBuildings", 0, 8, 0),
     MILL(300, "Mill", 3, 0, 20, 0, 0, "FoodProcessingBuildings", 3, 16, 0),
     IRON_MINE(250, "IronMine", 2, 0, 20, 0, 0, "Industry", 1, 12, 0),
@@ -44,7 +44,7 @@ public enum BuildingType {//fireRange will boost the range of the archers  || ca
     SHORT_WALL(400, "ShortWall", 0, 0, 0, 0, 1, "CastleBuildings", 1, 0, 0),
     TALL_WALL(600, "TallWall", 0, 0, 0, 0, 2, "CastleBuildings", 1, 0, 0),
     STAIRS(400, "Stairs", 0, 0, 0, 0, 3, "CastleBuildings", 1, 0, 0),
-    KEEP((int) Double.POSITIVE_INFINITY, "Keep", 0, 0, 0, 0, 0, "CastleBuildings", 40, 0, 15),
+    KEEP(Integer.MAX_VALUE, "Keep", 0, 0, 0, 0, 0, "CastleBuildings", 40, 0, 15),
     FOOD_STOCK(250, "FoodStock", 0, 0, 5, 0, 0, "FoodProcessingBuildings", 250, 0, 0);
 
 

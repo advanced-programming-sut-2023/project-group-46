@@ -1,5 +1,6 @@
 package Controller;
 
+import Enums.BuildingType;
 import Enums.EnvironmentType;
 import Enums.UnitType;
 import Model.Cell;
@@ -13,6 +14,12 @@ import java.util.Stack;
 
 public class MoveController {
     Map map;
+
+    private Stack<Pair<Integer, Integer>> path;
+
+    public Stack<Pair<Integer, Integer>> getPath() {
+        return path;
+    }
 
     private boolean isValid(int row, int col) {
         return row >= 0 && col >= 0 && row < map.getSize() && col < map.getSize();
@@ -36,7 +43,7 @@ public class MoveController {
         else return 1;
     }
 
-    private Stack tracePath(CellInMove[][] cellDetails, Pair<Integer, Integer> dest) {
+    private Stack<Pair<Integer, Integer>> tracePath(CellInMove[][] cellDetails, Pair<Integer, Integer> dest) {
         int row = dest.getObject1();
         int col = dest.getObject2();
         Stack<Pair<Integer, Integer>> path = new Stack<>();
@@ -140,9 +147,15 @@ public class MoveController {
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
                     if (grid[dest.getObject1()][dest.getObject2()] == 2)
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
-                    for (Unit unit : units) {
-                        map[i][j].getUnits().remove(unit);
-                        map[i - 1][j].getUnits().add(unit);
+                    path= tracePath(cellDetails, dest);
+                    for (Pair<Integer, Integer> pair : path){
+                        if(map[pair.getObject1()][pair.getObject2()].getBuilding() != null &&
+                                map[pair.getObject1()][pair.getObject2()].getBuilding().getBuildingType().equals(BuildingType.KILLING_PIT)){
+                            for (Unit unit : units){
+                                unit.getDamage(100);
+                                map[pair.getObject1()][pair.getObject2()].setBuilding(null);
+                            }
+                        }
                     }
                     return "Success";
 
@@ -179,9 +192,15 @@ public class MoveController {
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
                     if (grid[dest.getObject1()][dest.getObject2()] == 2)
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
-                    for (Unit unit : units) {
-                        map[i][j].getUnits().remove(unit);
-                        map[i + 1][j].getUnits().add(unit);
+                    path= tracePath(cellDetails, dest);
+                    for (Pair<Integer, Integer> pair : path){
+                        if(map[pair.getObject1()][pair.getObject2()].getBuilding() != null &&
+                                map[pair.getObject1()][pair.getObject2()].getBuilding().getBuildingType().equals(BuildingType.KILLING_PIT)){
+                            for (Unit unit : units){
+                                unit.getDamage(100);
+                                map[pair.getObject1()][pair.getObject2()].setBuilding(null);
+                            }
+                        }
                     }
                     return "Success";
                 } else if (closedList[i + 1][j] && isUnBlocked(grid, i + 1, j)) {
@@ -217,9 +236,15 @@ public class MoveController {
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
                     if (grid[dest.getObject1()][dest.getObject2()] == 2)
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
-                    for (Unit unit : units) {
-                        map[i][j].getUnits().remove(unit);
-                        map[i][j + 1].getUnits().add(unit);
+                    path= tracePath(cellDetails, dest);
+                    for (Pair<Integer, Integer> pair : path){
+                        if(map[pair.getObject1()][pair.getObject2()].getBuilding() != null &&
+                                map[pair.getObject1()][pair.getObject2()].getBuilding().getBuildingType().equals(BuildingType.KILLING_PIT)){
+                            for (Unit unit : units){
+                                unit.getDamage(100);
+                                map[pair.getObject1()][pair.getObject2()].setBuilding(null);
+                            }
+                        }
                     }
                     return "Success";
                 } else if (closedList[i][j + 1] && isUnBlocked(grid, i, j + 1)) {
@@ -255,9 +280,15 @@ public class MoveController {
                         map[src.getObject1()][src.getObject2()].getBuilding().addFreeCapacity(units.size());
                     if (grid[dest.getObject1()][dest.getObject2()] == 2)
                         map[dest.getObject1()][dest.getObject2()].getBuilding().addFreeCapacity(-units.size());
-                    for (Unit unit : units) {
-                        map[i][j].getUnits().remove(unit);
-                        map[i][j - 1].getUnits().add(unit);
+                    path= tracePath(cellDetails, dest);
+                    for (Pair<Integer, Integer> pair : path){
+                        if(map[pair.getObject1()][pair.getObject2()].getBuilding() != null &&
+                                map[pair.getObject1()][pair.getObject2()].getBuilding().getBuildingType().equals(BuildingType.KILLING_PIT)){
+                            for (Unit unit : units){
+                                unit.getDamage(100);
+                                map[pair.getObject1()][pair.getObject2()].setBuilding(null);
+                            }
+                        }
                     }
                     return "Success";
                 } else if (closedList[i][j - 1] && isUnBlocked(grid, i, j - 1)) {
