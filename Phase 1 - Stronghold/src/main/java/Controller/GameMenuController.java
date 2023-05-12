@@ -949,13 +949,17 @@ public class GameMenuController {
         return null;
     }
 
-    public void disbandUnit() {
+    public String disbandUnit() {
+        if (selectedUnits.size() == 0) {
+            return "you should select a unit";
+        }
         for (Unit selectedUnit : selectedUnits) {
             map.getMap()[selectedCoordinates.get("unit")[0]][selectedCoordinates.get("unit")[1]].getUnits().remove(selectedUnit);
             currentEmpire.getUnits().remove(selectedUnit);
         }
         currentEmpire.addUnemployedPeople(selectedUnits.size());
         selectedUnits.clear();
+        return "success";
     }
 
     private void attackNextTurnByMode(int x, int y, Unit unit) {//TODO after any movement and in the start of the turn it should be called
@@ -1382,6 +1386,33 @@ public class GameMenuController {
             return "there is no moa in that coordinate";
         }
         map.getMap()[x][y].setType("earth");
+        return "success";
+    }
+
+    public String deployCagedWarDogs() {//dogs will damage(10) all units in the range of 3
+        if (selectedBuilding == null || !selectedBuilding.getBuildingType().equals(BuildingType.CAGED_WAR_DOGS)) {
+            return "you have to select a cagedWarDogs";
+        }
+        int attackRange = 3, damage = 10;
+        int x = selectedCoordinates.get("building")[0];
+        int y = selectedCoordinates.get("building")[1];
+        for (int i = x - attackRange; i < attackRange + x; i++) {
+            for (int j = y - attackRange; j < y + attackRange; j++) {
+                if (j > map.getSize() - 1 || j < 0) {
+                    continue;
+                }
+                if (i > map.getSize() - 1 || i < 0) {
+                    break;
+                }
+                for (int k = 0; k < map.getMap()[i][j].getUnits().size(); k++) {
+                    map.getMap()[i][j].getUnits().get(k).getDamage(damage);
+                }
+                checkDeadUnitsLocation(i, j);
+            }
+        }
+        selectedBuilding = null;
+        map.getMap()[x][y].getBuilding().getOwner().getBuildings().remove(map.getMap()[x][y].getBuilding());
+        map.getMap()[x][y].setBuilding(null);
         return "success";
     }
 }

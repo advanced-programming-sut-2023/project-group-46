@@ -91,15 +91,17 @@ public class GameMenu {
                 System.out.println(gameMenuController.digMoat(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.NO_MOAT)) != null) {
                 System.out.println(gameMenuController.noMoat(matcher));
-            } else if (command.matches("repair")) {
+            } else if (command.equals("repair")) {
                 System.out.println(gameMenuController.repair());
-            } else if (command.matches("disband unit")) {
-                gameMenuController.disbandUnit();
-            } else if (command.matches("where is my keep")) {
+            } else if (command.equals("disband unit")) {
+                System.out.println(gameMenuController.disbandUnit());
+            } else if (command.equals("deploy caged war dogs")) {
+                System.out.println(gameMenuController.deployCagedWarDogs());
+            } else if (command.equals("where is my keep")) {
                 System.out.println(gameMenuController.showKeepCoordinates());
-            } else if (command.matches("show current menu")) {
+            } else if (command.equals("show current menu")) {
                 System.out.println("GameMenu");
-            } else if (command.matches("next turn")) {
+            } else if (command.equals("next turn")) {
                 result = gameMenuController.nextTurn();
                 System.out.println(result);
                 if (result.contains("end of the game")) {
