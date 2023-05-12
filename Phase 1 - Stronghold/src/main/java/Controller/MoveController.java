@@ -115,13 +115,18 @@ public class MoveController {
             j = p.getObject2().getObject2();
             closedList[i][j] = true;
             double gNew, hNew, fNew;
+            int flag= 0;
             //------------------------------------North
             if (isValid(i - 1, j)) {
-                for(i =0;i<map[i][j].getUnits().size();i++){
-                    if(map[i][j].getUnits().get(i).getUnitType().equals(UnitType.LADDER_MAN));
+                for(Unit machine : map[i][j].getUnits()){
+                    if(machine.getUnitType().equals(UnitType.LADDER_MAN) || machine.getUnitType().equals(UnitType.SIEGE_TOWER)) {
+                        flag = 1;
+                        break;
+                    }
                 }
-                if ((map[i][j].getBuilding().getBuildingType().getName().equals("Stairs")) && grid[i - 1][j] != 0)
+                if ((map[i][j].getBuilding().getBuildingType().getName().equals("Stairs") || flag == 1) && grid[i - 1][j] != 0)
                     grid[i - 1][j] = 1;
+                flag= 0;
                 if (grid[i][j] == 2 && grid[i - 1][j] == 2) grid[i - 1][j] = 1;
                 if (isDestination(i - 1, j, dest)) {
                     cellDetails[i - 1][j].parent_i = i;
@@ -151,8 +156,15 @@ public class MoveController {
             }
             //------------------------------------South
             if (isValid(i + 1, j)) {
-                if (map[i][j].getBuilding().getBuildingType().getName().equals("Stairs") && grid[i + 1][j] != 0)
+                for(Unit machine : map[i][j].getUnits()){
+                    if(machine.getUnitType().equals(UnitType.LADDER_MAN) || machine.getUnitType().equals(UnitType.SIEGE_TOWER)) {
+                        flag = 1;
+                        break;
+                    }
+                }
+                if ((map[i][j].getBuilding().getBuildingType().getName().equals("Stairs") || flag == 1) && grid[i + 1][j] != 0)
                     grid[i + 1][j] = 1;
+                flag= 0;
                 if (grid[i][j] == 2 && grid[i - 1][j] == 2) grid[i - 1][j] = 1;
                 if (isDestination(i + 1, j, dest)) {
                     cellDetails[i + 1][j].parent_i = i;
@@ -181,8 +193,15 @@ public class MoveController {
             }
             //------------------------------------East
             if (isValid(i, j + 1)) {
-                if (map[i][j].getBuilding().getBuildingType().getName().equals("Stairs") && grid[i][j + 1] != 0)
+                for(Unit machine : map[i][j].getUnits()){
+                    if(machine.getUnitType().equals(UnitType.LADDER_MAN) || machine.getUnitType().equals(UnitType.SIEGE_TOWER)) {
+                        flag = 1;
+                        break;
+                    }
+                }
+                if ((map[i][j].getBuilding().getBuildingType().getName().equals("Stairs") || flag == 1) && grid[i][j + 1] != 0)
                     grid[i][j + 1] = 1;
+                flag= 0;
                 if (grid[i][j] == 2 && grid[i - 1][j] == 2) grid[i - 1][j] = 1;
                 if (isDestination(i, j + 1, dest)) {
                     cellDetails[i][j + 1].parent_i = i;
@@ -211,8 +230,15 @@ public class MoveController {
             }
             //------------------------------------West
             if (isValid(i, j - 1)) {
-                if (map[i][j].getBuilding().getBuildingType().getName().equals("Stairs") && grid[i][j - 1] != 0)
+                for(Unit machine : map[i][j].getUnits()){
+                    if(machine.getUnitType().equals(UnitType.LADDER_MAN) || machine.getUnitType().equals(UnitType.SIEGE_TOWER)) {
+                        flag = 1;
+                        break;
+                    }
+                }
+                if ((map[i][j].getBuilding().getBuildingType().getName().equals("Stairs") || flag == 1 )&& grid[i][j - 1] != 0)
                     grid[i][j - 1] = 1;
+                flag= 0;
                 if (grid[i][j] == 2 && grid[i - 1][j] == 2) grid[i - 1][j] = 1;
                 if (isDestination(i, j - 1, dest)) {
                     cellDetails[i][j - 1].parent_i = i;
