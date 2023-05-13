@@ -29,12 +29,24 @@ public class GameMenuController {
         return currentEmpire;
     }
 
+    public static void setCurrentEmpire(Empire currentEmpire) {
+        GameMenuController.currentEmpire = currentEmpire;
+    }
+
     public static Game getGame() {
         return game;
     }
 
+    public static void setGame(Game game) {
+        GameMenuController.game = game;
+    }
+
     public static Map getMap() {
         return map;
+    }
+
+    public static void setMap(Map map) {
+        GameMenuController.map = map;
     }
 
     public String showKeepCoordinates() {
@@ -43,7 +55,11 @@ public class GameMenuController {
         return "x-> " + x + " y-> " + y;
     }
 
-    private ArrayList<Cell> neighbors(int x, int y) {
+    public void setSelectedBuilding(Building selectedBuilding) {
+        this.selectedBuilding = selectedBuilding;
+    }
+
+    public ArrayList<Cell> neighbors(int x, int y) {
         ArrayList<Cell> cells = new ArrayList<>();
         if (x > 0) {
             cells.add(map.getMap()[x - 1][y]);
@@ -72,7 +88,7 @@ public class GameMenuController {
         return false;
     }
 
-    private boolean anyEnemyNear(int x, int y) {//3*3 map that x,y is in the center
+    boolean anyEnemyNear(int x, int y) {//3*3 map that x,y is in the center
         if (enemyInThisCell(map.getMap()[x][y])) return true;
         if (x > 0 && enemyInThisCell(map.getMap()[x - 1][y])) return true;
         if (y > 0 && enemyInThisCell(map.getMap()[x][y - 1])) return true;
@@ -1429,6 +1445,7 @@ public class GameMenuController {
     }
 
     public String moveUnit(Matcher matcher) {
+        if (selectedUnits.size() == 0) return "Select unit";
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         MoveController.Pair<Integer, Integer> dest = new MoveController.Pair<>(x, y);
@@ -1438,49 +1455,67 @@ public class GameMenuController {
     }
 
     public String patrolUnit(Matcher matcher) {
+        if (selectedUnits.size() == 0) return "Select unit";
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         MoveController.Pair<Integer, Integer> dest = new MoveController.Pair<>(x, y);
         MoveController.Pair<Integer, Integer> src = new MoveController.Pair<>(selectedCoordinates.get("unit")[0], selectedCoordinates.get("unit")[1]);
         MoveController moveController = new MoveController();
-        return moveController.aStarSearch(src, dest, selectedUnits);
+        String stingPatrolUnit = moveController.aStarSearch(src, dest, selectedUnits);
+        if (stingPatrolUnit.equals("Success")) {
+            for (Unit unit : selectedUnits) {
+                unit.setPatrol(true);
+            }
+        }
+        return stingPatrolUnit;
+    }
+
+    public String stop() {
+        if (selectedUnits.size() == 0) return "Select unit";
+        for (Unit unit : selectedUnits) {
+            unit.getPath().clear();
+            unit.setCurrentCell(-1);
+            unit.setPatrol(false);
+        }
+        return "Success";
     }
 
     public void moveUnits() {
         for (Unit unit : currentEmpire.getUnits()) {
             if (!unit.isPatrol()) {
-                ArrayList<MoveController.Pair<Integer, Integer>> path = unit.getPath();
                 if (unit.getCurrentCell() != -1) {
-                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
-                    int raise = unit.getCurrentCell() + unit.getUnitType().getSpeed();
-                    if (raise < unit.getPath().size() - 1) unit.setCurrentCell(raise);
-                    else {
-                        unit.setCurrentCell(unit.getPath().size());
-                        unit.getPath().clear();
-                    }
-                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
-                    unit.setCurrentCell(-1);
-                }
-            } else {
-                if (!unit.isPatrol()) return;
-                ArrayList<MoveController.Pair<Integer, Integer>> path = unit.getPath();
-                if (unit.getCurrentCell() != -1) {
-                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
-                    int raise = unit.getCurrentCell() + unit.getUnitType().getSpeed();
-                    if (raise < unit.getPath().size() - 1) unit.setCurrentCell(raise);
-                    else unit.setCurrentCell(unit.getPath().size());
-                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
-                    unit.setCurrentCell(0);
+                    ArrayList<MoveController.Pair<Integer, Integer>> path = unit.getPath();
                     ArrayList<MoveController.Pair<Integer, Integer>> revPath = new ArrayList<>();
                     for (int i = path.size() - 1; i >= 0; i--) {
                         revPath.add(path.get(i));
                     }
-                    unit.setPath(revPath);
-                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
-                    raise = unit.getCurrentCell() + unit.getUnitType().getSpeed();
+                    map.getMap()[revPath.get(unit.getCurrentCell()).getObject1()][revPath.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
+                    int raise = unit.getCurrentCell() + unit.getUnitType().getSpeed();
                     if (raise < unit.getPath().size() - 1) unit.setCurrentCell(raise);
-                    else unit.setCurrentCell(unit.getPath().size());
+                    else unit.setCurrentCell(unit.getPath().size() - 1);
+                    map.getMap()[revPath.get(unit.getCurrentCell()).getObject1()][revPath.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
+                    if (raise == unit.getPath().size() - 1) {
+                        unit.setCurrentCell(-1);
+                        unit.getPath().clear();
+                    }
+                }
+            } else {
+                if (!unit.isPatrol()) return;
+                ArrayList<MoveController.Pair<Integer, Integer>> path = unit.getPath();
+                ArrayList<MoveController.Pair<Integer, Integer>> revPath = new ArrayList<>();
+                for (int i = path.size() - 1; i >= 0; i--) {
+                    revPath.add(path.get(i));
+                }
+                if (unit.getCurrentCell() != -1) {
+                    map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
+                    int raise = unit.getCurrentCell() + unit.getUnitType().getSpeed();
+                    if (raise < unit.getPath().size() - 1) unit.setCurrentCell(raise);
+                    else unit.setCurrentCell(unit.getPath().size() - 1);
                     map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
+                    if (raise == unit.getPath().size() - 1) {
+                        unit.setCurrentCell(0);
+                        unit.setPath(revPath);
+                    }
                 }
             }
         }

@@ -7,6 +7,9 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -140,9 +143,27 @@ public class User {
         isStayedLoggedIn = stayedLoggedIn;
     }
 
+    /**
+     * Check if the given password matches the user's stored password.
+     *
+     * @param password The password to check
+     * @return true if the password is correct, false otherwise
+     */
     public boolean isPasswordCorrect(String password) {
-        return this.getPassword().equals(password);
+        String encryptedPassword = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] messageDigest = md.digest(password.getBytes());
+            BigInteger no = new BigInteger(1, messageDigest);
+            encryptedPassword = no.toString(16);
+            while (encryptedPassword.length() < 32) {
+                encryptedPassword = "0" + encryptedPassword;
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return encryptedPassword.equals(this.password);
     }
 
-}
 
+}

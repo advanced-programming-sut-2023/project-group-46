@@ -68,7 +68,7 @@ public class GameMenu {
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.DROP_BUILDING_REGEX)) != null) {
                 System.out.println(gameMenuController.dropBuilding(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.PATROL_UNIT_REGEX)) != null) {
-                //gameMenuController.patrolUnit(matcher);
+                System.out.println(gameMenuController.patrolUnit(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.MOVE_UNIT_REGEX)) != null) {
                 System.out.println(gameMenuController.moveUnit(matcher));
             } else if ((matcher = GameMenuCommands.getMatcher(command, GameMenuCommands.SELECT_BUILDING_REGEX)) != null) {
@@ -101,6 +101,8 @@ public class GameMenu {
                 System.out.println(gameMenuController.showKeepCoordinates());
             } else if (command.equals("show current menu")) {
                 System.out.println("GameMenu");
+            } else if (command.equals("stop")){
+                System.out.println(gameMenuController.stop());
             } else if (command.equals("next turn")) {
                 result = gameMenuController.nextTurn();
                 System.out.println(result);

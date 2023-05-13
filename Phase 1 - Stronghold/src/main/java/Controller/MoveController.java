@@ -76,10 +76,10 @@ public class MoveController {
     }
 
     private void initializeAfterSuccess(CellInMove[][] cellDetails, Pair<Integer, Integer> dest, ArrayList<Unit> units) {
-        ArrayList<Pair<Integer, Integer>>  path= tracePath(cellDetails, dest);
+        ArrayList<Pair<Integer, Integer>> path= tracePath(cellDetails, dest);
         int currentCell = 0;
         for (Unit unit : units){
-            unit.setPath(path);
+            unit.getPath().addAll(path);
             unit.setCurrentCell(currentCell);
         }
     }
@@ -207,7 +207,7 @@ public class MoveController {
                     initializeAfterSuccess(cellDetails, dest, units);
                     checkTraps(units);
                     return "Success";
-                } else if (closedList[i + 1][j] && grid[i + 1][j] != 0 && grid[i + 1][j] != 2) {
+                } else if (!closedList[i + 1][j] && grid[i + 1][j] != 0 && grid[i + 1][j] != 2) {
                     gNew = cellDetails[i][j].g + 1.0;
                     hNew = calculateHValue(i + 1, j, dest);
                     fNew = gNew + hNew;
@@ -245,7 +245,7 @@ public class MoveController {
                     initializeAfterSuccess(cellDetails, dest, units);
                     checkTraps(units);
                     return "Success";
-                } else if (closedList[i][j + 1] && grid[i][j + 1] != 0 && grid[i][j + 1] != 2) {
+                } else if (!closedList[i][j + 1] && grid[i][j + 1] != 0 && grid[i][j + 1] != 2) {
                     gNew = cellDetails[i][j].g + 1.0;
                     hNew = calculateHValue(i, j + 1, dest);
                     fNew = gNew + hNew;
@@ -283,7 +283,7 @@ public class MoveController {
                     initializeAfterSuccess(cellDetails, dest, units);
                     checkTraps(units);
                     return "Success";
-                } else if (closedList[i][j - 1] && grid[i][j - 1] != 0 && grid[i][j - 1] != 2) {
+                } else if (!closedList[i][j - 1] && grid[i][j - 1] != 0 && grid[i][j - 1] != 2) {
                     gNew = cellDetails[i][j].g + 1.0;
                     hNew = calculateHValue(i, j - 1, dest);
                     fNew = gNew + hNew;
@@ -299,41 +299,6 @@ public class MoveController {
             }
         }
         return "Failed to find the Destination Cell";
-    }
-
-    public void moveUnits() {
-        for (Unit unit : empire.getUnits()){
-            if(!unit.isPatrol()) {
-                ArrayList<Pair<Integer, Integer>> path = unit.getPath();
-                if (unit.getCurrentCell() != -1) {
-                    map1.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
-                    int raise = unit.getCurrentCell() + unit.getUnitType().getSpeed();
-                    if (raise < unit.getPath().size() - 1) unit.setCurrentCell(raise);
-                    else {
-                        unit.setCurrentCell(unit.getPath().size());
-                        unit.getPath().clear();
-                    }
-                    map1.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
-                    unit.setCurrentCell(-1);
-                }
-            }else {
-                if(!unit.isPatrol()) return;
-                ArrayList<Pair<Integer, Integer>> path = unit.getPath();
-                if (unit.getCurrentCell() != -1) {
-                    map1.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
-                    int raise = unit.getCurrentCell() + unit.getUnitType().getSpeed();
-                    if (raise < unit.getPath().size() - 1) unit.setCurrentCell(raise);
-                    else unit.setCurrentCell(unit.getPath().size());
-                    map1.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
-                    unit.setCurrentCell(0);
-                    ArrayList<Pair<Integer, Integer>> revPath= new ArrayList<>();
-                    for (int i = path.size() - 1; i >= 0; i--) {
-                        revPath.add(path.get(i));
-                    }
-                    unit.setPath(revPath);
-                }
-            }
-        }
     }
 
     public static class Pair<A, B> {

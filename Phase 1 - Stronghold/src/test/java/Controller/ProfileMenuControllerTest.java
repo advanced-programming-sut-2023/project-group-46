@@ -1,7 +1,6 @@
 package Controller;
 
 import Enums.Commands.ProfileMenuCommands;
-import Enums.Commands.SignupMenuCommands;
 import Model.User;
 import org.junit.jupiter.api.Test;
 
@@ -45,19 +44,20 @@ class ProfileMenuControllerTest {
         SignUpMenuController signUpMenuController = new SignUpMenuController();
         ProfileMenuController profileMenuController = new ProfileMenuController();
         signUpMenuController.writeInJsonFile(username, password, email, nickname, slogan, "test-change-username.json");
-        profileMenuController.changeUsernameAction("newUsername" , "test-change-username.json");
+        profileMenuController.updateUserInJsonFile("newUsername" ,"username", "test-change-username.json");
 
         // Read file contents and check that they match expected output
-        String expectedOutput = "[{\"highScore\":0,\"password\":\"testPassword\",\"stayedLoggedIn\":false,\"nickname\":\"Test User\",\"email\":\"testUser@example.com\",\"username\":\"newUsername\",\"numberOfSecurityQuestion\":0}]";
+        String expectedOutput = "[{\"password\":\"testPassword\",\"highScore\":0,\"stayedLoggedIn\":false,\"nickname\":\"Test User\",\"email\":\"testUser@example.com\",\"numberOfSecurityQuestion\":0,\"username\":\"newUsername\"}]";
         String expectedOutput2 = "[{\"password\":\"testPassword\",\"highScore\":0,\"stayedLoggedIn\":false,\"nickname\":\"Test User\",\"email\":\"testUser@example.com\",\"username\":\"newUsername\",\"numberOfSecurityQuestion\":0}]";
         String expectedOutput3 = "[{\"highScore\":0,\"password\":\"testPassword\",\"stayedLoggedIn\":false,\"nickname\":\"Test User\",\"email\":\"testUser@example.com\",\"numberOfSecurityQuestion\":0,\"username\":\"newUsername\"}]";
-        String expectedOutput4 = "[{\"password\":\"testPassword\",\"highScore\":0,\"stayedLoggedIn\":false,\"nickname\":\"Test User\",\"email\":\"testUser@example.com\",\"numberOfSecurityQuestion\":0,\"username\":\"newUsername\"}]";
+        String expectedOutput4 = "[{\"highScore\":0,\"password\":\"testPassword\",\"stayedLoggedIn\":false,\"nickname\":\"Test User\",\"email\":\"testUser@example.com\",\"username\":\"newUsername\",\"numberOfSecurityQuestion\":0}]";
+
 
         String actualOutput = new String(Files.readAllBytes(Paths.get("test-change-username.json")));
         file.delete();
         LoginMenuController.setLoggedInUser(null);
 
-        assertTrue(expectedOutput.equals(actualOutput) || expectedOutput2.equals(actualOutput) || expectedOutput3.equals(actualOutput) || expectedOutput4.equals(actualOutput));
+        assertTrue(actualOutput.equals(expectedOutput) || actualOutput.equals(expectedOutput2) || actualOutput.equals(expectedOutput3) || actualOutput.equals(expectedOutput4));
 
     }
 
@@ -79,7 +79,7 @@ class ProfileMenuControllerTest {
         SignUpMenuController signUpMenuController = new SignUpMenuController();
         ProfileMenuController profileMenuController = new ProfileMenuController();
         signUpMenuController.writeInJsonFile(username, password, email, nickname, slogan, "test-change-nickname.json");
-        profileMenuController.changeNicknameAction("newNickname" , "test-change-nickname.json");
+        profileMenuController.updateUserInJsonFile("newNickname" ,"nickname", "test-change-nickname.json");
 
         // Read file contents and check that they match expected output
         String expectedOutput = "[{\"highScore\":0,\"password\":\"testPassword\",\"stayedLoggedIn\":false,\"nickname\":\"newNickname\",\"email\":\"testUser@example.com\",\"username\":\"testUser\",\"numberOfSecurityQuestion\":0}]";
@@ -187,7 +187,7 @@ class ProfileMenuControllerTest {
         SignUpMenuController signUpMenuController = new SignUpMenuController();
         ProfileMenuController profileMenuController = new ProfileMenuController();
         signUpMenuController.writeInJsonFile(username, password, email, nickname, slogan, "test-change-password.json");
-        profileMenuController.changePasswordAction("newPassword" , "test-change-password.json");
+        profileMenuController.updateUserInJsonFile("newPassword" ,"password", "test-change-password.json");
 
         // Read file contents and check that they match expected output
         String expectedOutput = "[{\"highScore\":0,\"password\":\"newPassword\",\"stayedLoggedIn\":false,\"nickname\":\"Test User\",\"email\":\"testUser@example.com\",\"username\":\"testUser\",\"numberOfSecurityQuestion\":0}]";
@@ -235,7 +235,7 @@ class ProfileMenuControllerTest {
         SignUpMenuController signUpMenuController = new SignUpMenuController();
         ProfileMenuController profileMenuController = new ProfileMenuController();
         signUpMenuController.writeInJsonFile(username, password, email, nickname, slogan, "test-change-email.json");
-        profileMenuController.changeEmailAction("newEmail@gmail.com" , "test-change-email.json");
+        profileMenuController.updateUserInJsonFile("newEmail@gmail.com" , "email" ,"test-change-email.json");
 
         // Read file contents and check that they match expected output
         String expectedOutput = "[{\"highScore\":0,\"password\":\"testPassword\",\"stayedLoggedIn\":false,\"nickname\":\"Test User\",\"email\":\"newEmail@gmail.com\",\"username\":\"testUser\",\"numberOfSecurityQuestion\":0}]";
@@ -269,13 +269,13 @@ class ProfileMenuControllerTest {
         SignUpMenuController signUpMenuController = new SignUpMenuController();
         ProfileMenuController profileMenuController = new ProfileMenuController();
         signUpMenuController.writeInJsonFile(username, password, email, nickname, slogan, "test-change-slogan.json");
-        profileMenuController.changeSloganAction("newSlogan" , "test-change-slogan.json");
+        profileMenuController.updateUserInJsonFile("newSlogan" , "slogan" ,"test-change-slogan.json");
 
         // Read file contents and check that they match expected output
-        String expectedOutput = "[{\"password\":\"testPassword\",\"highScore\":0,\"stayedLoggedIn\":false,\"nickname\":\"Test User\",\"email\":\"newSlogan\",\"username\":\"testUser\",\"numberOfSecurityQuestion\":0}]";
-        String expectedOutput2 = "[{\"highScore\":0,\"password\":\"testPassword\",\"stayedLoggedIn\":false,\"nickname\":\"Test User\",\"email\":\"newSlogan\",\"username\":\"testUser\",\"numberOfSecurityQuestion\":0}]";
-        String expectedOutput3 = "[{\"password\":\"testPassword\",\"highScore\":0,\"stayedLoggedIn\":false,\"nickname\":\"Test User\",\"email\":\"newSlogan\",\"numberOfSecurityQuestion\":0,\"username\":\"testUser\"}]";
-        String expectedOutput4 = "[{\"highScore\":0,\"password\":\"testPassword\",\"stayedLoggedIn\":false,\"nickname\":\"Test User\",\"email\":\"newSlogan\",\"numberOfSecurityQuestion\":0,\"username\":\"testUser\"}]";
+        String expectedOutput = "[{\"password\":\"testPassword\",\"highScore\":0,\"stayedLoggedIn\":false,\"nickname\":\"Test User\",\"slogan\":\"newSlogan\",\"email\":\"testUser@example.com\",\"username\":\"testUser\",\"numberOfSecurityQuestion\":0}]";
+        String expectedOutput2 = "[{\"password\":\"testPassword\",\"highScore\":0,\"stayedLoggedIn\":false,\"nickname\":\"Test User\",\"slogan\":\"newSlogan\",\"email\":\"testUser@example.com\",\"numberOfSecurityQuestion\":0,\"username\":\"testUser\"}]";
+        String expectedOutput3 = "[{\"highScore\":0,\"password\":\"testPassword\",\"stayedLoggedIn\":false,\"nickname\":\"Test User\",\"slogan\":\"newSlogan\",\"email\":\"testUser@example.com\",\"numberOfSecurityQuestion\":0,\"username\":\"testUser\"}]";
+        String expectedOutput4 = "[{\"highScore\":0,\"password\":\"testPassword\",\"stayedLoggedIn\":false,\"nickname\":\"Test User\",\"slogan\":\"newSlogan\",\"email\":\"testUser@example.com\",\"username\":\"testUser\",\"numberOfSecurityQuestion\":0}]";
 
         String actualOutput = new String(Files.readAllBytes(Paths.get("test-change-slogan.json")));
         file.delete();
@@ -285,24 +285,63 @@ class ProfileMenuControllerTest {
 
     }
 
-//    @Test
-//    void checkChangePasswordWhenOldOneIsWrongIsInvalid() throws Exception {
-//        Matcher matcher;
-//        ProfileMenuController profileMenuController = new ProfileMenuController();
-//
-//        Random rand = new Random();
-//        int randomNumber  = rand.nextInt(User.getUsersFromJsonFile().size()) ;
-//
-//        User user = User.getUsersFromJsonFile().get(randomNumber);
-//        LoginMenuController.setLoggedInUser(user);
-//        String command = "profile change -o " + user.getPassword() + "2 -n newPassword@";
-//
-//        matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_PASSWORD);
-//        LoginMenuController.setLoggedInUser(null);
-//
-//        assertEquals("Current password is incorrect!" ,
-//                profileMenuController.changePassword(matcher));
-//    }
+    @Test
+    void checkChangePasswordWhenOldOneIsWrongIsInvalid() throws Exception {
+        Matcher matcher;
+        ProfileMenuController profileMenuController = new ProfileMenuController();
+
+        Random rand = new Random();
+        int randomNumber  = rand.nextInt(User.getUsersFromJsonFile().size()) ;
+
+        User user = User.getUsersFromJsonFile().get(randomNumber);
+        LoginMenuController.setLoggedInUser(user);
+        String command = "profile change -o " + user.getPassword() + "2 -n newPassword@";
+
+        matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_PASSWORD);
+
+        assertEquals("Current password is incorrect!" ,
+                profileMenuController.changePassword(matcher));
+
+        LoginMenuController.setLoggedInUser(null);
+
+    }
+
+
+    @Test
+    void checkShowProfileInfo() throws Exception {
+        ProfileMenuController profileMenuController = new ProfileMenuController();
+
+        Random rand = new Random();
+        int randomNumber  = rand.nextInt(User.getUsersFromJsonFile().size()) ;
+
+        User user = User.getUsersFromJsonFile().get(randomNumber);
+        LoginMenuController.setLoggedInUser(user);
+
+        String info = profileMenuController.showProfileInfo();
+
+        assertTrue(info.contains("Username"));
+
+        LoginMenuController.setLoggedInUser(null);
+
+    }
+
+    @Test
+    void checkShowHighScore() throws Exception {
+        ProfileMenuController profileMenuController = new ProfileMenuController();
+
+        Random rand = new Random();
+        int randomNumber  = rand.nextInt(User.getUsersFromJsonFile().size()) ;
+
+        User user = User.getUsersFromJsonFile().get(randomNumber);
+        LoginMenuController.setLoggedInUser(user);
+
+        String info = profileMenuController.showUserHighScore();
+
+        assertTrue(info.contains("Highscore:"));
+
+        LoginMenuController.setLoggedInUser(null);
+
+    }
 
 
 
