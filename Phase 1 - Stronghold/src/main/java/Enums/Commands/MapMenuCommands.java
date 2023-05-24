@@ -6,10 +6,6 @@ import java.util.regex.Pattern;
 public enum MapMenuCommands {
     SHOW_MAP("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^show map( *-[xy]+ \\S+){2}$"),
     MOVE_IN_MAP("^move map (?<command>.+)$"),
-    UP("up( (?<count>[\\d]*))?"),
-    DOWN("down( (?<count>[\\d]*))?"),
-    LEFT("left( (?<count>[\\d]*))?"),
-    RIGHT("right( (?<count>[\\d]*))?"),
     SHOW_DETAILS("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^show details( *-[xy]+ \\S+){2}$");
 
     private final String regex;

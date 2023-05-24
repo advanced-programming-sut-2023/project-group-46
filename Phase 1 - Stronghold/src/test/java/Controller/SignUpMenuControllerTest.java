@@ -23,8 +23,8 @@ class SignUpMenuControllerTest {
 
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER);
 
-        assertEquals("Invalid command! Please enter your username, password, password confirmation, email and nickname correctly!" ,
-                signUpMenuController.register(matcher));
+        assertEquals("Invalid command! Please enter your username, email and nickname correctly!" ,
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher , false));
     }
 
     @Test
@@ -36,31 +36,31 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER_WITH_RANDOM_PASSWORD);
 
         assertEquals("Invalid command! Please enter your username, email and nickname correctly!" ,
-                signUpMenuController.registerWithRandomPassword(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher , true));
     }
 
     @Test
     void passwordForRegisterShouldExist() throws Exception {
         Matcher matcher;
         SignUpMenuController signUpMenuController = new SignUpMenuController();
-        String command = "user create -u username1 -p  -c Password1@ -e email1@gmail.com -n nickname1";
+        String command = "user create -u username137247 -p  -c Password1@ -e emailfvxmxdf1@gmail.com -n nickname1";
 
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER);
 
-        assertEquals("Invalid command! Please enter your username, password, password confirmation, email and nickname correctly!" ,
-                signUpMenuController.register(matcher));
+        assertEquals("Invalid command! Please enter your password and password confirmation correctly!" ,
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher,false));
     }
 
     @Test
     void passwordConfirmationForRegisterShouldExist() throws Exception {
         Matcher matcher;
         SignUpMenuController signUpMenuController = new SignUpMenuController();
-        String command = "user create -u username1 -p Password1@ -c -e email1@gmail.com -n nickname1";
+        String command = "user create -u username137289894 -p Password1@ -c -e emailfnsjf1@gmail.com -n nickname1";
 
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER);
 
-        assertEquals("Invalid command! Please enter your username, password, password confirmation, email and nickname correctly!" ,
-                signUpMenuController.register(matcher));
+        assertEquals("Invalid command! Please enter your password and password confirmation correctly!" ,
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher , false));
     }
 
     @Test
@@ -71,8 +71,8 @@ class SignUpMenuControllerTest {
 
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER);
 
-        assertEquals("Invalid command! Please enter your username, password, password confirmation, email and nickname correctly!" ,
-                signUpMenuController.register(matcher));
+        assertEquals("Invalid command! Please enter your username, email and nickname correctly!" ,
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher,false));
     }
 
     @Test
@@ -84,7 +84,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER_WITH_RANDOM_PASSWORD);
 
         assertEquals("Invalid command! Please enter your username, email and nickname correctly!" ,
-                signUpMenuController.registerWithRandomPassword(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher , true));
     }
 
     @Test
@@ -95,8 +95,8 @@ class SignUpMenuControllerTest {
 
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER);
 
-        assertEquals("Invalid command! Please enter your username, password, password confirmation, email and nickname correctly!" ,
-                signUpMenuController.register(matcher));
+        assertEquals("Invalid command! Please enter your username, email and nickname correctly!" ,
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher,false));
     }
 
     @Test
@@ -108,7 +108,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER_WITH_RANDOM_PASSWORD);
 
         assertEquals("Invalid command! Please enter your username, email and nickname correctly!" ,
-                signUpMenuController.registerWithRandomPassword(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher,true));
     }
 
 
@@ -248,7 +248,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER);
 
         assertEquals("Invalid username format! Username should contain only English letters, digits and underline character." ,
-                signUpMenuController.register(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher,false));
     }
 
     @Test
@@ -260,7 +260,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER_WITH_RANDOM_PASSWORD);
 
         assertEquals("Invalid username format! Username should contain only English letters, digits and underline character." ,
-                signUpMenuController.registerWithRandomPassword(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher , true));
     }
 
     @Test
@@ -272,7 +272,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER);
 
         assertEquals("Invalid email format!" ,
-                signUpMenuController.register(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher , false));
     }
 
     @Test
@@ -284,7 +284,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER_WITH_RANDOM_PASSWORD);
 
         assertEquals("Invalid email format!" ,
-                signUpMenuController.registerWithRandomPassword(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher , true));
     }
 
     @Test
@@ -296,7 +296,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER);
 
         assertEquals("Invalid email format!" ,
-                signUpMenuController.register(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher,false));
     }
 
     @Test
@@ -308,7 +308,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER_WITH_RANDOM_PASSWORD);
 
         assertEquals("Invalid email format!" ,
-                signUpMenuController.registerWithRandomPassword(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher , true));
     }
 
     @Test
@@ -320,7 +320,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER);
 
         assertEquals("Invalid email format!" ,
-                signUpMenuController.register(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher , false));
     }
 
     @Test
@@ -332,7 +332,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER_WITH_RANDOM_PASSWORD);
 
         assertEquals("Invalid email format!" ,
-                signUpMenuController.registerWithRandomPassword(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher,true));
     }
 
     @Test
@@ -344,7 +344,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER);
 
         assertEquals("The nickname you entered has only 1 double quote!" ,
-                signUpMenuController.register(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher,false));
     }
 
     @Test
@@ -356,7 +356,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER_WITH_RANDOM_PASSWORD);
 
         assertEquals("The nickname you entered has only 1 double quote!" ,
-                signUpMenuController.registerWithRandomPassword(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher,true));
     }
 
 
@@ -369,7 +369,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER);
 
         assertEquals("The nickname you entered has some whitespaces and is not between double quotes" ,
-                signUpMenuController.register(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher , false));
     }
 
     @Test
@@ -381,7 +381,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER_WITH_RANDOM_PASSWORD);
 
         assertEquals("The nickname you entered has some whitespaces and is not between double quotes" ,
-                signUpMenuController.registerWithRandomPassword(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher , true));
     }
 
 
@@ -414,7 +414,7 @@ class SignUpMenuControllerTest {
         Matcher matcher = SignupMenuCommands.getMatcher(input , SignupMenuCommands.CREATE_A_NEW_USER);
 
         SignUpMenuController signUpMenuController = new SignUpMenuController();
-        assertTrue(signUpMenuController.register(matcher).startsWith("This username is already taken! You can use this username instead: "));
+        assertTrue(signUpMenuController.registerOrRegisterWithRandomPassword(matcher , false).startsWith("This username is already taken! You can use this username instead: "));
     }
 
     @Test
@@ -455,8 +455,8 @@ class SignUpMenuControllerTest {
 
         String generatedPassword = SignUpMenuController.generateRandomPassword();
 
-        if(generatedPassword.length() < 6 || !generatedPassword.matches(".*[a-z].*") || !generatedPassword.matches(".*[A-Z].*") || !generatedPassword.matches(".*[0-9].*") || !generatedPassword.matches(".*[^a-zA-Z0-9|_].*"))
-            fail();
+        if(generatedPassword.length() < 6 || !generatedPassword.matches(".*[a-z].*") || !generatedPassword.matches(".*[A-Z].*") || !generatedPassword.matches(".*[0-9].*") || !generatedPassword.matches(".*[^a-zA-Z0-9].*"))
+            assertTrue(false);
 
         assertTrue(true);
     }
@@ -482,7 +482,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER);
 
         assertEquals("Invalid command! Slogan flag and slogan come with together!" ,
-                signUpMenuController.register(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher , false));
     }
 
     @Test
@@ -494,7 +494,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER_WITH_RANDOM_PASSWORD);
 
         assertEquals("Invalid command! Slogan flag and slogan come with together!" ,
-                signUpMenuController.registerWithRandomPassword(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher , true));
     }
 
     @Test
@@ -506,7 +506,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER);
 
         assertEquals("The slogan you entered has only 1 double quote!" ,
-                signUpMenuController.register(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher , false));
     }
 
     @Test
@@ -518,7 +518,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER_WITH_RANDOM_PASSWORD);
 
         assertEquals("The slogan you entered has only 1 double quote!" ,
-                signUpMenuController.registerWithRandomPassword(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher , true));
     }
 
     @Test
@@ -530,7 +530,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER);
 
         assertEquals("The slogan you entered has some whitespaces and is not between double quotes" ,
-                signUpMenuController.register(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher , false));
     }
 
     @Test
@@ -542,7 +542,7 @@ class SignUpMenuControllerTest {
         matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER_WITH_RANDOM_PASSWORD);
 
         assertEquals("The slogan you entered has some whitespaces and is not between double quotes" ,
-                signUpMenuController.registerWithRandomPassword(matcher));
+                signUpMenuController.registerOrRegisterWithRandomPassword(matcher , true));
     }
 
     @Test
@@ -616,7 +616,7 @@ class SignUpMenuControllerTest {
         Matcher matcher = SignupMenuCommands.getMatcher(input , SignupMenuCommands.CREATE_A_NEW_USER);
 
         SignUpMenuController signUpMenuController = new SignUpMenuController();
-        assertEquals("This email is already taken!" , signUpMenuController.register(matcher));
+        assertEquals("This email is already taken!" , signUpMenuController.registerOrRegisterWithRandomPassword(matcher , false));
     }
 
     @Test
@@ -636,7 +636,7 @@ class SignUpMenuControllerTest {
         controller.writeInJsonFile(username, password, email, nickname, slogan, "test-users.json");
 
         // Read file contents and check that they match expected output
-        String expectedOutput = "[{\"answer to security question\":\"\",\"password\":\"testPassword\",\"nickname\":\"Test User\",\"slogan\":\"Test slogan\",\"number of security question\":0,\"email\":\"testUser@example.com\",\"username\":\"testUser\",\"is stayed logged in\":false}]";
+        String expectedOutput = "[{\"answer to security question\":\"\",\"score\":0,\"password\":\"testPassword\",\"nickname\":\"Test User\",\"slogan\":\"Test slogan\",\"number of security question\":0,\"isStayedLoggedIn\":false,\"email\":\"testUser@example.com\",\"username\":\"testUser\"}]";
         String actualOutput = new String(Files.readAllBytes(Paths.get("test-users.json")));
         file.delete();
         assertEquals(expectedOutput, actualOutput);

@@ -17,7 +17,7 @@ public class Building {
         this.hp = buildingType.getHp();
         this.freeCapacity = buildingType.getCapacity();
         this.buildingType = buildingType;
-        this.rate = buildingType.getRate() + (int) (-0.5 * owner.getFearRate());
+        this.rate = buildingType.getRate() - owner.getFearRate();
         this.isPassableForEnemies = false;
         if (buildingType.getName().equals("Church") || buildingType.getName().equals("Cathedral")) {
             owner.addReligionPopularity(2);

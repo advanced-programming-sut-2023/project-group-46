@@ -8,16 +8,15 @@ import java.util.regex.Matcher;
 public class ProfileMenu {
     private final ProfileMenuController profileMenuController;
 
-    public ProfileMenu(ProfileMenuController profileMenuController) {
-        this.profileMenuController = profileMenuController;
-    }
+    public ProfileMenu(ProfileMenuController profileMenuController) {this.profileMenuController = profileMenuController;}
 
     public void run() throws Exception {
 
         Matcher matcher;
         String command;
 
-        while (true) {
+        while (true)
+        {
             command = Menu.getScanner().nextLine();
 
             if ((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_USERNAME)) != null)
@@ -35,27 +34,25 @@ public class ProfileMenu {
             else if ((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_SLOGAN)) != null)
                 System.out.println(profileMenuController.changeSlogan(matcher));
 
-            else if (command.matches("^profile display slogan$"))
+            else if(command.matches("^profile display slogan$"))
                 System.out.println(profileMenuController.showUserSlogan());
 
-            else if (command.matches("^profile display rank$"))
+            else if(command.matches("^profile display rank$"))
                 System.out.println(profileMenuController.showUserRank());
 
-            else if (command.matches("^profile remove slogan$"))
+            else if(command.matches("^profile remove slogan$"))
                 System.out.println(profileMenuController.removeSlogan());
 
-            else if (command.matches("^profile display highscore$"))
+            else if(command.matches("^profile display highscore$"))
                 System.out.println(profileMenuController.showUserHighScore());
 
-            else if (command.matches("^profile display$"))
+            else if(command.matches("^profile display$"))
                 System.out.println(profileMenuController.showProfileInfo());
 
-            else if (command.matches("^back$"))
+            else if(command.matches("^back$"))
                 return;
 
-            else if (command.matches("show current menu")) {
-                System.out.println("ProfileMenu");
-            } else
+            else
                 System.out.println("invalid command!");
 
         }

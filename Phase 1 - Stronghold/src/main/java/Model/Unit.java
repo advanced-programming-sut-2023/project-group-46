@@ -6,22 +6,23 @@ import Enums.UnitType;
 import java.util.ArrayList;
 
 public class Unit {
-    private ArrayList<MoveController.Pair<Integer, Integer>> path;
-    private int currentCell;
     private UnitType unitType;
     private Empire owner;
     private int hp;
     private String mode;
     private int attackPower;
+    private ArrayList<MoveController.Pair<Integer, Integer>> path;
+    private int currentCell;
     private boolean isPatrol;
 
     public Unit(UnitType unitType, Empire owner) {
+        path = new ArrayList<>();
         this.owner = owner;
         this.hp = unitType.getDefencePower();
         this.unitType = unitType;
         this.mode = "standing";
         this.attackPower = (int) (unitType.getAttackPower() * (1 + (owner.getFearRate() * 0.1)));
-        isPatrol= false;
+        isPatrol = false;
         currentCell = -1;
     }
 
@@ -30,6 +31,30 @@ public class Unit {
     }
 
     public Unit() {
+    }
+
+    public ArrayList<MoveController.Pair<Integer, Integer>> getPath() {
+        return path;
+    }
+
+    public void setPath(ArrayList<MoveController.Pair<Integer, Integer>> path) {
+        this.path = path;
+    }
+
+    public int getCurrentCell() {
+        return currentCell;
+    }
+
+    public void setCurrentCell(int currentCell) {
+        this.currentCell = currentCell;
+    }
+
+    public boolean isPatrol() {
+        return isPatrol;
+    }
+
+    public void setPatrol(boolean patrol) {
+        isPatrol = patrol;
     }
 
     public int getHp() {
@@ -63,30 +88,4 @@ public class Unit {
     public void setAttackPower(int attackPower) {
         this.attackPower = attackPower;
     }
-
-    public ArrayList<MoveController.Pair<Integer, Integer>> getPath() {
-        return path;
-    }
-
-    public void setPath(ArrayList<MoveController.Pair<Integer, Integer>> path) {
-        this.path = path;
-    }
-
-    public int getCurrentCell() {
-        return currentCell;
-    }
-
-    public void setCurrentCell(int currentCell) {
-        this.currentCell = currentCell;
-    }
-
-    public boolean isPatrol() {
-        return isPatrol;
-    }
-
-    public void setPatrol(boolean patrol) {
-        isPatrol = patrol;
-    }
-
-
 }

@@ -7,6 +7,9 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,7 +24,7 @@ public class User {
     private int score;
     private int numberOfSecurityQuestion;
     private String answerToSecurityQuestion;
-    private boolean isStayedLoggedIn;
+    private boolean stayedLoggedIn;
 
     public User(String username, String password, String nickname, String email) {
         this.username = username;
@@ -31,8 +34,7 @@ public class User {
         this.slogan = null;
         this.numberOfSecurityQuestion = 0;
         this.answerToSecurityQuestion = null;
-        this.isStayedLoggedIn = false;
-        this.score = 0;
+        this.stayedLoggedIn = false;
     }
 
     public static User getUserByUsername(String username) throws Exception {
@@ -41,6 +43,14 @@ public class User {
                 return user;
         }
         return null;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getScore() {
+        return score;
     }
 
     public static List<User> getUsersFromJsonFile() throws Exception {
@@ -108,10 +118,6 @@ public class User {
         this.slogan = slogan;
     }
 
-    public int getHighScore() {
-        return score;
-    }
-
     public void addScore(int score) {
         this.score += score;
     }
@@ -133,16 +139,34 @@ public class User {
     }
 
     public boolean isStayedLoggedIn() {
-        return isStayedLoggedIn;
+        return stayedLoggedIn;
     }
 
     public void setStayedLoggedIn(boolean stayedLoggedIn) {
-        isStayedLoggedIn = stayedLoggedIn;
+        this.stayedLoggedIn = stayedLoggedIn;
     }
 
+    /**
+     * Check if the given password matches the user's stored password.
+     *
+     * @param password The password to check
+     * @return true if the password is correct, false otherwise
+     */
     public boolean isPasswordCorrect(String password) {
-        return this.getPassword().equals(password);
+        String encryptedPassword = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] messageDigest = md.digest(password.getBytes());
+            BigInteger no = new BigInteger(1, messageDigest);
+            encryptedPassword = no.toString(16);
+            while (encryptedPassword.length() < 32) {
+                encryptedPassword = "0" + encryptedPassword;
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return encryptedPassword.equals(this.password);
     }
+
 
 }
-
