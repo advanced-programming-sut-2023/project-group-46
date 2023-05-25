@@ -4,7 +4,119 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="162fccc3-aba1-42dd-ae54-f35620b36eab" name="Changes" comment="users database is almost complete" />
+    <list default="true" id="162fccc3-aba1-42dd-ae54-f35620b36eab" name="Changes" comment="users database is almost complete">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Ap-Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Ap-Project.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/project-group-46.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/project-group-46.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/libraries/Maven__com_google_code_gson_gson_2_9_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/libraries/Maven__com_google_code_gson_gson_2_9_0.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/libraries/Maven__org_danilopianini_gson_extras_0_6_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/libraries/Maven__org_danilopianini_gson_extras_0_6_0.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/libraries/Maven__org_json_json_20210307.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/libraries/Maven__org_json_json_20210307.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/uiDesigner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/GsonWorkshop.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/EditMapMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/EditMapMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/EmpireMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/EmpireMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/GameMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/GameMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/LoginMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/LoginMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/MapMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/MapMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/ProfileMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/ProfileMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/RunnerController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/ShopMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/ShopMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/SignUpMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/SignUpMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/TradeMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Controller/TradeMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/BuildingType.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/BuildingType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/EditMapMenuCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/EditMapMenuCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/EmpireMenuCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/EmpireMenuCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/GameMenuCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/GameMenuCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/LoginMenuCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/LoginMenuCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/MapMenuCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/MapMenuCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/ProfileMenuCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/ProfileMenuCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/ShopMenuCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/ShopMenuCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/SignupMenuCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/SignupMenuCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/TradeMenuCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/Commands/TradeMenuCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/EmpireColors.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/EmpireColors.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/EnvironmentType.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/EnvironmentType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/MachineType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/PreBuiltSecurityQuestions.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/PreBuiltSecurityQuestions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/PreBuiltSlogans.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/PreBuiltSlogans.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/UnitType.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Enums/UnitType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Building.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Building.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Cell.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Cell.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Empire.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Empire.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/EnvironmentType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Goods/Armoury.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Goods/Armoury.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Goods/FoodStock.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Goods/FoodStock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Goods/Resources.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Goods/Resources.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Machine.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Map.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Trade.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Trade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Unit.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/Unit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/Model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/Captcha.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/Captcha.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/EditMapMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/EditMapMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/EmpireMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/EmpireMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/GameMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/GameMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/LoginMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/LoginMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/MainMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/MapMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/MapMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/Menu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/ProfileMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/ProfileMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/ShopMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/ShopMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/SignupMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/SignupMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/TradeMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/java/View/TradeMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/main/users.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/test/java/Controller/LoginMenuControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/test/java/Controller/LoginMenuControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/test/java/Controller/ProfileMenuControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/test/java/Controller/ProfileMenuControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/src/test/java/Controller/SignUpMenuControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/src/test/java/Controller/SignUpMenuControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Controller/EditMapMenuController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Controller/EditMapMenuController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Controller/EmpireMenuController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Controller/EmpireMenuController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Controller/GameMenuController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Controller/GameMenuController$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Controller/GameMenuController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Controller/GameMenuController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Controller/LoginMenuController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Controller/LoginMenuController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Controller/MapMenuController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Controller/MapMenuController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Controller/ProfileMenuController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Controller/ProfileMenuController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Controller/SignUpMenuController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Controller/SignUpMenuController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/BuildingType.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/BuildingType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/Commands/GameMenuCommands.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/Commands/GameMenuCommands.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/Commands/LoginMenuCommands.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/Commands/LoginMenuCommands.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/Commands/MapMenuCommands.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/Commands/MapMenuCommands.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/Commands/ProfileMenuCommands.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/Commands/ProfileMenuCommands.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/Commands/SignupMenuCommands.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/Commands/SignupMenuCommands.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/EnvironmentType.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/EnvironmentType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/PreBuiltSecurityQuestions.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/PreBuiltSecurityQuestions.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/PreBuiltSlogans.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/PreBuiltSlogans.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/UnitType.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Enums/UnitType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Model/Building.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Model/Building.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Model/Empire.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Model/Empire.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Model/Goods/FoodStock.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Model/Goods/FoodStock.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Model/Unit.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Model/Unit.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/Model/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/EditMapMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/EditMapMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/EmpireMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/EmpireMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/GameMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/GameMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/LoginMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/LoginMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/MainMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/MainMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/MapMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/MapMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/ProfileMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/ProfileMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/ShopMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/ShopMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/SignupMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/SignupMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/TradeMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/target/classes/View/TradeMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/user111.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/user1111.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phase 1 - Stronghold/users.json" beforeDir="false" afterPath="$PROJECT_DIR$/Phase 1 - Stronghold/users.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,6 +156,10 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "C:/Users/kiara/Desktop/University/project-group-46-1.0.0 (1)/project-group-46-1.0.0/Phase 1 - Stronghold",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "MavenSettings"
   }
 }]]></component>

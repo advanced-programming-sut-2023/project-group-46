@@ -4,6 +4,7 @@ import Controller.LoginMenuController;
 import Controller.ProfileMenuController;
 import Controller.SignUpMenuController;
 import Enums.Commands.LoginMenuCommands;
+import Model.Captcha;
 import Model.User;
 
 import java.util.Objects;
@@ -30,8 +31,9 @@ public class LoginMenu {
 
     }
 
-    public LoginMenu(LoginMenuController empireMenuController) {
-        this.loginMenuController = empireMenuController;
+    public LoginMenu(LoginMenuController loginMenuController) {
+        this.loginMenuController = loginMenuController;
+        this.mainMenu = new MainMenu();
     }
 
     public void run() throws Exception {
@@ -60,9 +62,6 @@ public class LoginMenu {
                 if(!Objects.equals(result, "Information were correct!"))
                     System.out.println(result);
 
-                //TODO
-                //change this part when main menu is completed
-                ProfileMenu profileMenu = new ProfileMenu(new ProfileMenuController());
                 if(Objects.equals(result, "Information were correct!"))
                 {
                     while (true)
@@ -72,7 +71,7 @@ public class LoginMenu {
                             break;
                         }
                     }
-                    profileMenu.run();
+                    mainMenu.run();
                     delayTime = 0;
                 }
 

@@ -5,8 +5,18 @@ public class FoodStock {
     private double apple;
     private double cheese;
     private double bread;
-
     private double freeCapacityFoodStock;
+
+    public FoodStock(double meat, double apple, double cheese, double bread, double freeCapacityFoodStock) {
+        this.meat = meat;
+        this.apple = apple;
+        this.cheese = cheese;
+        this.bread = bread;
+        this.freeCapacityFoodStock = freeCapacityFoodStock;
+    }
+
+    public FoodStock() {
+    }
 
     public double getMeat() {
         return meat;

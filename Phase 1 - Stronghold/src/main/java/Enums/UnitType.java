@@ -1,44 +1,61 @@
 package Enums;
 
 public enum UnitType {
-    ARCHER("Archer",  "bow", null, 4, 20, "high", 12, 10),
-    CROSSBOWMEN("Crossbowman",  "crossbow", "leatherArmor", 12, 60, "low", 20, 9),
-    SPEARMAN("Spearman",  "spear", null, 3, 15, "medium", 8,  0),
-    PIKE_MAN("Pikeman",  "pike", "leatherArmor", 30, 150, "low", 5,  0),
-    MACE_MAN("Maceman",  "mace", "leatherArmor", 30, 100, "medium", 20, 0),
-    SWORDSMAN("Swordsman",  "swords", "metalArmor", 60, 300, "very low", 40, 0),
-    KNIGHT("Knight",  "swords", "metalArmor", 60, 300, "very high", 40, 0),
-    TUNNELER("Tunneler",  null, null, 10, 10, "high", 30, 0),
-    LADDER_MAN("Ladderman",  null, null, 0, 10, "high", 4, 0),
-    ENGINEER("Engineer",  null, null, 0, 10, "medium", 30, 0),
-    BLACK_MONK("BlackMonk",  null, null, 30, 150, "low", 10, 0),
-    ARCHER_BOW("ArcherBow",  null, null, 4, 20, "high", 75, 10),
-    SLAVES("Slaves",  null, null, 10, 10, "high", 5, 0),
-    SLINGER("Slinger",  null, null, 3, 10, "high", 12, 5),
-    ASSASSIN("Assassin",  null, null, 20, 20, "medium", 60, 0),
-    HORSE_ARCHER("HorseArcher",  null, null, 20, 30, "very high", 80, 13),
-    ARABIAN_SWORDSMEN("ArabianSwordsmen",  null, null, 40, 100, "very high", 80, 0),
-    FIRE_THROWERS("FireThrowers",  null, null, 70, 20, "very high", 100, 3);
+    ARCHER("Archer", 4, 20, 4, 12, 10, "Archer"),
+    CROSSBOWMEN("Crossbowman", 12, 60, 2, 20, 9, "Archer"),
+    SPEARMAN("Spearman", 3, 15, 3, 8, 0, "Sword"),
+    PIKE_MAN("Pikeman", 30, 150, 2, 5, 0, "Sword"),
+    MACE_MAN("Maceman", 30, 100, 3, 20, 0, "Sword"),
+    SWORDSMAN("Swordsman", 60, 300, 1, 40, 0, "Sword"),
+    KNIGHT("Knight", 60, 300, 5, 40, 0, "Sword"),
+    TUNNELER("Tunneler", 10, 10, 4, 30, 0, "Engineer"),
+    LADDER_MAN("Ladderman", 0, 10, 4, 4, 0, "Engineer"),
+    ENGINEER("Engineer", 0, 10, 3, 30, 0, "Engineer"),
+    ENGINEER_WITH_OIL("EngineerWithOil",200,10, 3,30,0,"Engineer"),
+    BLACK_MONK("BlackMonk", 30, 150, 2, 10, 0, "Sword"),
+    ARCHER_BOW("ArcherBow", 4, 20, 4, 75, 10, "Archer"),
+    SLAVES("Slaves", 10, 10, 4, 5, 0, "Sword"),
+    SLINGER("Slinger", 3, 10, 4, 12, 5, "Archer"),
+    ASSASSIN("Assassin", 20, 20, 3, 60, 0, "Sword"),
+    HORSE_ARCHER("HorseArcher", 20, 30, 5, 80, 13, "Archer"),
+    ARABIAN_SWORDSMAN("ArabianSwordsman", 40, 100, 5, 80, 0, "Sword"),
+    FIRE_THROWER("FireThrower", 70, 20, 5, 100, 3, "Archer"),
+    PORTABLE_SHIELD("PortableShield", 0, 100, 4, 5, 0, "Machine"),
+    BATTERING_RAM("BatteringRam", 500, 2000, 2, 150, 0, "Machine"),
+    TREBUCHET("Trebuchet", 2000, 400, 0, 150, 40, "Machine"),
+    CATAPULT("Catapult", 650, 150, 3, 150, 30, "Machine"),
+    FIRE_BALLISTA("FireBallista", 100, 150, 3, 150, 30, "Archer"),
+    SIEGE_TOWER("SiegeTower", 0, 3300, 3, 150, 0, "Machine");
 
-    UnitType(String name, String weapon, String armor, int attackPower, int defencePower, String speed, int cost, int attackRange) {
-        this.weapon = weapon;
-        this.armor = armor;
+    private final int cost;
+    private final String name;
+    private final int speed;
+    private final int attackPower;
+    private final int defencePower;
+    private final int attackRange;
+    private final String type;
+
+    UnitType(String name, int attackPower, int defencePower, int speed, int cost, int attackRange, String type) {
         this.name = name;
         this.speed = speed;
         this.attackPower = attackPower;
         this.defencePower = defencePower;
         this.cost = cost;
         this.attackRange = attackRange;
+        this.type = type;
     }
 
-    private int cost;
-    private String weapon;
-    private String armor;
-    private String name;
-    private String speed;
-    private int attackPower;
-    private int defencePower;
-    private int attackRange;
+    public static UnitType getUnitByName(String name) {
+        for (UnitType unit : UnitType.values()) {
+            if (name.equals(unit.name))
+                return unit;
+        }
+        return null;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
 
     public int getAttackRange() {
         return attackRange;
@@ -48,20 +65,8 @@ public enum UnitType {
         return cost;
     }
 
-    public String getWeapon() {
-        return weapon;
-    }
-
-    public String getArmor() {
-        return armor;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public String getSpeed() {
-        return speed;
     }
 
     public int getAttackPower() {
@@ -72,11 +77,7 @@ public enum UnitType {
         return defencePower;
     }
 
-    public static UnitType getUnitByName(String name) {
-        for (UnitType unit : UnitType.values()) {
-            if (name.equalsIgnoreCase(unit.name))
-                return unit;
-        }
-        return null;
+    public String getType() {
+        return type;
     }
 }

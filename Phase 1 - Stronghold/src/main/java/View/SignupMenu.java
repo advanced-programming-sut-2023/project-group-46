@@ -3,6 +3,7 @@ package View;
 import Controller.SignUpMenuController;
 import Enums.Commands.SignupMenuCommands;
 import Enums.PreBuiltSecurityQuestions;
+import Model.Captcha;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -25,7 +26,7 @@ public class SignupMenu {
 
             if ((matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER)) != null)
             {
-                String result = signUpMenuController.register(matcher);
+                String result = signUpMenuController.registerOrRegisterWithRandomPassword(matcher , false);
                 System.out.println(result);
 
                 if(result.charAt(0) == 'P' && result.charAt(1) == 'i')
@@ -60,7 +61,7 @@ public class SignupMenu {
 
             else if ((matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER_WITH_RANDOM_PASSWORD)) != null)
             {
-                String result = signUpMenuController.registerWithRandomPassword(matcher);
+                String result = signUpMenuController.registerOrRegisterWithRandomPassword(matcher , true);
                 System.out.println(result);
 
                 if(result.charAt(0) == 'P')

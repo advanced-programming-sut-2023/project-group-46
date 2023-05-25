@@ -17,7 +17,7 @@ public class EditMapMenu {
         Matcher matcher;
         Scanner scanner = new Scanner(System.in);
         String command = scanner.nextLine();
-        while (!command.equals("back")) {
+        while (true) {
             if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.SET_TEXTURE)) != null) {
                 System.out.println(editMapMenuController.setTexture(matcher));
             } else if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.SET_TEXTURE_RECTANGLE)) != null) {
@@ -28,6 +28,17 @@ public class EditMapMenu {
                 System.out.println(editMapMenuController.dropRock(matcher));
             } else if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.DROP_TREE)) != null) {
                 System.out.println(editMapMenuController.dropTree(matcher));
+            } else if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.DROP_BUILDING)) != null) {
+                System.out.println(editMapMenuController.dropBuilding(matcher));
+            } else if ((matcher = EditMapMenuCommands.getMatcher(command, EditMapMenuCommands.DROP_UNIT)) != null) {
+                System.out.println(editMapMenuController.dropUnit(matcher));
+            } else if (command.equals("back")) {
+                String checkBack = editMapMenuController.checkCountEmpires();
+                if (checkBack.equals("Need more keepBuilding"))
+                    System.out.println(checkBack);
+                else break;
+            } else if (command.matches("show current menu")) {
+                System.out.println("EditMapMenu");
             } else System.out.println("Invalid command!");
             command = scanner.nextLine();
         }

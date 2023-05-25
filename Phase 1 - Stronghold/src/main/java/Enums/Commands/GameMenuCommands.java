@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum GameMenuCommands {
-    DROP_BUILDING_REGEX("(?=.* -x (?<x>\\S+))(?=.* -y (?<y>\\S+))(?=.* -t (?<type>.+))^dropbuilding( *-[xyt]+ \\S+){3}$"),
+    DROP_BUILDING_REGEX("(?=.* -x (?<x>\\S+))(?=.* -y (?<y>\\S+))(?=.* -t (?<type>.+))^drop building( *-[xyt]+ \\S+){3}$"),
     SELECT_BUILDING_REGEX("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^select building( *-[xy] \\d+){2}$"),
     SELECT_UNIT_REGEX("(?=.* -x (?<x>\\S+))(?=.* -y (?<y>\\S+))(?=.* -t (?<type>\\S+))*^select unit( *-[xyt] \\S+){2,3}$"),
     MOVE_UNIT_REGEX("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^move unit to( *-[xy] \\d+){2}$"),
@@ -15,12 +15,13 @@ public enum GameMenuCommands {
     DIG_TUNNEL_REGEX("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^dig tunnel( *-[xy] \\d+){2}$"),
     BUILD_REGEX("^build -q (?<equipment>.+)$"),
     SET_UNIT_MODE_REGEX("^set -s (?<mode>\\S+)$"),
-    CREATE_UNIT_REGEX("(?=.* -t (?<type>\\S+))(?=.* -c (?<count>\\S+))^createunit( *-[tc] \\S+){2}$"),
+    CREATE_UNIT_REGEX("(?=.* -t (?<type>\\S+))(?=.* -c (?<count>\\S+))^create unit( *-[tc] \\S+){2}$"),
     CHANGE_MODE_ARMOUR_BUILDING_REGEX("^change mode -m (?<mode>\\S+)$"),
-    DROP_UNIT_REGEX("(?=.* -x (?<x>\\S+))(?=.* -y (?<y>\\S+))(?=.* -t (?<type>\\S+))(?=.* -c (?<count>\\S+))^dropunit( *-[xytc]+ \\S+){4}$"),
+    DROP_UNIT_REGEX("(?=.* -x (?<x>\\S+))(?=.* -y (?<y>\\S+))(?=.* -t (?<type>\\S+))(?=.* -c (?<count>\\S+))^drop unit( *-[xytc]+ \\S+){4}$"),
     ATTACK_MACHINES_REGEX("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^attack machines( *-[xy] \\d+){2}$"),
-    SET_OIL_FOR_ENGINEER("set oil for engineers -c (?<count>\\d+)");//count is number of engineers that you want to do this task
-
+    SET_OIL_FOR_ENGINEER("set oil for engineers -c (?<count>\\d+)"),//count is number of engineers that you want to do this task
+    DIG_MOAT("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^dig moat( *-[xy] \\d+){2}$"),
+    NO_MOAT("(?=.* -x (?<x>\\d+))(?=.* -y (?<y>\\d+))^no moat( *-[xy] \\d+){2}$");
     private final String regex;
 
     GameMenuCommands(String regex) {

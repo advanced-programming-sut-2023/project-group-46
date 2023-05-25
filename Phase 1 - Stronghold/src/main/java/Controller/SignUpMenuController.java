@@ -4,10 +4,13 @@ import Enums.PreBuiltSecurityQuestions;
 import Enums.PreBuiltSlogans;
 import Model.User;
 import View.SignupMenu;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.SecureRandom;
@@ -16,6 +19,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.regex.Matcher;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 public class SignUpMenuController {
@@ -24,90 +29,7 @@ public class SignUpMenuController {
         signupMenu = new SignupMenu(this);
     }
 
-    public String register(Matcher matcher) throws Exception {
-        String username = matcher.group("username");
-        String password = matcher.group("password");
-        String passwordConfirmation = matcher.group("passwordConfirmation");
-        String email = matcher.group("email");
-        String nickName = matcher.group("nickname");
-
-        if(username.matches("^ *$")
-                || password.matches("^ *$") || passwordConfirmation.matches("^ *$")
-                || email.matches("^ *$") || nickName.matches("^ *$"))
-            return "Invalid command! Please enter your username, password, password confirmation, email and nickname correctly!";
-
-        username = cleanUsername(username);
-        password = cleanPassword(password);
-        passwordConfirmation = cleanPasswordConfirmation(passwordConfirmation);
-        email = cleanEmail(email);
-        nickName = cleanNickname(nickName);
-
-        switch (checkStringForDoubleQuote(nickName))
-        {
-            case 1:
-                return "The nickname you entered has only 1 double quote!";
-            case 2:
-                nickName = nickName.substring(1 , nickName.length() - 1);
-                break;
-            case 3:
-                return "The nickname you entered has some whitespaces and is not between double quotes";
-            case 4:
-                break;
-        }
-
-        if(username.matches(".*[^a-zA-Z0-9|_].*"))
-            return "Invalid username format! Username should contain only English letters, digits and underline character.";
-
-        if(User.getUserByUsername(username) != null)
-            return suggestUsername(username);
-
-        if(password.length() < 6 || !password.matches(".*[a-z].*") || !password.matches(".*[A-Z].*") || !password.matches(".*[0-9].*") || !password.matches(".*[^a-zA-Z0-9|_].*") || !password.equals(passwordConfirmation))
-            return handlePasswordErrors(password , passwordConfirmation);
-
-        email = email.toLowerCase();
-
-        for(User user : User.getUsersFromJsonFile())
-        {
-            if(Objects.equals(user.getEmail(), email))
-                return "This email is already taken!";
-        }
-
-        if(!email.matches("^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$"))
-            return "Invalid email format!";
-
-        String slogan = matcher.group("slogan");
-
-        if(slogan != null)
-        {
-            if(slogan.matches("^-s\\s*$"))
-                return "Invalid command! Slogan flag and slogan come with together!";
-
-            slogan = slogan.substring(3);
-            while (slogan.matches("^\\s.*$"))
-            {
-                slogan = slogan.substring(1);
-            }
-
-            switch (checkStringForDoubleQuote(slogan))
-            {
-                case 1:
-                    return "The slogan you entered has only 1 double quote!";
-                case 2:
-                    slogan = slogan.substring(1 , slogan.length() - 1);
-                    break;
-                case 3:
-                    return "The slogan you entered has some whitespaces and is not between double quotes";
-                default:
-                    break;
-            }
-        }
-
-        writeInJsonFile(username , password , email , nickName , slogan , "users.json");
-
-        return showSecurityQuestion();
-    }
-
-    public String registerWithRandomPassword(Matcher matcher) throws Exception {
+    public String registerOrRegisterWithRandomPassword(Matcher matcher, boolean randomPassword) throws Exception {
         String username = matcher.group("username");
         String email = matcher.group("email");
         String nickName = matcher.group("nickname");
@@ -176,12 +98,79 @@ public class SignUpMenuController {
             }
         }
 
-        String password = generateRandomPassword();
+        String password;
+        if(randomPassword) {
+            password = generateRandomPassword();
 
-        writeInJsonFile(username , password , email , nickName , slogan , "users.json");
+            String encryptedPassword = null;
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA-256");
+                byte[] messageDigest = md.digest(password.getBytes());
+                BigInteger no = new BigInteger(1, messageDigest);
+                encryptedPassword = no.toString(16);
+                while (encryptedPassword.length() < 32) {
+                    encryptedPassword = "0" + encryptedPassword;
+                }
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
 
-        return "Please re-enter you password:  \"   " + password + "   \"";
+            writeInJsonFile(username , encryptedPassword , email , nickName , slogan , "users.json");
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
+            try {
+                objectMapper.writeValue(new File( username + ".json"), new Model.Map(100));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            return "Please re-enter you password:  \"   " + password + "   \"";
+
+        } else {
+            String userPassword = matcher.group("password");
+            String passwordConfirmation = matcher.group("passwordConfirmation");
+
+            if(userPassword.matches("^ *$") || passwordConfirmation.matches("^ *$"))
+                return "Invalid command! Please enter your password and password confirmation correctly!";
+
+            userPassword = cleanPassword(userPassword);
+            passwordConfirmation = cleanPasswordConfirmation(passwordConfirmation);
+
+            if(userPassword.length() < 6 || !userPassword.matches(".*[a-z].*") || !userPassword.matches(".*[A-Z].*") || !userPassword.matches(".*[0-9].*") || !userPassword.matches(".*[^a-zA-Z0-9|_].*") || !userPassword.equals(passwordConfirmation))
+                return handlePasswordErrors(userPassword , passwordConfirmation);
+
+            password = userPassword;
+
+
+            String encryptedPassword = null;
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA-256");
+                byte[] messageDigest = md.digest(password.getBytes());
+                BigInteger no = new BigInteger(1, messageDigest);
+                encryptedPassword = no.toString(16);
+                while (encryptedPassword.length() < 32) {
+                    encryptedPassword = "0" + encryptedPassword;
+                }
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+
+
+            writeInJsonFile(username , encryptedPassword , email , nickName , slogan , "users.json");
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+
+            try {
+                objectMapper.writeValue(new File( username + ".json"), new Model.Map(100));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
+
+            return showSecurityQuestion();
+        }
     }
 
     public String chooseSecurityQuestion(Matcher findUser , Matcher questionNumberAndAnswer) throws Exception
@@ -406,7 +395,8 @@ public class SignUpMenuController {
         else newUserMap.put("slogan" , "");
         newUserMap.put("number of security question" , 0);
         newUserMap.put("answer to security question" , "");
-        newUserMap.put("is stayed logged in" , false);
+        newUserMap.put("isStayedLoggedIn" , false);
+        newUserMap.put("score" , 0);
 
         JSONObject newUser = new JSONObject(newUserMap);
 

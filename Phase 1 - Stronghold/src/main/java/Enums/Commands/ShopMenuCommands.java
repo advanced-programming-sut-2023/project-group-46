@@ -9,7 +9,7 @@ public enum ShopMenuCommands {
     ;
     private final String regex;
 
-    private ShopMenuCommands(String regex) {
+    ShopMenuCommands(String regex) {
         this.regex = regex;
     }
 
