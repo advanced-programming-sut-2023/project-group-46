@@ -8,6 +8,7 @@ import Model.Captcha;
 import Model.User;
 import javafx.application.Application;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -25,11 +26,13 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.util.Objects;
 import java.util.regex.Matcher;
 
 public class LoginMenu extends Application{
     private LoginMenuController loginMenuController;
+    public static Stage stage;
     private MainMenu mainMenu;
     //private SignUpMenuController signUpMenuController = new SignUpMenuController();
     //private SignupMenu signupMenu = new SignupMenu(signUpMenuController);
@@ -41,7 +44,17 @@ public class LoginMenu extends Application{
 
     @Override
     public void start(Stage stage) throws Exception {
-
+        this.stage= stage;
+        stage.setFullScreen(true);
+        Pane pane = FXMLLoader.load(new URL(SignupMenu.class.getResource("/FXML/LoginMenu.fxml").toExternalForm()));
+        Paint paint = new ImagePattern(new Image(LoginMenu.class.getResource("/Image/LoginMenu.PNG").openStream()));
+        BackgroundFill backgroundFill = new BackgroundFill(paint, CornerRadii.EMPTY, Insets.EMPTY);
+        pane.setBackground(new Background(backgroundFill));
+        if(stage.getScene() == null){
+            Scene scene= new Scene(pane);
+            stage.setScene(scene);
+        }else stage.getScene().setRoot(pane);
+        stage.show();
     }
 
     @FXML
@@ -63,10 +76,10 @@ public class LoginMenu extends Application{
 
     }
 
-    public LoginMenu(LoginMenuController loginMenuController) {
-        this.loginMenuController = loginMenuController;
-        this.mainMenu = new MainMenu();
-    }
+//    public LoginMenu(LoginMenuController loginMenuController) {
+//        this.loginMenuController = loginMenuController;
+//        this.mainMenu = new MainMenu();
+//    }
 
     public void run() throws Exception {
 
@@ -150,5 +163,9 @@ public class LoginMenu extends Application{
                 System.out.println("invalid command!");
         }
 
+    }
+
+    public void signup() throws Exception {
+        loginMenuController.signup();
     }
 }

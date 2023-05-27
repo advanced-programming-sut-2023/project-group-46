@@ -35,7 +35,7 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <Label layoutX="1047.0" layoutY="516.0" text="Password Rcovery">
+      <Label layoutX="1047.0" layoutY="516.0" text="Password Recovery">
          <font>
             <Font size="25.0" />
          </font>
@@ -76,7 +76,7 @@
             <Font size="15.0" />
          </font>
       </CheckBox>
-      <Button fx:id="signup" layoutX="1412.0" layoutY="800.0" mnemonicParsing="false" text="Signup" />
-      <Button fx:id="back" layoutX="1319.0" layoutY="800.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="53.0" text="back" />
+      <Button layoutX="1412.0" layoutY="800.0" mnemonicParsing="false" text="Signup" />
+      <Button layoutX="1319.0" layoutY="800.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="25.0" prefWidth="53.0" text="back" />
    </children>
 </Pane>

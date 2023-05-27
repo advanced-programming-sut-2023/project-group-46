@@ -22,7 +22,7 @@ public class Main extends Application {
                 break;
             }
         }
-        SignupMenu signupMenu = new SignupMenu();
-        signupMenu.start(stage);
+        LoginMenu loginMenu = new LoginMenu();
+        loginMenu.start(stage);
     }
 }

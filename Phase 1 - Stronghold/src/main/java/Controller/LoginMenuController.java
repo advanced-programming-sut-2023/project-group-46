@@ -208,4 +208,8 @@ public class LoginMenuController {
     public static void setLoggedInUser(User loggenInUser) {
         LoginMenuController.loggedInUser = loggenInUser;
     }
+
+    public void signup() throws Exception {
+        new SignupMenu().start(LoginMenu.stage);
+    }
 }

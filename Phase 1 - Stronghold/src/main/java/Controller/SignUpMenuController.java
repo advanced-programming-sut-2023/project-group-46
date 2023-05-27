@@ -3,6 +3,7 @@ package Controller;
 import Enums.PreBuiltSecurityQuestions;
 import Enums.PreBuiltSlogans;
 import Model.User;
+import View.LoginMenu;
 import View.SignupMenu;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -438,6 +439,10 @@ public class SignUpMenuController {
                 output += "\n";
         }
         return output;
+    }
+
+    public void back() throws Exception {
+        new LoginMenu().start(LoginMenu.stage);
     }
 }
 

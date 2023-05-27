@@ -59,14 +59,12 @@ public class SignupMenu extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        signUpMenuController = new SignUpMenuController(this);
         stage.setFullScreen(true);
         Pane pane = FXMLLoader.load(new URL(SignupMenu.class.getResource("/FXML/SignupMenu.fxml").toExternalForm()));
         Paint paint = new ImagePattern(new Image(LoginMenu.class.getResource("/Image/LoginMenu.PNG").openStream()));
         BackgroundFill backgroundFill = new BackgroundFill(paint, CornerRadii.EMPTY, Insets.EMPTY);
         pane.setBackground(new Background(backgroundFill));
-        Scene scene = new Scene(pane);
-        stage.setScene(scene);
+        stage.getScene().setRoot(pane);
         stage.show();
     }
 
@@ -222,5 +220,9 @@ public class SignupMenu extends Application {
 
     public TextField getSlogan() {
         return slogan;
+    }
+
+    public void back() throws Exception {
+        signUpMenuController.back();
     }
 }
