@@ -1,15 +1,19 @@
+package View;
+
 import Controller.LoginMenuController;
 import Controller.SignUpMenuController;
 import Model.User;
 import View.LoginMenu;
 import View.MainMenu;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class Main {
-
-    public static void main(String[] args) throws Exception {
+public class Main extends Application {
+    @Override
+    public void start(Stage stage) throws Exception {
         for(User user : User.getUsersFromJsonFile()) {
             if (user.isStayedLoggedIn()) {
                 LoginMenuController.setLoggedInUser(user);
@@ -18,9 +22,8 @@ public class Main {
                 break;
             }
         }
-
         LoginMenuController loginMenuController = new LoginMenuController();
         LoginMenu loginMenu = new LoginMenu(loginMenuController);
-        loginMenu.run();
+        loginMenu.start(stage);
     }
 }
