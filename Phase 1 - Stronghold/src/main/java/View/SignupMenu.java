@@ -4,16 +4,94 @@ import Controller.SignUpMenuController;
 import Enums.Commands.SignupMenuCommands;
 import Enums.PreBuiltSecurityQuestions;
 import Model.Captcha;
+import javafx.application.Application;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
+import java.net.URL;
 import java.util.Objects;
 import java.util.regex.Matcher;
 
-public class SignupMenu {
+public class SignupMenu extends Application {
+    private SignUpMenuController signUpMenuController;
+    @FXML
+    private TextField username;
+    @FXML
+    private TextField nickname;
+    @FXML
+    private TextField email;
+    @FXML
+    private TextField passwordRecovery;
+    @FXML
+    private PasswordField password;
+    @FXML
+    private Label error;
+    @FXML
+    private TextField slogan;
+    @FXML
+    private CheckBox randomPassword;
+    @FXML
+    private CheckBox chooseSlogan;
+    @FXML
+    private CheckBox randomSlogan;
+    @FXML
+    private CheckBox visibility;
 
-    private final SignUpMenuController signUpMenuController;
+    public SignupMenu() {
+        this.signUpMenuController = new SignUpMenuController(this);
+    }
 
-    public SignupMenu(SignUpMenuController signUpMenuController) {
-        this.signUpMenuController = signUpMenuController;
+    @Override
+    public void start(Stage stage) throws Exception {
+        signUpMenuController = new SignUpMenuController(this);
+        stage.setFullScreen(true);
+        Pane pane = FXMLLoader.load(new URL(SignupMenu.class.getResource("/FXML/SignupMenu.fxml").toExternalForm()));
+        Paint paint = new ImagePattern(new Image(LoginMenu.class.getResource("/Image/LoginMenu.PNG").openStream()));
+        BackgroundFill backgroundFill = new BackgroundFill(paint, CornerRadii.EMPTY, Insets.EMPTY);
+        pane.setBackground(new Background(backgroundFill));
+        Scene scene = new Scene(pane);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    public void initialize() {
+        slogan.disableProperty().bind(chooseSlogan.selectedProperty().not());
+        randomSlogan.disableProperty().bind(chooseSlogan.selectedProperty().not());
+        visibility.setOnAction(event -> {
+            if (visibility.isSelected()) {
+                password.setPromptText(password.getText());
+                password.setText("");
+                password.setDisable(true);
+            } else {
+                password.setText(password.getPromptText());
+                password.setPromptText("password");
+                password.setDisable(false);
+            }
+        });
+        username.textProperty().addListener((observable, oldText, newText)->{
+            try {
+                error.setText(signUpMenuController.registerOrRegisterWithRandomPassword(randomPassword.isSelected()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     public void run() throws Exception {
@@ -26,42 +104,37 @@ public class SignupMenu {
 
             if ((matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER)) != null)
             {
-                String result = signUpMenuController.registerOrRegisterWithRandomPassword(matcher , false);
+                String result = signUpMenuController.registerOrRegisterWithRandomPassword(false);
                 System.out.println(result);
 
-                if(result.charAt(0) == 'P' && result.charAt(1) == 'i')
-                {
-                    while (true)
-                    {
-                        command = Menu.getScanner().nextLine();
-                        Matcher matcher1;
-                        if ((matcher1 = SignupMenuCommands.getMatcher(command, SignupMenuCommands.PICK_A_SECURITY_QUESTION)) != null)
-                        {
-                            result = signUpMenuController.chooseSecurityQuestion(matcher , matcher1);
-                            System.out.println(result);
-                            if(result.charAt(0) == 'Y') {
-                                while (true)
-                                {
-                                    if (Captcha.verifyCaptcha(true)) {
-                                        System.out.println("Registration was successful!");
-                                        break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                        else
-                            System.out.println("Please choose your security question and answer it!");
-
-
-
-                    }
-                }
+//                if(result.charAt(0) == 'P' && result.charAt(1) == 'i') {
+//                    while (true)
+//                    {
+//                        command = Menu.getScanner().nextLine();
+//                        Matcher matcher1;
+//                        if ((matcher1 = SignupMenuCommands.getMatcher(command, SignupMenuCommands.PICK_A_SECURITY_QUESTION)) != null)
+//                        {
+//                            result = signUpMenuController.chooseSecurityQuestion(matcher , matcher1);
+//                            System.out.println(result);
+//                            if(result.charAt(0) == 'Y') {
+//                                while (true)
+//                                {
+//                                    if (Captcha.verifyCaptcha(true)) {
+//                                        System.out.println("Registration was successful!");
+//                                        break;
+//                                    }
+//                                }
+//                                break;
+//                            }
+//                        }
+//                        else System.out.println("Please choose your security question and answer it!");
+//                    }
+//                }
             }
 
             else if ((matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER_WITH_RANDOM_PASSWORD)) != null)
             {
-                String result = signUpMenuController.registerOrRegisterWithRandomPassword(matcher , true);
+                String result = signUpMenuController.registerOrRegisterWithRandomPassword(true);
                 System.out.println(result);
 
                 if(result.charAt(0) == 'P')
@@ -127,4 +200,27 @@ public class SignupMenu {
         }
     }
 
+    public TextField getUsername() {
+        return username;
+    }
+
+    public TextField getNickname() {
+        return nickname;
+    }
+
+    public TextField getEmail() {
+        return email;
+    }
+
+    public TextField getPasswordRecovery() {
+        return passwordRecovery;
+    }
+
+    public PasswordField getPassword() {
+        return password;
+    }
+
+    public TextField getSlogan() {
+        return slogan;
+    }
 }

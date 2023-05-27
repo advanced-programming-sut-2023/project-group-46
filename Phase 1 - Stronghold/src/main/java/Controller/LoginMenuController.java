@@ -3,6 +3,7 @@ package Controller;
 import Enums.PreBuiltSecurityQuestions;
 import Model.User;
 import View.LoginMenu;
+import View.SignupMenu;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -18,9 +19,10 @@ import java.util.regex.Matcher;
 public class LoginMenuController {
 
     private static User loggedInUser;
-    private final LoginMenu loginMenu;
-    public LoginMenuController(){
-        loginMenu = new LoginMenu(this);
+    private LoginMenu loginMenu;
+
+    public LoginMenuController(LoginMenu loginMenu) {
+        this.loginMenu = loginMenu;
     }
 
     public String login(Matcher matcher) throws Exception {

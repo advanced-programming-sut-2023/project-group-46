@@ -22,8 +22,7 @@ public class Main extends Application {
                 break;
             }
         }
-        LoginMenuController loginMenuController = new LoginMenuController();
-        LoginMenu loginMenu = new LoginMenu(loginMenuController);
-        loginMenu.start(stage);
+        SignupMenu signupMenu = new SignupMenu();
+        signupMenu.start(stage);
     }
 }
