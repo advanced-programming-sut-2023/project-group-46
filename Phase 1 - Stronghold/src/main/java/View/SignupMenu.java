@@ -22,6 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -148,112 +149,6 @@ public class SignupMenu extends Application {
         });
     }
 
-//    public void run() throws Exception {
-//        String command;
-//        Matcher matcher;
-//
-//        while (true)
-//        {
-//            command = Menu.getScanner().nextLine();
-//
-//            if ((matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER)) != null)
-//            {
-//                String result = signUpMenuController.registerOrRegisterWithRandomPassword(false);
-//                System.out.println(result);
-//
-////                if(result.charAt(0) == 'P' && result.charAt(1) == 'i') {
-////                    while (true)
-////                    {
-////                        command = Menu.getScanner().nextLine();
-////                        Matcher matcher1;
-////                        if ((matcher1 = SignupMenuCommands.getMatcher(command, SignupMenuCommands.PICK_A_SECURITY_QUESTION)) != null)
-////                        {
-////                            result = signUpMenuController.chooseSecurityQuestion(matcher , matcher1);
-////                            System.out.println(result);
-////                            if(result.charAt(0) == 'Y') {
-////                                while (true)
-////                                {
-////                                    if (Captcha.verifyCaptcha(true)) {
-////                                        System.out.println("Registration was successful!");
-////                                        break;
-////                                    }
-////                                }
-////                                break;
-////                            }
-////                        }
-////                        else System.out.println("Please choose your security question and answer it!");
-////                    }
-////                }
-//            }
-//
-//            else if ((matcher = SignupMenuCommands.getMatcher(command, SignupMenuCommands.CREATE_A_NEW_USER_WITH_RANDOM_PASSWORD)) != null)
-//            {
-//                String result = signUpMenuController.registerOrRegisterWithRandomPassword(true);
-//                System.out.println(result);
-//
-//                if(result.charAt(0) == 'P')
-//                {
-//                    int start_index = result.indexOf('"') + 1;
-//
-//                    String expectedInput = result.substring(start_index , start_index + 12).trim();
-//                    while (true)
-//                    {
-//                        command = Menu.getScanner().nextLine();
-//
-//                        if(Objects.equals(command, expectedInput))
-//                        {
-//                            break;
-//                        }
-//                        else
-//                            System.out.println("You didn't input the generated password correctly. please try again!");
-//                    }
-//
-//                    String askingSecurityQuestion = "Pick your security question:\n";
-//                    for(int i = 1 ; i < 4 ; i++)
-//                    {
-//                        askingSecurityQuestion += i +". "+ PreBuiltSecurityQuestions.getSecurityQuestionByNumber(i) ;
-//                        if(i != 3)
-//                            askingSecurityQuestion += "\n";
-//                    }
-//                    System.out.println(askingSecurityQuestion);
-//
-//                    while (true)
-//                    {
-//                        command = Menu.getScanner().nextLine();
-//                        Matcher matcher1;
-//                        if ((matcher1 = SignupMenuCommands.getMatcher(command, SignupMenuCommands.PICK_A_SECURITY_QUESTION)) != null)
-//                        {
-//                            result = signUpMenuController.chooseSecurityQuestion(matcher , matcher1);
-//                            System.out.println(result);
-//                            if(result.charAt(0) == 'Y')
-//                            {
-//                                while (true)
-//                                {
-//                                    if (Captcha.verifyCaptcha(true)) {
-//                                        System.out.println("Registration was successful!");
-//                                        break;
-//                                    }
-//                                }
-//                                break;
-//                            }
-//                        }
-//                        else
-//                            System.out.println("Please choose your security question and answer it!");
-//                    }
-//
-//                }
-//            }
-//
-//            else if(command.matches("^back$"))
-//            {
-//                System.out.println("Back to login menu!");
-//                return;
-//            }
-//
-//            else System.out.println("Invalid command!");
-//        }
-//    }
-
     public TextField getUsername() {
         return username;
     }
@@ -310,7 +205,9 @@ public class SignupMenu extends Application {
         signUpMenuController.back();
     }
 
-    public void signup(){
-        signUpMenuController.signup();
+    public void signup() throws Exception {
+        String signup= signUpMenuController.signup();
+        if(signup.equals("Success")) new LoginMenu().start(LoginMenu.stage);
+        else error.setText(signup);
     }
 }

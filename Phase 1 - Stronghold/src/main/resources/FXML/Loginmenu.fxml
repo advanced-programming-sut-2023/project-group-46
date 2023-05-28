@@ -37,6 +37,17 @@
             <Font name="System Bold" size="40.0" />
         </font>
     </Label>
-   <Button layoutX="1340.0" layoutY="446.0" mnemonicParsing="false" text="recovery password" />
-   <Button layoutX="1323.0" layoutY="800.0" mnemonicParsing="false" onMouseClicked="#signup" text="signup!" />
+<!--    <Button layoutX="1075.0" layoutY="478.0" mnemonicParsing="false" onMouseClicked="#recoveryPassword" text="recovery password" />-->
+    <Button layoutX="1323.0" layoutY="800.0" mnemonicParsing="false" onMouseClicked="#signup" text="signup!" />
+    <CheckBox fx:id="stayLogin" layoutX="1203.0" layoutY="802.0" mnemonicParsing="false" text="stay login">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </CheckBox>
+   <TextField fx:id="recoveryPassword" layoutX="1323.0" layoutY="478.0" promptText="recovery password" />
+   <CheckBox fx:id="forgetPassword" layoutX="1068.0" layoutY="480.0" mnemonicParsing="false" selected="true#recoveryPassword" text="forget password">
+      <font>
+         <Font size="15.0" />
+      </font>
+   </CheckBox>
 </Pane>

@@ -5,11 +5,20 @@ import Enums.PreBuiltSlogans;
 import Model.User;
 import View.LoginMenu;
 import View.SignupMenu;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.io.*;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -17,11 +26,8 @@ import java.util.regex.Pattern;
 
 
 public class SignUpMenuController {
-    //    private final SignupMenu signupMenu;
-//    public SignUpMenuController(){
-//        signupMenu = new SignupMenu(this);
-//    }
     private SignupMenu signupMenu;
+    private String pas;
 
     public SignUpMenuController(SignupMenu signupMenu) {
         this.signupMenu = signupMenu;
@@ -136,7 +142,7 @@ public class SignUpMenuController {
         } else {
             Random random = new Random();
             int randomSloganNumber = random.nextInt(5) + 1;
-            return PreBuiltSlogans.getSloganByNumber(randomSloganNumber);
+            return "\"" + PreBuiltSlogans.getSloganByNumber(randomSloganNumber) + "\"";
         }
         return "Success";
     }
@@ -157,6 +163,7 @@ public class SignUpMenuController {
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
+            pas= encryptedPassword;
             return "Please re-enter you password:  \"   " + password + "   \"";
         } else {
             String userPassword = signupMenu.getPassword().getText();
@@ -183,7 +190,8 @@ public class SignUpMenuController {
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
-            return showSecurityQuestion();
+            pas= encryptedPassword;
+            return "Success";
         }
     }
 
@@ -215,64 +223,48 @@ public class SignUpMenuController {
 
         String username = signupMenu.getUsername().getText();
 
-//        User user = User.getUserByUsername(username);
-//        user.setNumberOfSecurityQuestion(Integer.parseInt(questionNumberAndAnswer.group("questionNumber")));
-//        user.setAnswerToSecurityQuestion(answer);
+        User user = User.getUserByUsername(username);
+        user.setNumberOfSecurityQuestion(Integer.parseInt(questionNumberAndAnswer.group("questionNumber")));
+        user.setAnswerToSecurityQuestion(answer);
 
         // read the existing contents of the users.json file into a JSONArray
-//        String jsonString = new String(Files.readAllBytes(Paths.get("users.json")));
-//        JSONArray usersArray = new JSONArray(jsonString);
+        String jsonString = new String(Files.readAllBytes(Paths.get("users.json")));
+        JSONArray usersArray = new JSONArray(jsonString);
 
         // find the index of the JSONObject for the updated User
-//        int userIndex = -1;
-//        for (int i = 0; i < usersArray.length(); i++) {
-//            JSONObject jsonObject = usersArray.getJSONObject(i);
-//            if (jsonObject.getString("username").equals(user.getUsername())) {
-//                userIndex = i;
-//                break;
-//            }
-//        }
+        int userIndex = -1;
+        for (int i = 0; i < usersArray.length(); i++) {
+            JSONObject jsonObject = usersArray.getJSONObject(i);
+            if (jsonObject.getString("username").equals(user.getUsername())) {
+                userIndex = i;
+                break;
+            }
+        }
 
         // replace the old JSONObject with the updated User's JSONObject
-//        if (userIndex != -1) {
-//            JSONObject updatedUser = new JSONObject(user);
-//            usersArray.put(userIndex, updatedUser);
-//        }
+        if (userIndex != -1) {
+            JSONObject updatedUser = new JSONObject(user);
+            usersArray.put(userIndex, updatedUser);
+        }
 
         // write the updated contents of the JSONArray back to the users.json file
-//        Files.write(Paths.get("users.json"), usersArray.toString().getBytes());
+        Files.write(Paths.get("users.json"), usersArray.toString().getBytes());
 
         return "You chose question successfully!";
     }
 
-//    public String registerOrRegisterWithRandomPassword() throws Exception {
-//            writeInJsonFile(username , encryptedPassword , email , nickName , slogan , "users.json");
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-//
-//            try {
-//                objectMapper.writeValue(new File( username + ".json"), new Model.Map(100));
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//
-//
-//            writeInJsonFile(username , encryptedPassword , email , nickName , slogan , "users.json");
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-//
-//            try {
-//                objectMapper.writeValue(new File( username + ".json"), new Model.Map(100));
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//    }
+    public void register() throws Exception {
+            writeInJsonFile(signupMenu.getUsername().getText() , pas , signupMenu.getEmail().getText()
+                    , signupMenu.getNickname().getText() , signupMenu.getSlogan().getText() , "users.json");
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
-//    public String chooseSecurityQuestion(Matcher findUser, Matcher questionNumberAndAnswer) throws Exception {
-//
-//    }
+            try {
+                objectMapper.writeValue(new File( signupMenu.getUsername() + ".json"), new Model.Map(100));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+    }
 
     public String handlePasswordErrors(String password, String passwordConfirmation) {
         if (password.length() < 6)
@@ -306,48 +298,47 @@ public class SignUpMenuController {
         return "This username is already taken! You can use this username instead: " + username + randomNumber;
     }
 
-//    public void writeInJsonFile(String username , String password , String email , String nickName , String slogan , String fileName) throws IOException {
-//        File file = new File(fileName);
-//
-//        Map<String, Object> newUserMap = new LinkedHashMap<>();
-//        newUserMap.put("username", username);
-//        newUserMap.put("password", password);
-//        newUserMap.put("email", email);
-//        newUserMap.put("nickname", nickName);
-//        else newUserMap.put("slogan" , "");
-//        newUserMap.put("number of security question" , 0);
-//        newUserMap.put("answer to security question" , "");
-//        newUserMap.put("isStayedLoggedIn" , false);
-//        newUserMap.put("score" , 0);
-//
-//        JSONObject newUser = new JSONObject(newUserMap);
-//
-//        // read the existing contents of the users.json file into a string
-//        BufferedReader br = new BufferedReader(new FileReader(file));
-//        StringBuilder sb = new StringBuilder();
-//        String line;
-//        while ((line = br.readLine()) != null) {
-//            sb.append(line);
-//        }
-//        br.close();
-//
-//        // manually add an opening square bracket if the string is empty
-//        if (sb.length() == 0) {
-//            sb.append("[]");
-//        }
-//
-//        // parse the contents of the file as a JSONArray
-//        JSONArray usersArray = new JSONArray(sb.toString());
-//
-//        // add the new user JSONObject to the JSONArray
-//        usersArray.put(newUser);
-//
-//        // write the updated contents of the JSONArray back to the users.json file
-//        BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-//        bw.write(usersArray.toString());
-//        bw.close();
-//
-//    }
+    public void writeInJsonFile(String username , String password , String email , String nickName , String slogan , String fileName) throws IOException, IOException {
+        File file = new File(fileName);
+        Map<String, Object> newUserMap = new LinkedHashMap<>();
+        newUserMap.put("username", username);
+        newUserMap.put("password", password);
+        newUserMap.put("email", email);
+        newUserMap.put("nickname", nickName);
+        newUserMap.put("slogan" , slogan);
+        newUserMap.put("number of security question" , 0);
+        newUserMap.put("answer to security question" , "");
+        newUserMap.put("isStayedLoggedIn" , false);
+        newUserMap.put("score" , 0);
+
+        JSONObject newUser = new JSONObject(newUserMap);
+
+        // read the existing contents of the users.json file into a string
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line);
+        }
+        br.close();
+
+        // manually add an opening square bracket if the string is empty
+        if (sb.length() == 0) {
+            sb.append("[]");
+        }
+
+        // parse the contents of the file as a JSONArray
+        JSONArray usersArray = new JSONArray(sb.toString());
+
+        // add the new user JSONObject to the JSONArray
+        usersArray.put(newUser);
+
+        // write the updated contents of the JSONArray back to the users.json file
+        BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+        bw.write(usersArray.toString());
+        bw.close();
+
+    }
 
     public String showSecurityQuestion() {
         String output = "Pick your security question:\n";
@@ -363,7 +354,7 @@ public class SignUpMenuController {
         new LoginMenu().start(LoginMenu.stage);
     }
 
-    public String signup() {
+    public String signup() throws Exception {
         if (signupMenu.getUsername().getText().matches("^ *$")) return "Please enter your username!";
         if (signupMenu.getNickname().getText().matches("^ *$")) return "Please enter your nickname!";
         if (signupMenu.getEmail().getText().matches("^ *$")) return "Please enter your email!";
@@ -375,7 +366,8 @@ public class SignUpMenuController {
         if (!signupMenu.getAnswerEmail().equals("Success")) return "Please enter email correctly!";
         if (!signupMenu.getAnswerPassword().equals("Success")) return "Please enter your password correctly!";
         if (signupMenu.getChooseSlogan().isSelected() && !signupMenu.getAnswerSlogan().equals("Success"))
-            return "Please enter your username correctly!";
+            return "Please enter your slogan correctly!";
+        register();
         return "Success";
     }
 }

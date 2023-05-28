@@ -44,6 +44,13 @@ public class LoginMenu extends Application{
     private TextField password;
     @FXML
     private CheckBox visibility;
+    @FXML
+    private CheckBox stayLogin;
+    @FXML
+    private TextField recoveryPassword;
+    @FXML
+    private CheckBox forgetPassword;
+    private Pane pane;
 
     public LoginMenu() {
         this.loginMenuController = new LoginMenuController(this);
@@ -53,7 +60,7 @@ public class LoginMenu extends Application{
     public void start(Stage stage) throws Exception {
         this.stage= stage;
         stage.setFullScreen(true);
-        Pane pane = FXMLLoader.load(new URL(SignupMenu.class.getResource("/FXML/LoginMenu.fxml").toExternalForm()));
+        pane = FXMLLoader.load(new URL(SignupMenu.class.getResource("/FXML/LoginMenu.fxml").toExternalForm()));
         Paint paint = new ImagePattern(new Image(LoginMenu.class.getResource("/Image/LoginMenu.PNG").openStream()));
         BackgroundFill backgroundFill = new BackgroundFill(paint, CornerRadii.EMPTY, Insets.EMPTY);
         pane.setBackground(new Background(backgroundFill));
@@ -66,6 +73,21 @@ public class LoginMenu extends Application{
 
     @FXML
     public void initialize() throws Exception {
+        recoveryPassword.disableProperty().bind(forgetPassword.selectedProperty().not());
+        forgetPassword.selectedProperty().addListener((observable, oldText, newText)->{
+            try {
+                recoveryPassword();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        stayLogin.selectedProperty().addListener((observable, oldText, newText)->{
+            try {
+                loginMenuController.handleStayLoggedIn();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         visibility.setOnAction(event -> {
             if (visibility.isSelected()) {
                 password.setPromptText(password.getText());
@@ -75,13 +97,6 @@ public class LoginMenu extends Application{
                 password.setText(password.getPromptText());
                 password.setPromptText("password");
                 password.setDisable(false);
-            }
-        });
-        username.textProperty().addListener((observable, oldText, newText)->{
-            try {
-                error.setText(loginMenuController.login());
-            } catch (Exception e) {
-                throw new RuntimeException(e);
             }
         });
     }
@@ -100,101 +115,92 @@ public class LoginMenu extends Application{
 
     }
 
-//    public LoginMenu(LoginMenuController loginMenuController) {
-//        this.loginMenuController = loginMenuController;
-//        this.mainMenu = new MainMenu();
+//    public void run() throws Exception {
+//
+//        //System.out.println("Don't have an account? Whenever you want, type \" create a new account \" to enter Signup Menu.");
+//
+//        Matcher matcher;
+//        String command , result;
+//
+//        while (true)
+//        {
+//            command = Menu.getScanner().nextLine();
+//
+//            if(command.matches("^show current menu$"))
+//                System.out.println("Login Menu");
+//
+//            else if(command.matches("^create a new account$"))
+//            {
+//                System.out.println("Entered Sign up menu!");
+//                //signupMenu.run();
+//            }
+//
+//            else if ((matcher = LoginMenuCommands.getMatcher(command, LoginMenuCommands.LOGGING_IN)) != null)
+//            {
+//                result = loginMenuController.login();
+//                if(!Objects.equals(result, "Information were correct!"))
+//                    System.out.println(result);
+//
+//                if(Objects.equals(result, "Information were correct!"))
+//                {
+//                    while (true)
+//                    {
+//                        if (Captcha.verifyCaptcha(false)) {
+//                            System.out.println("Logged in successfully!");
+//                            break;
+//                        }
+//                    }
+//                    mainMenu.run();
+//                    delayTime = 0;
+//                }
+//
+//                else if(Objects.equals(result, "Username and password did not match!"))
+//                    delayForWrongPassword();
+//
+//            }
+//            else if ((matcher = LoginMenuCommands.getMatcher(command, LoginMenuCommands.FORGOT_PASSWORD)) != null)
+//            {
+//                result = loginMenuController.forgetPassword(matcher);
+//                System.out.println(result);
+//
+//                if(result.charAt(0) == 'P')
+//                {
+//                    String expectedAnswer = User.getUserByUsername( matcher.group("username")).getAnswerToSecurityQuestion();
+//
+//                    while (true)
+//                    {
+//                        command = Menu.getScanner().nextLine();
+//                        if(Objects.equals(command, expectedAnswer))
+//                        {
+//                            System.out.println("You answered the security question correctly. Please enter your new password:");
+//
+//                            while (true)
+//                            {
+//                                command = Menu.getScanner().nextLine();
+//                                result = loginMenuController.setANewPassword(matcher , command);
+//                                System.out.println(result);
+//
+//                                if(result.charAt(0) == 'Y')
+//                                    break;
+//                            }
+//                        }
+//                        else
+//                            System.out.println("Wrong answer to security question. Try again!");
+//                    }
+//                }
+//            }
+//
+//            else if(command.matches("^exit$"))
+//                return;
+//
+//            else
+//                System.out.println("invalid command!");
+//        }
+//
 //    }
-
-    public void run() throws Exception {
-
-        //System.out.println("Don't have an account? Whenever you want, type \" create a new account \" to enter Signup Menu.");
-
-        Matcher matcher;
-        String command , result;
-
-        while (true)
-        {
-            command = Menu.getScanner().nextLine();
-
-            if(command.matches("^show current menu$"))
-                System.out.println("Login Menu");
-
-            else if(command.matches("^create a new account$"))
-            {
-                System.out.println("Entered Sign up menu!");
-                //signupMenu.run();
-            }
-
-            else if ((matcher = LoginMenuCommands.getMatcher(command, LoginMenuCommands.LOGGING_IN)) != null)
-            {
-                result = loginMenuController.login();
-                if(!Objects.equals(result, "Information were correct!"))
-                    System.out.println(result);
-
-                if(Objects.equals(result, "Information were correct!"))
-                {
-                    while (true)
-                    {
-                        if (Captcha.verifyCaptcha(false)) {
-                            System.out.println("Logged in successfully!");
-                            break;
-                        }
-                    }
-                    mainMenu.run();
-                    delayTime = 0;
-                }
-
-                else if(Objects.equals(result, "Username and password did not match!"))
-                    delayForWrongPassword();
-
-            }
-            else if ((matcher = LoginMenuCommands.getMatcher(command, LoginMenuCommands.FORGOT_PASSWORD)) != null)
-            {
-                result = loginMenuController.forgetPassword(matcher);
-                System.out.println(result);
-
-                if(result.charAt(0) == 'P')
-                {
-                    String expectedAnswer = User.getUserByUsername( matcher.group("username")).getAnswerToSecurityQuestion();
-
-                    while (true)
-                    {
-                        command = Menu.getScanner().nextLine();
-                        if(Objects.equals(command, expectedAnswer))
-                        {
-                            System.out.println("You answered the security question correctly. Please enter your new password:");
-
-                            while (true)
-                            {
-                                command = Menu.getScanner().nextLine();
-                                result = loginMenuController.setANewPassword(matcher , command);
-                                System.out.println(result);
-
-                                if(result.charAt(0) == 'Y')
-                                    break;
-                            }
-                        }
-                        else
-                            System.out.println("Wrong answer to security question. Try again!");
-                    }
-                }
-            }
-
-            else if(command.matches("^exit$"))
-                return;
-
-            else
-                System.out.println("invalid command!");
-        }
-
-    }
 
     public void signup() throws Exception {
         loginMenuController.signup();
-    }
-
-    public Label getError() {
-        return error;
     }
 
     public TextField getUsername() {
@@ -205,7 +211,21 @@ public class LoginMenu extends Application{
         return password;
     }
 
+    public CheckBox getStayLogin() {
+        return stayLogin;
+    }
+
     public void login() throws Exception {
-        new ProfileMenu().start(LoginMenu.stage);
+        String login= loginMenuController.login();
+        if(login.equals("Information were correct!")) new ProfileMenu().start(LoginMenu.stage);
+        else error.setText(login);
+    }
+
+    public void recoveryPassword() throws Exception {
+//        TextField passwordRecovery= new TextField();
+//        passwordRecovery.setTranslateX(1323);
+//        passwordRecovery.setTranslateY(450);
+//        pane.getChildren().add(passwordRecovery);
+        error.setText(loginMenuController.forgetPassword());
     }
 }
