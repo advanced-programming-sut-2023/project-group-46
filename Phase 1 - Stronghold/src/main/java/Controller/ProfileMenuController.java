@@ -2,6 +2,7 @@ package Controller;
 
 import Enums.PreBuiltSecurityQuestions;
 import Model.User;
+import View.LoginMenu;
 import View.ProfileMenu;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,9 +19,10 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 
 public class ProfileMenuController {
-    private final ProfileMenu profileMenu;
-    public ProfileMenuController(){
-        profileMenu = new ProfileMenu(this);
+    private ProfileMenu profileMenu;
+
+    public ProfileMenuController(ProfileMenu profileMenu) {
+        this.profileMenu = profileMenu;
     }
 
     public void updateUserInJsonFile(String newField, String fieldType, String filename) throws IOException {

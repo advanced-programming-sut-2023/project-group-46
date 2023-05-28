@@ -31,7 +31,7 @@
             <Font size="15.0" />
         </font>
     </CheckBox>
-    <Button layoutX="1412.0" layoutY="800.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="55.0" text="Login" />
+    <Button layoutX="1412.0" layoutY="800.0" mnemonicParsing="false" onMouseClicked="#login" prefHeight="25.0" prefWidth="55.0" text="Login" />
     <Label layoutX="675.0" layoutY="49.0" text="Login Manu">
         <font>
             <Font name="System Bold" size="40.0" />

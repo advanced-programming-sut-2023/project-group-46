@@ -1285,7 +1285,7 @@ public class GameMenuController {
     }
 
     private String checkEndOfTheGame() throws IOException {
-        ProfileMenuController profileMenuController = new ProfileMenuController();
+        //ProfileMenuController profileMenuController = new ProfileMenuController();
 
 
         int[] scores = new int[game.getEmpires().size()];

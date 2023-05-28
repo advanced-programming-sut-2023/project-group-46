@@ -25,12 +25,9 @@ public class LoginMenuController {
         this.loginMenu = loginMenu;
     }
 
-    public String login(Matcher matcher) throws Exception {
-        String username = matcher.group("username").trim();
-        String password = matcher.group("password").trim();
-
-        username = cleanUsername(username);
-        password = cleanPassword(password);
+    public String login() throws Exception {
+        String username = loginMenu.getUsername().getText();
+        String password = loginMenu.getPassword().getText();
 
         if(User.getUserByUsername(username) == null)
             return "No user with this username found!";
@@ -40,8 +37,8 @@ public class LoginMenuController {
             return "Username and password did not match!";
 
         loggedInUser = user;
-        if(matcher.group("stayLoggedInFlag") != null)
-            handleStayLoggedIn("users.json");
+//        if(matcher.group("stayLoggedInFlag") != null)
+//            handleStayLoggedIn("users.json");
 
         return "Information were correct!";
     }
@@ -133,27 +130,27 @@ public class LoginMenuController {
         // write the updated contents of the JSONArray back to the users.json file
         Files.write(Paths.get(fileName), usersArray.toString().getBytes());
     }
-    public String cleanStringWithAFlag(String string , String flag)
-    {
-        string = string.trim();
-        if (string.matches("^" + flag + "\\s.*$"))
-        {
-            string = string.substring(3);
-            while (string.matches("^\\s.*$"))
-                string = string.substring(1);
-        }
-        return string;
-    }
+//    public String cleanStringWithAFlag(String string , String flag)
+//    {
+//        string = string.trim();
+//        if (string.matches("^" + flag + "\\s.*$"))
+//        {
+//            string = string.substring(3);
+//            while (string.matches("^\\s.*$"))
+//                string = string.substring(1);
+//        }
+//        return string;
+//    }
 
-    public String cleanUsername(String username)
-    {
-        return cleanStringWithAFlag(username , "-u");
-    }
-
-    public String cleanPassword(String password)
-    {
-        return cleanStringWithAFlag(password , "-p");
-    }
+//    public String cleanUsername(String username)
+//    {
+//        return cleanStringWithAFlag(username , "-u");
+//    }
+//
+//    public String cleanPassword(String password)
+//    {
+//        return cleanStringWithAFlag(password , "-p");
+//    }
 
     public void handleStayLoggedIn(String filename) throws Exception {
         // read the existing contents of the users.json file into a JSONArray

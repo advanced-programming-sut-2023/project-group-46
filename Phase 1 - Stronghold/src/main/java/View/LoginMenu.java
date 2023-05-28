@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -34,9 +35,15 @@ public class LoginMenu extends Application{
     private LoginMenuController loginMenuController;
     public static Stage stage;
     private MainMenu mainMenu;
-    //private SignUpMenuController signUpMenuController = new SignUpMenuController();
-    //private SignupMenu signupMenu = new SignupMenu(signUpMenuController);
     static int delayTime = 0;
+    @FXML
+    private Label error;
+    @FXML
+    private TextField username;
+    @FXML
+    private TextField password;
+    @FXML
+    private CheckBox visibility;
 
     public LoginMenu() {
         this.loginMenuController = new LoginMenuController(this);
@@ -58,8 +65,25 @@ public class LoginMenu extends Application{
     }
 
     @FXML
-    public void initialize() {
-
+    public void initialize() throws Exception {
+        visibility.setOnAction(event -> {
+            if (visibility.isSelected()) {
+                password.setPromptText(password.getText());
+                password.setText("");
+                password.setDisable(true);
+            } else {
+                password.setText(password.getPromptText());
+                password.setPromptText("password");
+                password.setDisable(false);
+            }
+        });
+        username.textProperty().addListener((observable, oldText, newText)->{
+            try {
+                error.setText(loginMenuController.login());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     static void delayForWrongPassword() {
@@ -83,7 +107,7 @@ public class LoginMenu extends Application{
 
     public void run() throws Exception {
 
-        System.out.println("Don't have an account? Whenever you want, type \" create a new account \" to enter Signup Menu.");
+        //System.out.println("Don't have an account? Whenever you want, type \" create a new account \" to enter Signup Menu.");
 
         Matcher matcher;
         String command , result;
@@ -103,7 +127,7 @@ public class LoginMenu extends Application{
 
             else if ((matcher = LoginMenuCommands.getMatcher(command, LoginMenuCommands.LOGGING_IN)) != null)
             {
-                result = loginMenuController.login(matcher);
+                result = loginMenuController.login();
                 if(!Objects.equals(result, "Information were correct!"))
                     System.out.println(result);
 
@@ -167,5 +191,21 @@ public class LoginMenu extends Application{
 
     public void signup() throws Exception {
         loginMenuController.signup();
+    }
+
+    public Label getError() {
+        return error;
+    }
+
+    public TextField getUsername() {
+        return username;
+    }
+
+    public TextField getPassword() {
+        return password;
+    }
+
+    public void login() throws Exception {
+        new ProfileMenu().start(LoginMenu.stage);
     }
 }
