@@ -74,8 +74,8 @@ public class ProfileMenuController {
         Files.write(Paths.get(filename), usersArray.toString().getBytes());
     }
 
-    public String changeUsername(Matcher matcher) throws Exception {
-        String newUsername = matcher.group("username");
+    public String changeUsername() throws Exception {
+        String newUsername = profileMenu.getUsername().getText();
 
         if(newUsername.matches(".*[^a-zA-Z0-9|_].*"))
             return "Invalid username format! Username is only consisted of English letters, numbers and underline character.";
@@ -88,8 +88,8 @@ public class ProfileMenuController {
         return "Username was changed successfully.";
     }
 
-    public String changeNickname(Matcher matcher) throws IOException {
-        String nickName = matcher.group("nickname");
+    public String changeNickname() throws IOException {
+        String nickName = profileMenu.getNickname().getText();
 
         switch (checkStringForDoubleQuote(nickName))
         {
@@ -208,8 +208,8 @@ public class ProfileMenuController {
     }
 
 
-    public String changeEmail(Matcher matcher) throws Exception {
-        String newEmail = matcher.group("email");
+    public String changeEmail() throws Exception {
+        String newEmail = profileMenu.getEmail().getText();
 
         for(User user : User.getUsersFromJsonFile())
         {
@@ -224,8 +224,8 @@ public class ProfileMenuController {
         return "Email was changed successfully.";
     }
 
-    public String changeSlogan(Matcher matcher) throws IOException {
-        String newSlogan = matcher.group("slogan");
+    public String changeSlogan() throws IOException {
+        String newSlogan = profileMenu.getSlogan().getText();
 
         switch (checkStringForDoubleQuote(newSlogan))
         {
@@ -283,6 +283,22 @@ public class ProfileMenuController {
         }
 
         return "Rank: " + rank;
+    }
+
+    public String scoreboard() throws Exception {
+        ArrayList<User> sortedUsers = new ArrayList<>();
+        sortedUsers.addAll(User.getUsersFromJsonFile());
+
+        Comparator<User> comparator = Comparator
+                .comparing(User::getScore)
+                .thenComparing(User::getUsername);
+
+        sortedUsers.sort(comparator);
+        String scoreboard= "";
+        for(int i = 1 ; i <= sortedUsers.size() ; i++) {
+            scoreboard = scoreboard + "Rank : " + i + "   Score : " + LoginMenuController.getLoggedInUser().getScore()+ "\n";
+        }
+        return scoreboard;
     }
 
     public String showUserSlogan()
