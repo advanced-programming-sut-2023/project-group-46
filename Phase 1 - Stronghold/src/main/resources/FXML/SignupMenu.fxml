@@ -76,7 +76,7 @@
             <Font size="15.0" />
          </font>
       </CheckBox>
-      <Button layoutX="1412.0" layoutY="800.0" mnemonicParsing="false" text="Signup" />
+      <Button layoutX="1412.0" layoutY="800.0" mnemonicParsing="false" onMouseClicked="#signup" text="Signup" />
       <Button layoutX="1319.0" layoutY="800.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="25.0" prefWidth="53.0" text="back" />
    </children>
 </Pane>
