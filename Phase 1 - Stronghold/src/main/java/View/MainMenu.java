@@ -12,9 +12,9 @@ public class MainMenu {
             System.out.println("choose number of one of these menus: 1)EditMapMenu 2)GameMenu 3)ProfileMenu");
             command = Menu.getScanner().nextLine();
             if (command.equals("3")) {
-                ProfileMenu profileMenu = new ProfileMenu(new ProfileMenuController());
-                System.out.println("Entered ProfileMenu");
-                profileMenu.run();
+                //ProfileMenu profileMenu = new ProfileMenu(new ProfileMenuController());
+//                System.out.println("Entered ProfileMenu");
+//                profileMenu.run();
             } else if (command.equals("1")) {
                 EditMapMenu editMapMenu = new EditMapMenu(new EditMapMenuController());
                 System.out.println("Entered EditMapMenu");

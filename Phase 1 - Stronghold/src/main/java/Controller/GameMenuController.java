@@ -5,9 +5,13 @@ import Enums.UnitType;
 import Model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -381,6 +385,17 @@ public class GameMenuController {
                         continue;
                     }
                     boolean bool = true;
+                    if (map.getMap()[x][y].getUnits().size() == 0)
+                        continue;
+
+                    boolean check = false;
+                    for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
+                        if (map.getMap()[x][y].getUnits().get(i).getOwner() != currentEmpire)
+                            check = true;
+                    }
+                    if (!check)
+                        continue;
+
                     while (bool) {
                         int index = (int) (Math.random() * map.getMap()[x][y].getUnits().size());
                         if (map.getMap()[x][y].getUnits().get(index).getOwner() != null && !map.getMap()[x][y].getUnits().get(index).getOwner().equals(currentEmpire)) {
@@ -395,6 +410,17 @@ public class GameMenuController {
                     continue;
                 }
                 boolean bool = true;
+                if (map.getMap()[x][y].getUnits().size() == 0)
+                    continue;
+
+                boolean check = false;
+                for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
+                    if (map.getMap()[x][y].getUnits().get(i).getOwner() != currentEmpire)
+                        check = true;
+                }
+                if (!check)
+                    continue;
+
                 while (bool) {
                     int index = (int) (Math.random() * map.getMap()[x][y].getUnits().size());
                     if (map.getMap()[x][y].getUnits().get(index).getOwner() != null && !map.getMap()[x][y].getUnits().get(index).getOwner().equals(currentEmpire)) {
@@ -491,6 +517,17 @@ public class GameMenuController {
                     continue;
                 }
                 boolean bool = true;
+                if (map.getMap()[x][y].getUnits().size() == 0)
+                    continue;
+
+                boolean check = false;
+                for (int i = 0; i < map.getMap()[x][y].getUnits().size(); i++) {
+                    if (map.getMap()[x][y].getUnits().get(i).getOwner() != currentEmpire)
+                        check = true;
+                }
+                if (!check)
+                    continue;
+
                 while (bool) {
                     int index = (int) (Math.random() * map.getMap()[x][y].getUnits().size());
                     if ((map.getMap()[x][y].getUnits().get(index).getOwner() == null || !map.getMap()[x][y].getUnits().get(index).getOwner().equals(currentEmpire)) && !map.getMap()[x][y].getUnits().get(index).getUnitType().equals(UnitType.ASSASSIN)) {
@@ -649,6 +686,9 @@ public class GameMenuController {
         }
         if (x > map.getSize() - 1 || x < 0 || y > map.getSize() - 1 || y < 0) {
             return "invalid coordinate";
+        }
+        if (map.getMap()[x][y].getBuilding() != null || map.getMap()[x][y].getEnvironmentName() != null) {
+            return "there are some other things in this place";
         }
         if (count > currentEmpire.getUnemployedPeople()) {
             return "not enough unemployed people";
@@ -1030,10 +1070,10 @@ public class GameMenuController {
                             break;
                         }
                         for (int k = 0; k < map.getMap()[i][j].getUnits().size(); k++) {
-                            if (map.getMap()[i][j].getUnits().get(k).getOwner() == null && !map.getMap()[i][j].getUnits().get(k).getOwner().equals(currentEmpire)) {
-                                if (map.getMap()[i][j].getUnits().get(k).getUnitType().equals(UnitType.ASSASSIN) && (x != i || y != j)) {
-                                    continue;
-                                }
+                            if (!map.getMap()[i][j].getUnits().get(k).getOwner().equals(currentEmpire)) {
+//                                if (map.getMap()[i][j].getUnits().get(k).getUnitType().equals(UnitType.ASSASSIN) && (x != i || y != j)) {
+//                                    continue;
+//                                }
                                 map.getMap()[i][j].getUnits().get(k).getDamage(damage);
                             }
                         }
@@ -1244,16 +1284,21 @@ public class GameMenuController {
         currentEmpire.getResources().addResource("stone", transitAllOxTethers);
     }
 
-    private String checkEndOfTheGame() {
+    private String checkEndOfTheGame() throws IOException {
+        //ProfileMenuController profileMenuController = new ProfileMenuController();
+
+
         int[] scores = new int[game.getEmpires().size()];
         for (int i = 0; i < game.getEmpires().size(); i++) {
             for (int j = 0; j < game.getEmpires().get(i).getBuildings().size(); j++) {
                 if (game.getEmpires().get(i).getBuildings().get(j).getBuildingType().equals(BuildingType.KEEP) || game.getEmpires().get(i).getBuildings().get(j).getBuildingType().equals(BuildingType.KILLING_PIT)) {
                     continue;
                 }
+                setNewScoresInJsonFile(game.getEmpires().get(i), game.getEmpires().get(i).getBuildings().get(j).getHp());
                 scores[i] += game.getEmpires().get(i).getBuildings().get(j).getHp();
             }
             for (int k = 0; k < game.getEmpires().get(i).getUnits().size(); k++) {
+                setNewScoresInJsonFile(game.getEmpires().get(i), game.getEmpires().get(i).getUnits().get(k).getHp());
                 scores[i] += game.getEmpires().get(i).getUnits().get(k).getHp();
             }
         }
@@ -1268,13 +1313,44 @@ public class GameMenuController {
         return output.toString();
     }
 
-    public String nextTurn() {
+    private void setNewScoresInJsonFile(Empire empire, int numberOfIncrease) throws IOException {
+        String username = empire.getUser().getUsername();
+
+        // read the existing contents of the users.json file into a JSONArray
+        String jsonString = new String(Files.readAllBytes(Paths.get("users.json")));
+        JSONArray usersArray = new JSONArray(jsonString);
+
+        // find the index of the JSONObject for the updated User
+        int userIndex = -1;
+        for (int i = 0; i < usersArray.length(); i++) {
+            JSONObject jsonObject = usersArray.getJSONObject(i);
+            if (jsonObject.getString("username").equals(username)) {
+                userIndex = i;
+                break;
+            }
+        }
+
+        // update the specified user field
+        if (userIndex != -1) {
+
+            empire.getUser().setScore(empire.getUser().getScore() + numberOfIncrease);
+
+            JSONObject updatedUser = new JSONObject(empire.getUser());
+            usersArray.put(userIndex, updatedUser);
+        }
+
+        // write the updated contents of the JSONArray back to the users.json file
+        Files.write(Paths.get("users.json"), usersArray.toString().getBytes());
+
+    }
+
+    public String nextTurn() throws IOException {
         selectedUnits.clear();
         selectedBuilding = null;
+        EmpireMenuController.checkEffectOfFearRate();
         checkFoodProductiveBuildings();
         checkArmourProductiveBuildings();
         checkResourceProductiveBuildings();
-        EmpireMenuController.checkEffectOfFearRate();
         EmpireMenuController.calculateFoodAndTax();
         EmpireMenuController.calculatePopularityFactors();
         EmpireMenuController.calculatePopulation();
@@ -1492,7 +1568,10 @@ public class GameMenuController {
                     map.getMap()[revPath.get(unit.getCurrentCell()).getObject1()][revPath.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
                     int raise = unit.getCurrentCell() + unit.getUnitType().getSpeed();
                     if (raise < unit.getPath().size() - 1) unit.setCurrentCell(raise);
-                    else unit.setCurrentCell(unit.getPath().size() - 1);
+                    else {
+                        raise = unit.getPath().size() - 1;
+                        unit.setCurrentCell(unit.getPath().size() - 1);
+                    }
                     map.getMap()[revPath.get(unit.getCurrentCell()).getObject1()][revPath.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
                     if (raise == unit.getPath().size() - 1) {
                         unit.setCurrentCell(-1);
@@ -1510,7 +1589,10 @@ public class GameMenuController {
                     map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().remove(unit);
                     int raise = unit.getCurrentCell() + unit.getUnitType().getSpeed();
                     if (raise < unit.getPath().size() - 1) unit.setCurrentCell(raise);
-                    else unit.setCurrentCell(unit.getPath().size() - 1);
+                    else {
+                        raise = unit.getPath().size() - 1;
+                        unit.setCurrentCell(unit.getPath().size() - 1);
+                    }
                     map.getMap()[path.get(unit.getCurrentCell()).getObject1()][path.get(unit.getCurrentCell()).getObject2()].getUnits().add(unit);
                     if (raise == unit.getPath().size() - 1) {
                         unit.setCurrentCell(0);

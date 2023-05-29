@@ -124,7 +124,7 @@ public class EmpireMenuController {
         }
         for (int i = 0; i < GameMenuController.getCurrentEmpire().getBuildings().size(); i++) {
             int defaultWorkingRate = GameMenuController.getCurrentEmpire().getBuildings().get(i).getBuildingType().getRate();
-            GameMenuController.getCurrentEmpire().getBuildings().get(i).setRate(defaultWorkingRate + (int) (-0.5 * fearRate));
+            GameMenuController.getCurrentEmpire().getBuildings().get(i).setRate(defaultWorkingRate - fearRate);
         }
     }
 

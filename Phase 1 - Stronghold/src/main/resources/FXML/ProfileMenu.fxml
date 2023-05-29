@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.ProfileMenu">
+   <children>
+      <Label layoutX="892.0" layoutY="144.0" text="username :">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <TextField fx:id="username" layoutX="1096.0" layoutY="146.0" promptText="change username" />
+      <Button layoutX="1283.0" layoutY="533.0" mnemonicParsing="false" onMouseClicked="#changePassword" prefHeight="25.0" prefWidth="85.0" text="change" />
+      <Button layoutX="1283.0" layoutY="240.0" mnemonicParsing="false" onMouseClicked="#changeNickname" prefHeight="25.0" prefWidth="85.0" text="change" />
+      <Button layoutX="1283.0" layoutY="334.0" mnemonicParsing="false" onMouseClicked="#changeEmail" prefHeight="25.0" prefWidth="85.0" text="change" />
+      <Button layoutX="1283.0" layoutY="440.0" mnemonicParsing="false" onMouseClicked="#changeSlogan" prefHeight="25.0" prefWidth="85.0" text="change" />
+      <Button layoutX="1283.0" layoutY="146.0" mnemonicParsing="false" onMouseClicked="#changeUsername" prefHeight="25.0" prefWidth="85.0" text="change" />
+      <TextField fx:id="nickname" layoutX="1096.0" layoutY="240.0" promptText="change nickname" />
+      <TextField fx:id="email" layoutX="1096.0" layoutY="334.0" promptText="change email" />
+      <TextField fx:id="slogan" layoutX="1096.0" layoutY="440.0" promptText="change slogan" />
+      <Button fx:id="avatar" layoutX="1283.0" layoutY="628.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" text="change" />
+      <Label layoutX="893.0" layoutY="238.0" text="nickname :">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="911.0" layoutY="331.0" text="email :">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="905.0" layoutY="439.0" text="slogan :">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="1096.0" layoutY="531.0" text="password :">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="1111.0" layoutY="626.0" text="avatar :">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="error" layoutX="502.0" layoutY="744.0" textFill="RED">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <CheckBox fx:id="removeSlogan" layoutX="720.0" layoutY="444.0" mnemonicParsing="false" text="remove slogan">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </CheckBox>
+      <Label layoutX="598.0" layoutY="27.0" text="Profile Menu">
+         <font>
+            <Font name="System Bold" size="40.0" />
+         </font>
+      </Label>
+      <Button fx:id="back" layoutX="1446.0" layoutY="799.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="25.0" prefWidth="57.0" text="back" />
+      <Button fx:id="scoreboard" layoutX="1207.0" layoutY="698.0" mnemonicParsing="false" onMouseClicked="#scoreboard" text="scoreboard" />
+   </children>
+</Pane>
