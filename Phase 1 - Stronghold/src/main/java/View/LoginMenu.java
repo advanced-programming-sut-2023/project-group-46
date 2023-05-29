@@ -6,6 +6,8 @@ import Controller.SignUpMenuController;
 import Enums.Commands.LoginMenuCommands;
 import Model.Captcha;
 import Model.User;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -25,7 +28,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.Objects;
@@ -215,9 +220,26 @@ public class LoginMenu extends Application{
         return stayLogin;
     }
 
-    public void login() throws Exception {
+    public void login(MouseEvent mouseEvent) throws Exception {
         String login= loginMenuController.login();
-        if(login.equals("Information were correct!")) new ProfileMenu().start(LoginMenu.stage);
+        if(login.equals("Information were correct!")){
+            Label label = new Label("Success");
+            label.setTextFill(Color.GREEN);
+            label.setFont(new Font(20));
+            Popup popup = new Popup();
+            popup.getContent().add(label);
+            popup.show(LoginMenu.stage);
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+                popup.hide();
+                try {
+                    new ProfileMenu().start(LoginMenu.stage);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }));
+            timeline.setCycleCount(1);
+            timeline.play();
+        }
         else error.setText(login);
     }
 

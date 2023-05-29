@@ -2,25 +2,33 @@ package View;
 
 import Controller.LoginMenuController;
 import Controller.ProfileMenuController;
+import Enums.BuildingType;
 import Enums.Commands.ProfileMenuCommands;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Pane;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 public class ProfileMenu extends Application {
@@ -38,6 +46,10 @@ public class ProfileMenu extends Application {
     private Label error;
     @FXML
     private CheckBox removeSlogan;
+    private String answerUsername;
+    private String answerNickname;
+    private String answerEmail;
+    private String answerSlogan;
 
     public ProfileMenu() {
         this.profileMenuController = new ProfileMenuController(this);
@@ -58,28 +70,32 @@ public class ProfileMenu extends Application {
     public void initialize() throws Exception {
         username.textProperty().addListener((observable, oldText, newText)->{
             try {
-                error.setText(profileMenuController.changeUsername());
+                answerUsername= profileMenuController.username();
+                error.setText(answerUsername);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
         nickname.textProperty().addListener((observable, oldText, newText)->{
             try {
-                error.setText(profileMenuController.changeNickname());
+                answerNickname= profileMenuController.nickname();
+                error.setText(answerNickname);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
         email.textProperty().addListener((observable, oldText, newText)->{
             try {
-                error.setText(profileMenuController.changeEmail());
+                answerEmail= profileMenuController.email();
+                error.setText(answerEmail);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
         slogan.textProperty().addListener((observable, oldText, newText)->{
             try {
-                error.setText(profileMenuController.changeSlogan());
+                answerSlogan= profileMenuController.slogan();
+                error.setText(answerSlogan);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -92,54 +108,6 @@ public class ProfileMenu extends Application {
             }
         });
     }
-
-//    public void run() throws Exception {
-//
-//        Matcher matcher;
-//        String command;
-//
-//        while (true) {
-//            command = Menu.getScanner().nextLine();
-//
-//            if ((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_USERNAME)) != null)
-//                System.out.println(profileMenuController.changeUsername(matcher));
-//
-//            else if ((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_NICKNAME)) != null)
-//                System.out.println(profileMenuController.changeNickname(matcher));
-//
-//            else if ((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_PASSWORD)) != null)
-//                System.out.println(profileMenuController.changePassword(matcher));
-//
-//            else if ((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_EMAIL)) != null)
-//                System.out.println(profileMenuController.changeEmail(matcher));
-//
-//            else if ((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_SLOGAN)) != null)
-//                System.out.println(profileMenuController.changeSlogan(matcher));
-//
-//            else if (command.matches("^profile display slogan$"))
-//                System.out.println(profileMenuController.showUserSlogan());
-//
-//            else if (command.matches("^profile display rank$"))
-//                System.out.println(profileMenuController.showUserRank());
-//
-//            else if (command.matches("^profile remove slogan$"))
-//                System.out.println(profileMenuController.removeSlogan());
-//
-//            else if (command.matches("^profile display highscore$"))
-//                System.out.println(profileMenuController.showUserHighScore());
-//
-//            else if (command.matches("^profile display$"))
-//                System.out.println(profileMenuController.showProfileInfo());
-//
-//            else if (command.matches("^back$"))
-//                return;
-//
-//            else
-//                System.out.println("invalid command!");
-//
-//        }
-//
-//    }
 
     public TextField getUsername() {
         return username;
@@ -165,7 +133,118 @@ public class ProfileMenu extends Application {
         new LoginMenu().start(LoginMenu.stage);
     }
 
+//    public void scoreboard() throws Exception {
+//        error.setText(profileMenuController.scoreboard());
+//    }
+
+    public String getAnswerUsername() {
+        return answerUsername;
+    }
+
+    public String getAnswerNickname() {
+        return answerNickname;
+    }
+
+    public String getAnswerEmail() {
+        return answerEmail;
+    }
+
+    public String getAnswerSlogan() {
+        return answerSlogan;
+    }
+
+    public void changeUsername(MouseEvent mouseEvent) throws IOException {
+        String username= profileMenuController.changeUsername();
+        if(username.equals("Success")){
+            Label label = new Label("Success");
+            label.setTextFill(Color.GREEN);
+            label.setFont(new Font(20));
+            Popup popup = new Popup();
+            popup.getContent().add(label);
+            popup.show(LoginMenu.stage);
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+                popup.hide();
+            }));
+            timeline.setCycleCount(1);
+            timeline.play();
+        }
+        else error.setText(username);
+    }
+
+    public void changeNickname(MouseEvent mouseEvent) throws IOException {
+        String nickname= profileMenuController.changeNickname();
+        if(nickname.equals("Success")){
+            Label label = new Label("Success");
+            label.setTextFill(Color.GREEN);
+            label.setFont(new Font(20));
+            Popup popup = new Popup();
+            popup.getContent().add(label);
+            popup.show(LoginMenu.stage);
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+                popup.hide();
+            }));
+            timeline.setCycleCount(1);
+            timeline.play();
+        }
+        else error.setText(nickname);
+    }
+
+    public void changeEmail(MouseEvent mouseEvent) throws IOException {
+        String email= profileMenuController.changeEmail();
+        if(email.equals("Success")){
+            Label label = new Label("Success");
+            label.setTextFill(Color.GREEN);
+            label.setFont(new Font(20));
+            Popup popup = new Popup();
+            popup.getContent().add(label);
+            popup.show(LoginMenu.stage);
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+                popup.hide();
+            }));
+            timeline.setCycleCount(1);
+            timeline.play();
+        }
+        else error.setText(email);
+    }
+
+    public void changeSlogan(MouseEvent mouseEvent) throws IOException {
+        String slogan= profileMenuController.changeSlogan();
+        if(slogan.equals("Success")){
+            Label label = new Label("Success");
+            label.setTextFill(Color.GREEN);
+            label.setFont(new Font(20));
+            Popup popup = new Popup();
+            popup.getContent().add(label);
+            popup.show(LoginMenu.stage);
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+                popup.hide();
+            }));
+            timeline.setCycleCount(1);
+            timeline.play();
+        }
+        else error.setText(slogan);
+    }
+
+    public void changePassword(){
+        Dialog dialog= new Dialog();
+        PasswordField oldPassword= new PasswordField();
+        oldPassword.setPromptText("enter old password");
+        PasswordField newPassword= new PasswordField();
+        newPassword.setPromptText("enter new password");
+        //Button button= new Button("change");
+        ButtonType button= new ButtonType("change");
+        dialog.getDialogPane().getButtonTypes().addAll(button);
+        dialog.show();
+    }
+
     public void scoreboard() throws Exception {
-        error.setText(profileMenuController.scoreboard());
+        ListView<String> listView= new ListView<>();
+        ObservableList<String> items= FXCollections.observableArrayList(profileMenuController.scoreboard());
+        listView.setItems(items);
+        listView.setPrefHeight(10 * (listView.getFixedCellSize() + .5));
+        listView.setOnScroll((event) ->{
+            int offset= listView.getItems().size() - 10;
+//            if(listView.getOnScrollTo() >= offset)
+        });
     }
 }

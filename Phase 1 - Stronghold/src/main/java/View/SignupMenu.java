@@ -4,16 +4,19 @@ import Controller.SignUpMenuController;
 import Enums.Commands.SignupMenuCommands;
 import Enums.PreBuiltSecurityQuestions;
 import Model.Captcha;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -24,6 +27,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.Objects;
@@ -59,6 +63,9 @@ public class SignupMenu extends Application {
     private String answerSlogan;
     private String answerPassword;
     private String answerPasswordRecovery;
+    private int questionNumber;
+    @FXML
+    private ChoiceBox choiceBox;
 
     public SignupMenu() {
         this.signUpMenuController = new SignUpMenuController(this);
@@ -83,6 +90,17 @@ public class SignupMenu extends Application {
 
     @FXML
     public void initialize() {
+        String question[] = {PreBuiltSecurityQuestions.getSecurityQuestionByNumber(1),
+                PreBuiltSecurityQuestions.getSecurityQuestionByNumber(2), PreBuiltSecurityQuestions.getSecurityQuestionByNumber(3) };
+        choiceBox.setItems(FXCollections.observableArrayList(question));
+//        choiceBox.setTranslateX(800);
+//        choiceBox.setTranslateY(601);
+        choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue ov, Number value, Number new_value) {
+                questionNumber= new_value.intValue() + 1;
+                //System.out.println(questionNumber);
+            }
+        });
         slogan.disableProperty().bind(chooseSlogan.selectedProperty().not());
         randomSlogan.disableProperty().bind(chooseSlogan.selectedProperty().not());
         visibility.setOnAction(event -> {
@@ -201,13 +219,38 @@ public class SignupMenu extends Application {
         return chooseSlogan;
     }
 
+    public int getQuestionNumber() {
+        return questionNumber;
+    }
+
     public void back() throws Exception {
         signUpMenuController.back();
     }
 
-    public void signup() throws Exception {
+    public void signup(MouseEvent mouseEvent) throws Exception {
         String signup= signUpMenuController.signup();
-        if(signup.equals("Success")) new LoginMenu().start(LoginMenu.stage);
+        if(signup.equals("Success")){
+            Label label = new Label("Success");
+            label.setTextFill(Color.GREEN);
+            label.setFont(new Font(20));
+            Popup popup = new Popup();
+            popup.getContent().add(label);
+            popup.show(LoginMenu.stage);
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+                popup.hide();
+                try {
+                    new LoginMenu().start(LoginMenu.stage);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }));
+            timeline.setCycleCount(1);
+            timeline.play();
+        }
         else error.setText(signup);
+    }
+
+    public void confirm(){
+
     }
 }

@@ -15,15 +15,15 @@
          </font>
       </Label>
       <TextField fx:id="username" layoutX="1096.0" layoutY="146.0" promptText="change username" />
-      <Button layoutX="1283.0" layoutY="533.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" text="change" />
-      <Button layoutX="1283.0" layoutY="240.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" text="change" />
-      <Button layoutX="1283.0" layoutY="346.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" text="change" />
-      <Button layoutX="1283.0" layoutY="440.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" text="change" />
-      <Button layoutX="1283.0" layoutY="146.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" text="change" />
+      <Button layoutX="1283.0" layoutY="533.0" mnemonicParsing="false" onMouseClicked="#changePassword" prefHeight="25.0" prefWidth="85.0" text="change" />
+      <Button layoutX="1283.0" layoutY="240.0" mnemonicParsing="false" onMouseClicked="#changeNickname" prefHeight="25.0" prefWidth="85.0" text="change" />
+      <Button layoutX="1283.0" layoutY="334.0" mnemonicParsing="false" onMouseClicked="#changeEmail" prefHeight="25.0" prefWidth="85.0" text="change" />
+      <Button layoutX="1283.0" layoutY="440.0" mnemonicParsing="false" onMouseClicked="#changeSlogan" prefHeight="25.0" prefWidth="85.0" text="change" />
+      <Button layoutX="1283.0" layoutY="146.0" mnemonicParsing="false" onMouseClicked="#changeUsername" prefHeight="25.0" prefWidth="85.0" text="change" />
       <TextField fx:id="nickname" layoutX="1096.0" layoutY="240.0" promptText="change nickname" />
       <TextField fx:id="email" layoutX="1096.0" layoutY="334.0" promptText="change email" />
       <TextField fx:id="slogan" layoutX="1096.0" layoutY="440.0" promptText="change slogan" />
-      <Button layoutX="1283.0" layoutY="628.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" text="change" />
+      <Button fx:id="avatar" layoutX="1283.0" layoutY="628.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" text="change" />
       <Label layoutX="893.0" layoutY="238.0" text="nickname :">
          <font>
             <Font size="20.0" />

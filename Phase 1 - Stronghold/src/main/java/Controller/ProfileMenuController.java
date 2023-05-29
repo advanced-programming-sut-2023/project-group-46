@@ -74,7 +74,7 @@ public class ProfileMenuController {
         Files.write(Paths.get(filename), usersArray.toString().getBytes());
     }
 
-    public String changeUsername() throws Exception {
+    public String username() throws Exception {
         String newUsername = profileMenu.getUsername().getText();
 
         if(newUsername.matches(".*[^a-zA-Z0-9|_].*"))
@@ -83,12 +83,18 @@ public class ProfileMenuController {
         if(User.getUserByUsername(newUsername) != null)
             return "This username is already taken!";
 
-        updateUserInJsonFile(newUsername ,"username", "users.json");
-
         return "Username was changed successfully.";
     }
 
-    public String changeNickname() throws IOException {
+    public String changeUsername() throws IOException {
+        if (profileMenu.getUsername().getText().matches("^ *$")) return "Please enter your username!";
+        if(!profileMenu.getAnswerUsername().equals("Success")) return "Please enter your username correctly!";
+        String newUsername = profileMenu.getUsername().getText();
+        updateUserInJsonFile(newUsername ,"username", "users.json");
+        return "Success";
+    }
+
+    public String nickname() throws IOException {
         String nickName = profileMenu.getNickname().getText();
 
         switch (checkStringForDoubleQuote(nickName))
@@ -104,8 +110,16 @@ public class ProfileMenuController {
                 break;
         }
 
-        updateUserInJsonFile(nickName ,"nickname", "users.json");
+
         return "Nickname was changed successfully.";
+    }
+
+    public String changeNickname() throws IOException {
+        if (profileMenu.getNickname().getText().matches("^ *$")) return "Please enter your nickname!";
+        if(!profileMenu.getAnswerNickname().equals("Success")) return "Please enter your nickname correctly!";
+        String nickName = profileMenu.getNickname().getText();
+        updateUserInJsonFile(nickName ,"nickname", "users.json");
+        return "Success";
     }
 
 
@@ -208,7 +222,7 @@ public class ProfileMenuController {
     }
 
 
-    public String changeEmail() throws Exception {
+    public String email() throws Exception {
         String newEmail = profileMenu.getEmail().getText();
 
         for(User user : User.getUsersFromJsonFile())
@@ -220,11 +234,18 @@ public class ProfileMenuController {
         if(!newEmail.matches("^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$"))
             return "Invalid email format!";
 
-        updateUserInJsonFile(newEmail , "email","users.json");
         return "Email was changed successfully.";
     }
 
-    public String changeSlogan() throws IOException {
+    public String changeEmail() throws IOException {
+        if (profileMenu.getEmail().getText().matches("^ *$")) return "Please enter your email!";
+        if(!profileMenu.getAnswerEmail().equals("Success")) return "Please enter your email correctly!";
+        String newEmail = profileMenu.getEmail().getText();
+        updateUserInJsonFile(newEmail , "email","users.json");
+        return "Success";
+    }
+
+    public String slogan() throws IOException {
         String newSlogan = profileMenu.getSlogan().getText();
 
         switch (checkStringForDoubleQuote(newSlogan))
@@ -240,9 +261,15 @@ public class ProfileMenuController {
                 break;
         }
 
-        updateUserInJsonFile(newSlogan , "slogan" ,"users.json");
-
         return "Slogan was changed successfully.";
+    }
+
+    public String changeSlogan() throws IOException {
+        if (profileMenu.getSlogan().getText().matches("^ *$")) return "Please enter your slogan!";
+        if(!profileMenu.getAnswerSlogan().equals("Success")) return "Please enter your slogan correctly!";
+        String newSlogan = profileMenu.getSlogan().getText();
+        updateUserInJsonFile(newSlogan , "slogan" ,"users.json");
+        return "Success";
     }
 
     public String removeSlogan() throws IOException {
@@ -285,7 +312,7 @@ public class ProfileMenuController {
         return "Rank: " + rank;
     }
 
-    public String scoreboard() throws Exception {
+    public ArrayList<String> scoreboard() throws Exception {
         ArrayList<User> sortedUsers = new ArrayList<>();
         sortedUsers.addAll(User.getUsersFromJsonFile());
 
@@ -294,11 +321,11 @@ public class ProfileMenuController {
                 .thenComparing(User::getUsername);
 
         sortedUsers.sort(comparator);
-        String scoreboard= "";
+        ArrayList<String> result= new ArrayList<>();
         for(int i = 1 ; i <= sortedUsers.size() ; i++) {
-            scoreboard = scoreboard + "Rank : " + i + "   Score : " + LoginMenuController.getLoggedInUser().getScore()+ "\n";
+           result.add("Rank : " + i + "   Score : " + LoginMenuController.getLoggedInUser().getScore());
         }
-        return scoreboard;
+        return result;
     }
 
     public String showUserSlogan()

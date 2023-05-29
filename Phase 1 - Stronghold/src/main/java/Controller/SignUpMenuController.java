@@ -196,19 +196,8 @@ public class SignUpMenuController {
     }
 
     public String passwordRecovery() throws Exception {
-        String passwordRecovery = signupMenu.getPasswordRecovery().getText();
-        String regex = "(?=.* -q (?<questionNumber>\\d+))(?=.* -a (?<answer>[^-]+))(?=.* -c (?<answerConfirmation>[^-]*))^question pick( *-[qac][^-]+){3}$";
-        Matcher questionNumberAndAnswer = Pattern.compile(regex).matcher(passwordRecovery);
-        if (!questionNumberAndAnswer.find()) return "No mach";
-        if (Integer.parseInt(questionNumberAndAnswer.group("questionNumber")) > 3 || Integer.parseInt(questionNumberAndAnswer.group("questionNumber")) == 0)
-            return "Please choose a question number between 1 and 3!";
-
-        String answer = signupMenu.getPassword().getText();
-        String answerConfirmation = signupMenu.getPassword().getText();
-
-        if (!answer.equals(answerConfirmation))
-            return "Answer and answer confirmation didn't match!";
-
+        if(signupMenu.getQuestionNumber() == 0) return "Pick a question number";
+        String answer = signupMenu.getPasswordRecovery().getText();
         switch (checkStringForDoubleQuote(answer)) {
             case 1:
                 return "The answer you entered has only 1 double quote!";
@@ -220,12 +209,24 @@ public class SignUpMenuController {
             case 4:
                 break;
         }
+        return "Success";
+    }
 
+    public void register() throws Exception {
+            writeInJsonFile(signupMenu.getUsername().getText() , pas , signupMenu.getEmail().getText()
+                    , signupMenu.getNickname().getText() , signupMenu.getSlogan().getText() , "users.json");
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+
+            try {
+                objectMapper.writeValue(new File( signupMenu.getUsername().getText() + ".json"), new Model.Map(100));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         String username = signupMenu.getUsername().getText();
-
         User user = User.getUserByUsername(username);
-        user.setNumberOfSecurityQuestion(Integer.parseInt(questionNumberAndAnswer.group("questionNumber")));
-        user.setAnswerToSecurityQuestion(answer);
+        user.setNumberOfSecurityQuestion(signupMenu.getQuestionNumber());
+        user.setAnswerToSecurityQuestion(signupMenu.getPasswordRecovery().getText());
 
         // read the existing contents of the users.json file into a JSONArray
         String jsonString = new String(Files.readAllBytes(Paths.get("users.json")));
@@ -250,20 +251,6 @@ public class SignUpMenuController {
         // write the updated contents of the JSONArray back to the users.json file
         Files.write(Paths.get("users.json"), usersArray.toString().getBytes());
 
-        return "You chose question successfully!";
-    }
-
-    public void register() throws Exception {
-            writeInJsonFile(signupMenu.getUsername().getText() , pas , signupMenu.getEmail().getText()
-                    , signupMenu.getNickname().getText() , signupMenu.getSlogan().getText() , "users.json");
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-
-            try {
-                objectMapper.writeValue(new File( signupMenu.getUsername() + ".json"), new Model.Map(100));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
     }
 
     public String handlePasswordErrors(String password, String passwordConfirmation) {
@@ -359,12 +346,14 @@ public class SignUpMenuController {
         if (signupMenu.getNickname().getText().matches("^ *$")) return "Please enter your nickname!";
         if (signupMenu.getEmail().getText().matches("^ *$")) return "Please enter your email!";
         if (signupMenu.getPassword().getText().matches("^ *$")) return "Please enter your password!";
+        if (signupMenu.getPasswordRecovery().getText().matches("^ *$")) return "Pleas enter your password recovery";
         if (signupMenu.getChooseSlogan().isSelected() && signupMenu.getSlogan().getText().matches("^ *$"))
             return "Please enter your slogan!";
         if (!signupMenu.getAnswerUsername().equals("Success")) return "Please enter your username correctly!";
         if (!signupMenu.getAnswerNickname().equals("Success")) return "Please enter your nickname correctly!";
         if (!signupMenu.getAnswerEmail().equals("Success")) return "Please enter email correctly!";
         if (!signupMenu.getAnswerPassword().equals("Success")) return "Please enter your password correctly!";
+        if (!signupMenu.getAnswerPasswordRecovery().equals("Success")) return "Please enter your password recovery correctly!";
         if (signupMenu.getChooseSlogan().isSelected() && !signupMenu.getAnswerSlogan().equals("Success"))
             return "Please enter your slogan correctly!";
         register();

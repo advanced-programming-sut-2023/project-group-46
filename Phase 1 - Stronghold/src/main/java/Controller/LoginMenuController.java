@@ -51,6 +51,7 @@ public class LoginMenuController {
     }
 
     public String forgetPassword() throws Exception {
+        System.out.println(User.getUserByUsername(loginMenu.getUsername().getText()).getUsername());
         if (User.getUserByUsername(loginMenu.getUsername().getText()) == null)
             return "No user with this username found!";
         User user = User.getUserByUsername(loginMenu.getUsername().getText());
@@ -84,27 +85,6 @@ public class LoginMenuController {
 
         return "Your password was changed successfully.";
     }
-//    public String cleanStringWithAFlag(String string , String flag)
-//    {
-//        string = string.trim();
-//        if (string.matches("^" + flag + "\\s.*$"))
-//        {
-//            string = string.substring(3);
-//            while (string.matches("^\\s.*$"))
-//                string = string.substring(1);
-//        }
-//        return string;
-//    }
-
-//    public String cleanUsername(String username)
-//    {
-//        return cleanStringWithAFlag(username , "-u");
-//    }
-//
-//    public String cleanPassword(String password)
-//    {
-//        return cleanStringWithAFlag(password , "-p");
-//    }
 
     public String handlePasswordErrors(String password) {
         if (password.length() < 6)

@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -13,7 +14,7 @@
       <TextField fx:id="username" layoutX="1323.0" layoutY="114.0" promptText="username" />
       <TextField fx:id="nickname" layoutX="1323.0" layoutY="308.0" promptText="nickname" />
       <TextField fx:id="email" layoutX="1323.0" layoutY="411.0" promptText="email" />
-      <TextField fx:id="passwordRecovery" layoutX="1323.0" layoutY="521.0" promptText="password recovery" />
+      <TextField fx:id="passwordRecovery" layoutX="1323.0" layoutY="600.0" promptText="password recovery" />
       <PasswordField fx:id="password" layoutX="1323.0" layoutY="204.0" promptText="password" />
       <Label layoutX="1078.0" layoutY="109.0" text="Username">
          <font>
@@ -35,12 +36,12 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <Label layoutX="1047.0" layoutY="516.0" text="Password Recovery">
+      <Label layoutX="1041.0" layoutY="595.0" text="Password Recovery">
          <font>
             <Font size="25.0" />
          </font>
       </Label>
-      <Label layoutX="675.0" layoutY="49.0" text="Signup Manu">
+      <Label layoutX="675.0" layoutY="49.0" text="Signup Menu">
          <font>
             <Font name="System Bold" size="40.0" />
          </font>
@@ -55,18 +56,18 @@
             <Font size="15.0" />
          </font>
       </CheckBox>
-      <TextField fx:id="slogan" layoutX="1323.0" layoutY="616.0" promptText="slogan" />
-      <Label layoutX="1108.0" layoutY="611.0" text="Slogan">
+      <TextField fx:id="slogan" layoutX="1323.0" layoutY="502.0" promptText="slogan" />
+      <Label layoutX="1108.0" layoutY="497.0" text="Slogan">
          <font>
             <Font size="25.0" />
          </font>
       </Label>
-      <CheckBox fx:id="chooseSlogan" layoutX="739.0" layoutY="618.0" mnemonicParsing="false" text="choose slogan">
+      <CheckBox fx:id="chooseSlogan" layoutX="748.0" layoutY="505.0" mnemonicParsing="false" text="choose slogan">
          <font>
             <Font size="15.0" />
          </font>
       </CheckBox>
-      <CheckBox fx:id="randomSlogan" layoutX="911.0" layoutY="619.0" mnemonicParsing="false" text="random slogan">
+      <CheckBox fx:id="randomSlogan" layoutX="910.0" layoutY="504.0" mnemonicParsing="false" text="random slogan">
          <font>
             <Font size="15.0" />
          </font>
@@ -76,7 +77,8 @@
             <Font size="15.0" />
          </font>
       </CheckBox>
-      <Button layoutX="1412.0" layoutY="800.0" mnemonicParsing="false" onMouseClicked="#signup" text="Signup" />
+      <Button layoutX="1419.0" layoutY="800.0" mnemonicParsing="false" onMouseClicked="#signup" text="Signup" />
       <Button layoutX="1319.0" layoutY="800.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="25.0" prefWidth="53.0" text="back" />
+      <ChoiceBox fx:id="choiceBox" layoutX="800.0" layoutY="601.0" prefWidth="150.0" />
    </children>
 </Pane>
