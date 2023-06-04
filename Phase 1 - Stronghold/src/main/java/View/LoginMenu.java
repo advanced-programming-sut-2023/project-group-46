@@ -64,7 +64,7 @@ public class LoginMenu extends Application{
     @Override
     public void start(Stage stage) throws Exception {
         this.stage= stage;
-        stage.setFullScreen(true);
+        stage.setMaximized(true);
         pane = FXMLLoader.load(new URL(SignupMenu.class.getResource("/FXML/LoginMenu.fxml").toExternalForm()));
         Paint paint = new ImagePattern(new Image(LoginMenu.class.getResource("/Image/LoginMenu.PNG").openStream()));
         BackgroundFill backgroundFill = new BackgroundFill(paint, CornerRadii.EMPTY, Insets.EMPTY);

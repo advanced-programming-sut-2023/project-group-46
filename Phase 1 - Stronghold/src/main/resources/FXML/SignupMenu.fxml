@@ -62,12 +62,12 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <CheckBox fx:id="chooseSlogan" layoutX="748.0" layoutY="505.0" mnemonicParsing="false" text="choose slogan">
+      <CheckBox fx:id="chooseSlogan" layoutX="552.0" layoutY="504.0" mnemonicParsing="false" text="choose slogan">
          <font>
             <Font size="15.0" />
          </font>
       </CheckBox>
-      <CheckBox fx:id="randomSlogan" layoutX="910.0" layoutY="504.0" mnemonicParsing="false" text="random slogan">
+      <CheckBox fx:id="randomSlogan" layoutX="936.0" layoutY="505.0" mnemonicParsing="false" text="random slogan">
          <font>
             <Font size="15.0" />
          </font>
@@ -77,8 +77,9 @@
             <Font size="15.0" />
          </font>
       </CheckBox>
-      <Button layoutX="1419.0" layoutY="800.0" mnemonicParsing="false" onMouseClicked="#signup" text="Signup" />
-      <Button layoutX="1319.0" layoutY="800.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="25.0" prefWidth="53.0" text="back" />
+      <Button layoutX="1419.0" layoutY="734.0" mnemonicParsing="false" onMouseClicked="#signup" text="Signup" />
+      <Button layoutX="1323.0" layoutY="734.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="25.0" prefWidth="53.0" text="back" />
       <ChoiceBox fx:id="choiceBox" layoutX="800.0" layoutY="601.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="slogans" layoutX="734.0" layoutY="503.0" prefWidth="150.0" />
    </children>
 </Pane>

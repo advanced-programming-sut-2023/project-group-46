@@ -13,9 +13,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -51,13 +53,15 @@ public class ProfileMenu extends Application {
     private String answerEmail;
     private String answerSlogan;
 
+    public static ImageView avatar;
+
     public ProfileMenu() {
         this.profileMenuController = new ProfileMenuController(this);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        stage.setFullScreen(true);
+        stage.setMaximized(true);
         Pane pane = FXMLLoader.load(new URL(SignupMenu.class.getResource("/FXML/ProfileMenu.fxml").toExternalForm()));
         Paint paint = new ImagePattern(new Image(LoginMenu.class.getResource("/Image/LoginMenu.PNG").openStream()));
         BackgroundFill backgroundFill = new BackgroundFill(paint, CornerRadii.EMPTY, Insets.EMPTY);
@@ -225,26 +229,72 @@ public class ProfileMenu extends Application {
         else error.setText(slogan);
     }
 
-    public void changePassword(){
-        Dialog dialog= new Dialog();
-        PasswordField oldPassword= new PasswordField();
-        oldPassword.setPromptText("enter old password");
-        PasswordField newPassword= new PasswordField();
-        newPassword.setPromptText("enter new password");
-        //Button button= new Button("change");
-        ButtonType button= new ButtonType("change");
-        dialog.getDialogPane().getButtonTypes().addAll(button);
-        dialog.show();
+    public void changePassword() throws Exception {
+        ChangePassword changePassword= new ChangePassword();
+        changePassword.start(new Stage());
     }
 
     public void scoreboard() throws Exception {
+        Pane pane= new Pane();
+        Stage stage= new Stage();
         ListView<String> listView= new ListView<>();
+//        listView.getItems().add("1");
+//        listView.getItems().add("1");
+//        listView.getItems().add("1");
+//        listView.getItems().add("1");
+//        listView.getItems().add("1");
+//        listView.getItems().add("1");
+//        listView.getItems().add("1");
+//        listView.getItems().add("1");
+//        listView.getItems().add("1");
+//        listView.getItems().add("1");
+//        listView.getItems().add("2");
+//        listView.getItems().add("2");
+//        listView.getItems().add("2");
+//        listView.getItems().add("2");
+//        listView.getItems().add("2");
+//        listView.getItems().add("2");
+//        listView.getItems().add("2");
+//        listView.getItems().add("2");
+//        listView.getItems().add("2");
+//        listView.getItems().add("2");
+//        listView.getItems().add("3");
+        VBox vbox = new VBox(listView);
         ObservableList<String> items= FXCollections.observableArrayList(profileMenuController.scoreboard());
         listView.setItems(items);
-        listView.setPrefHeight(10 * (listView.getFixedCellSize() + .5));
-        listView.setOnScroll((event) ->{
-            int offset= listView.getItems().size() - 10;
-//            if(listView.getOnScrollTo() >= offset)
-        });
+//        vbox.setPrefHeight(20 * (listView.getFixedCellSize() + .5));
+//        listView.setOnScroll((event) ->{
+//            int offset= listView.getItems().size() - 10;
+////            if(listView.getSelectionModel() >= offset){
+//                listView.scrollTo(offset);
+////            }
+//        });
+        Scene scene = new Scene(vbox, 300, 230);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void showUsername(){
+        Label label= new Label(profileMenuController.showProfileInfo());
+        Pane pane= new Pane(label);
+        pane.setPrefHeight(150);
+        pane.setPrefWidth(400);
+        avatar= new ImageView();
+        avatar.setX(350);
+        avatar.setY(10);
+        avatar.setFitHeight(44);
+        avatar.setFitWidth(47);
+        System.out.println(LoginMenuController.getLoggedInUser().getImage());
+        avatar.setImage(new javafx.scene.image.Image(getClass().getResource(LoginMenuController.getLoggedInUser().getImage()).toExternalForm()));
+        pane.getChildren().add(avatar);
+        Scene scene= new Scene(pane);
+        Stage stage= new Stage();
+        //stage.setResizable(false);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void changeAvatar() throws Exception {
+        new AvatarMenu().start(new Stage());
     }
 }

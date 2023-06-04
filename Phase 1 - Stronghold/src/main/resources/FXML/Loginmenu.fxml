@@ -31,15 +31,15 @@
             <Font size="15.0" />
         </font>
     </CheckBox>
-    <Button layoutX="1412.0" layoutY="800.0" mnemonicParsing="false" onMouseClicked="#login" prefHeight="25.0" prefWidth="55.0" text="Login" />
+    <Button layoutX="1417.0" layoutY="736.0" mnemonicParsing="false" onMouseClicked="#login" prefHeight="25.0" prefWidth="55.0" text="Login" />
     <Label layoutX="675.0" layoutY="49.0" text="Login Manu">
         <font>
             <Font name="System Bold" size="40.0" />
         </font>
     </Label>
 <!--    <Button layoutX="1075.0" layoutY="478.0" mnemonicParsing="false" onMouseClicked="#recoveryPassword" text="recovery password" />-->
-    <Button layoutX="1323.0" layoutY="800.0" mnemonicParsing="false" onMouseClicked="#signup" text="signup!" />
-    <CheckBox fx:id="stayLogin" layoutX="1203.0" layoutY="802.0" mnemonicParsing="false" text="stay login">
+    <Button layoutX="1323.0" layoutY="736.0" mnemonicParsing="false" onMouseClicked="#signup" text="signup!" />
+    <CheckBox fx:id="stayLogin" layoutX="1203.0" layoutY="738.0" mnemonicParsing="false" text="stay login">
         <font>
             <Font size="15.0" />
         </font>

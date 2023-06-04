@@ -7,6 +7,7 @@ import View.LoginMenu;
 import View.SignupMenu;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import javafx.scene.image.Image;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -214,7 +215,7 @@ public class SignUpMenuController {
 
     public void register() throws Exception {
             writeInJsonFile(signupMenu.getUsername().getText() , pas , signupMenu.getEmail().getText()
-                    , signupMenu.getNickname().getText() , signupMenu.getSlogan().getText() , "users.json");
+                    , signupMenu.getNickname().getText() , signupMenu.getSlogan().getText() , "users.json", "/Image/Avatar/10.png");
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
@@ -285,7 +286,7 @@ public class SignUpMenuController {
         return "This username is already taken! You can use this username instead: " + username + randomNumber;
     }
 
-    public void writeInJsonFile(String username , String password , String email , String nickName , String slogan , String fileName) throws IOException, IOException {
+    public void writeInJsonFile(String username , String password , String email , String nickName , String slogan , String fileName, String image) throws IOException, IOException {
         File file = new File(fileName);
         Map<String, Object> newUserMap = new LinkedHashMap<>();
         newUserMap.put("username", username);
@@ -297,6 +298,7 @@ public class SignUpMenuController {
         newUserMap.put("answer to security question" , "");
         newUserMap.put("isStayedLoggedIn" , false);
         newUserMap.put("score" , 0);
+        newUserMap.put("image", image);
 
         JSONObject newUser = new JSONObject(newUserMap);
 

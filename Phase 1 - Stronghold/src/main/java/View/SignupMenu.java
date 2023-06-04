@@ -1,9 +1,8 @@
 package View;
 
 import Controller.SignUpMenuController;
-import Enums.Commands.SignupMenuCommands;
 import Enums.PreBuiltSecurityQuestions;
-import Model.Captcha;
+import Enums.PreBuiltSlogans;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -13,7 +12,6 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -30,8 +28,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
-import java.util.Objects;
-import java.util.regex.Matcher;
 
 public class SignupMenu extends Application {
     private SignUpMenuController signUpMenuController;
@@ -66,20 +62,23 @@ public class SignupMenu extends Application {
     private int questionNumber;
     @FXML
     private ChoiceBox choiceBox;
+    private int sloganNumber;
+    @FXML
+    private ChoiceBox slogans;
 
     public SignupMenu() {
         this.signUpMenuController = new SignUpMenuController(this);
-        answerUsername= "";
-        answerNickname= "";
-        answerEmail= "";
-        answerSlogan= "";
-        answerPassword= "";
-        answerPasswordRecovery= "";
+        answerUsername = "";
+        answerNickname = "";
+        answerEmail = "";
+        answerSlogan = "";
+        answerPassword = "";
+        answerPasswordRecovery = "";
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        stage.setFullScreen(true);
+        stage.setMaximized(true);
         Pane pane = FXMLLoader.load(new URL(SignupMenu.class.getResource("/FXML/SignupMenu.fxml").toExternalForm()));
         Paint paint = new ImagePattern(new Image(LoginMenu.class.getResource("/Image/LoginMenu.PNG").openStream()));
         BackgroundFill backgroundFill = new BackgroundFill(paint, CornerRadii.EMPTY, Insets.EMPTY);
@@ -91,18 +90,24 @@ public class SignupMenu extends Application {
     @FXML
     public void initialize() {
         String question[] = {PreBuiltSecurityQuestions.getSecurityQuestionByNumber(1),
-                PreBuiltSecurityQuestions.getSecurityQuestionByNumber(2), PreBuiltSecurityQuestions.getSecurityQuestionByNumber(3) };
+                PreBuiltSecurityQuestions.getSecurityQuestionByNumber(2), PreBuiltSecurityQuestions.getSecurityQuestionByNumber(3)};
         choiceBox.setItems(FXCollections.observableArrayList(question));
-//        choiceBox.setTranslateX(800);
-//        choiceBox.setTranslateY(601);
         choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue ov, Number value, Number new_value) {
-                questionNumber= new_value.intValue() + 1;
-                //System.out.println(questionNumber);
+                questionNumber = new_value.intValue() + 1;
+            }
+        });
+        String slogansStrings[] = {PreBuiltSlogans.getSloganByNumber(1), PreBuiltSlogans.getSloganByNumber(2), PreBuiltSlogans.getSloganByNumber(3),
+                PreBuiltSlogans.getSloganByNumber(4), PreBuiltSlogans.getSloganByNumber(5)};
+        slogans.setItems(FXCollections.observableArrayList(slogansStrings));
+        slogans.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue observableValue, Number number, Number t1) {
+                sloganNumber= t1.intValue() + 1;
             }
         });
         slogan.disableProperty().bind(chooseSlogan.selectedProperty().not());
         randomSlogan.disableProperty().bind(chooseSlogan.selectedProperty().not());
+        slogans.disableProperty().bind(chooseSlogan.selectedProperty().not());
         visibility.setOnAction(event -> {
             if (visibility.isSelected()) {
                 password.setPromptText(password.getText());
@@ -114,42 +119,45 @@ public class SignupMenu extends Application {
                 password.setDisable(false);
             }
         });
-        username.textProperty().addListener((observable, oldText, newText)->{
+        username.textProperty().addListener((observable, oldText, newText) -> {
             try {
-                answerUsername= signUpMenuController.username();
+                answerUsername = signUpMenuController.username();
                 error.setText(answerUsername);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
-        nickname.textProperty().addListener((observable, oldText, newText)->{
+        nickname.textProperty().addListener((observable, oldText, newText) -> {
             try {
-                answerNickname= signUpMenuController.nickname();
+                answerNickname = signUpMenuController.nickname();
                 error.setText(answerNickname);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
-        email.textProperty().addListener((observable, oldText, newText)->{
+        email.textProperty().addListener((observable, oldText, newText) -> {
             try {
-                answerEmail= signUpMenuController.email();
+                answerEmail = signUpMenuController.email();
                 error.setText(answerEmail);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
-        slogan.textProperty().addListener((observable, oldText, newText)->{
+        slogan.textProperty().addListener((observable, oldText, newText) -> {
             try {
-                answerSlogan= signUpMenuController.slogan(randomSlogan.isSelected());
-                if(randomSlogan.isSelected()){
+                answerSlogan = signUpMenuController.slogan(randomSlogan.isSelected());
+                if (randomSlogan.isSelected()) {
                     slogan.setText(answerSlogan);
                     error.setText("Success");
-                }else error.setText(answerSlogan);
+                }else if(sloganNumber != 0){
+                    slogan.setText(PreBuiltSlogans.getSloganByNumber(sloganNumber));
+                    error.setText("Success");
+                } else error.setText(answerSlogan);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
-        password.textProperty().addListener((observable, oldText, newText)->{
+        password.textProperty().addListener((observable, oldText, newText) -> {
             try {
                 answerPassword = signUpMenuController.password(randomPassword.isSelected());
                 error.setText(answerPassword);
@@ -157,9 +165,9 @@ public class SignupMenu extends Application {
                 throw new RuntimeException(e);
             }
         });
-        passwordRecovery.textProperty().addListener((observable, oldText, newText)->{
+        passwordRecovery.textProperty().addListener((observable, oldText, newText) -> {
             try {
-                answerPasswordRecovery= signUpMenuController.passwordRecovery();
+                answerPasswordRecovery = signUpMenuController.passwordRecovery();
                 error.setText(answerPasswordRecovery);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -228,8 +236,8 @@ public class SignupMenu extends Application {
     }
 
     public void signup(MouseEvent mouseEvent) throws Exception {
-        String signup= signUpMenuController.signup();
-        if(signup.equals("Success")){
+        String signup = signUpMenuController.signup();
+        if (signup.equals("Success")) {
             Label label = new Label("Success");
             label.setTextFill(Color.GREEN);
             label.setFont(new Font(20));
@@ -246,11 +254,10 @@ public class SignupMenu extends Application {
             }));
             timeline.setCycleCount(1);
             timeline.play();
-        }
-        else error.setText(signup);
+        } else error.setText(signup);
     }
 
-    public void confirm(){
+    public void confirm() {
 
     }
 }
