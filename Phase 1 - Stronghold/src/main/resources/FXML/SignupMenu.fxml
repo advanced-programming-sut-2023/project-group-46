@@ -11,6 +11,7 @@
 
 <Pane prefHeight="780.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.SignupMenu">
    <children>
+      <TextField fx:id="captcha" layoutX="375.0" layoutY="715.0" promptText="enter captcha" text="" />
       <TextField fx:id="username" layoutX="1323.0" layoutY="114.0" promptText="username" />
       <TextField fx:id="nickname" layoutX="1323.0" layoutY="308.0" promptText="nickname" />
       <TextField fx:id="email" layoutX="1323.0" layoutY="411.0" promptText="email" />

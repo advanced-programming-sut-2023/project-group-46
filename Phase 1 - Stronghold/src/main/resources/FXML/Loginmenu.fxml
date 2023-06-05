@@ -9,6 +9,7 @@
 <?import javafx.scene.text.Font?>
 
 <Pane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.LoginMenu">
+    <TextField fx:id="captcha" layoutX="375.0" layoutY="715.0" promptText="enter captcha" text="" />
     <TextField fx:id="username" layoutX="1323.0" layoutY="255.0" promptText="username" />
     <PasswordField fx:id="password" layoutX="1323.0" layoutY="388.0" promptText="password" />
     <Label layoutX="1077.0" layoutY="250.0" text="Username">

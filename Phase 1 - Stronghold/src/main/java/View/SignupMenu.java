@@ -3,6 +3,7 @@ package View;
 import Controller.SignUpMenuController;
 import Enums.PreBuiltSecurityQuestions;
 import Enums.PreBuiltSlogans;
+import Model.Captcha;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -14,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -28,6 +30,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
+import java.util.Random;
 
 public class SignupMenu extends Application {
     private SignUpMenuController signUpMenuController;
@@ -65,6 +68,9 @@ public class SignupMenu extends Application {
     private int sloganNumber;
     @FXML
     private ChoiceBox slogans;
+    @FXML
+    private TextField captcha;
+    private int rand;
 
     public SignupMenu() {
         this.signUpMenuController = new SignUpMenuController(this);
@@ -74,6 +80,7 @@ public class SignupMenu extends Application {
         answerSlogan = "";
         answerPassword = "";
         answerPasswordRecovery = "";
+        rand= Captcha.getNum();
     }
 
     @Override
@@ -83,6 +90,12 @@ public class SignupMenu extends Application {
         Paint paint = new ImagePattern(new Image(LoginMenu.class.getResource("/Image/LoginMenu.PNG").openStream()));
         BackgroundFill backgroundFill = new BackgroundFill(paint, CornerRadii.EMPTY, Insets.EMPTY);
         pane.setBackground(new Background(backgroundFill));
+        ImageView imageView= new ImageView();
+        imageView.setX(150);
+        imageView.setY(700);
+        Image imageCaptcha= new Image(SignupMenu.class.getResource(Captcha.getCaptcha().get(rand)).toExternalForm());
+        imageView.setImage(imageCaptcha);
+        pane.getChildren().add(imageView);
         stage.getScene().setRoot(pane);
         stage.show();
     }
@@ -235,8 +248,22 @@ public class SignupMenu extends Application {
         signUpMenuController.back();
     }
 
+    public TextField getCaptcha() {
+        return captcha;
+    }
+
+    public int getRand() {
+        return rand;
+    }
+
+    public void changeRand(){
+        rand ++;
+        Captcha.setNum(rand);
+    }
+
     public void signup(MouseEvent mouseEvent) throws Exception {
         String signup = signUpMenuController.signup();
+        if(signup.equals("Please enter your captcha correctly!")) start(LoginMenu.stage);
         if (signup.equals("Success")) {
             Label label = new Label("Success");
             label.setTextFill(Color.GREEN);
@@ -255,9 +282,5 @@ public class SignupMenu extends Application {
             timeline.setCycleCount(1);
             timeline.play();
         } else error.setText(signup);
-    }
-
-    public void confirm() {
-
     }
 }
