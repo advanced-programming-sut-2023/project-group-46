@@ -17,6 +17,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/libgdx-tests" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -91,7 +92,21 @@
       <option name="project" value="LOCAL" />
       <updated>1687981660424</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="phase 2 tag">
+      <created>1687981884684</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1687981884684</updated>
+    </task>
+    <task id="LOCAL-00007" summary="phase 2">
+      <created>1687982013705</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1687982013705</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -119,6 +134,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="users database is almost complete" />
+    <MESSAGE value="phase 2 tag" />
     <MESSAGE value="phase 2" />
     <option name="LAST_COMMIT_MESSAGE" value="phase 2" />
   </component>
