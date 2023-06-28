@@ -4,88 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="162fccc3-aba1-42dd-ae54-f35620b36eab" name="Changes" comment="phase 2">
-      <change afterPath="$PROJECT_DIR$/libgdx-tests" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/MenuButtons.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/MenuButtons.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/back.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/back.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/buildMenu.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/buildMenu.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/buttons.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/buttons.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/castleButton.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/castleButton.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/coin.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/coin.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/disease.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/disease.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/faces.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/faces.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/fire.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/fire.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/foodButton.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/foodButton.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/houseButton.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/houseButton.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/industryButton.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/industryButton.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/processorButton.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/processorButton.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/remove.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/remove.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/settingsButton.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/settingsButton.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/shopMenu.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/shopMenu.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/signs.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/signs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/tradeObjects.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/tradeObjects.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/unitButtons.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/unitButtons.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/units.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/units.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/weaponButton.atlas" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/assets/weaponButton.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Controller/EmpireMenuController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Controller/GameMenuController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Controller/MapMenuController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Controller/MoveController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Controller/ShopMenuController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Controller/TradeMenuController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Enums/BuildingType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Enums/EmpireColors.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Enums/EnvironmentType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Enums/UnitType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Menu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Model/Building.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Model/Cell.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Model/Empire.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Model/Game.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Model/Goods/Armoury.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Model/Goods/FoodStock.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Model/Goods/Resources.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Model/Map.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Model/Trade.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Model/Unit.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/Model/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgdx-tests/desktop/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgdx-tests/assets/Buildings.atlas" beforeDir="false" afterPath="$PROJECT_DIR$/libgdx-tests/assets/Buildings.atlas" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgdx-tests/assets/Buildings.png" beforeDir="false" afterPath="$PROJECT_DIR$/libgdx-tests/assets/Buildings.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgdx-tests/assets/aa.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgdx-tests/assets/badlogic.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgdx-tests/assets/bb.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgdx-tests/assets/bb.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgdx-tests/assets/click.pack" beforeDir="false" afterPath="$PROJECT_DIR$/libgdx-tests/assets/click.pack" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgdx-tests/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/libgdx-tests/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgdx-tests/core/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/libgdx-tests/core/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/GameMenuGDX.java" beforeDir="false" afterPath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/GameMenuGDX.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgdx-tests/core/src/view/game/WindowWithTopRightCornerCloseButton.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgdx-tests/desktop/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/libgdx-tests/desktop/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgdx-tests/desktop/src/com/view/game/DesktopLauncher.java" beforeDir="false" afterPath="$PROJECT_DIR$/libgdx-tests/desktop/src/com/view/game/DesktopLauncher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgdx-tests/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/libgdx-tests/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-    </list>
+    <list default="true" id="162fccc3-aba1-42dd-ae54-f35620b36eab" name="Changes" comment="phase 2" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -98,7 +17,6 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/libgdx-tests" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -159,7 +77,21 @@
       <option name="project" value="LOCAL" />
       <updated>1687981111572</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="phase 2">
+      <created>1687981587117</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1687981587117</updated>
+    </task>
+    <task id="LOCAL-00005" summary="phase 2">
+      <created>1687981660424</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1687981660424</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -173,7 +105,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="main" />
+                        <option value="phase2" />
                       </list>
                     </value>
                   </entry>
