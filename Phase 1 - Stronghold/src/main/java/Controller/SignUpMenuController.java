@@ -2,6 +2,7 @@ package Controller;
 
 import Enums.PreBuiltSecurityQuestions;
 import Enums.PreBuiltSlogans;
+import Model.Captcha;
 import Model.User;
 import View.LoginMenu;
 import View.SignupMenu;
@@ -21,8 +22,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class SignUpMenuController {
@@ -163,7 +162,7 @@ public class SignUpMenuController {
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
-            pas= encryptedPassword;
+            pas = encryptedPassword;
             return "Please re-enter you password:  \"   " + password + "   \"";
         } else {
             String userPassword = signupMenu.getPassword().getText();
@@ -190,13 +189,13 @@ public class SignUpMenuController {
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
-            pas= encryptedPassword;
+            pas = encryptedPassword;
             return "Success";
         }
     }
 
     public String passwordRecovery() throws Exception {
-        if(signupMenu.getQuestionNumber() == 0) return "Pick a question number";
+        if (signupMenu.getQuestionNumber() == 0) return "Pick a question number";
         String answer = signupMenu.getPasswordRecovery().getText();
         switch (checkStringForDoubleQuote(answer)) {
             case 1:
@@ -213,16 +212,10 @@ public class SignUpMenuController {
     }
 
     public void register() throws Exception {
-            writeInJsonFile(signupMenu.getUsername().getText() , pas , signupMenu.getEmail().getText()
-                    , signupMenu.getNickname().getText() , signupMenu.getSlogan().getText() , "users.json");
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-
-            try {
-                objectMapper.writeValue(new File( signupMenu.getUsername().getText() + ".json"), new Model.Map(100));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        writeInJsonFile(signupMenu.getUsername().getText(), pas, signupMenu.getEmail().getText()
+                , signupMenu.getNickname().getText(), signupMenu.getSlogan().getText(), "users.json", "/Image/Avatar/10.png");
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         String username = signupMenu.getUsername().getText();
         User user = User.getUserByUsername(username);
         user.setNumberOfSecurityQuestion(signupMenu.getQuestionNumber());
@@ -285,18 +278,19 @@ public class SignUpMenuController {
         return "This username is already taken! You can use this username instead: " + username + randomNumber;
     }
 
-    public void writeInJsonFile(String username , String password , String email , String nickName , String slogan , String fileName) throws IOException, IOException {
+    public void writeInJsonFile(String username, String password, String email, String nickName, String slogan, String fileName, String image) throws IOException, IOException {
         File file = new File(fileName);
         Map<String, Object> newUserMap = new LinkedHashMap<>();
         newUserMap.put("username", username);
         newUserMap.put("password", password);
         newUserMap.put("email", email);
         newUserMap.put("nickname", nickName);
-        newUserMap.put("slogan" , slogan);
-        newUserMap.put("number of security question" , 0);
-        newUserMap.put("answer to security question" , "");
-        newUserMap.put("isStayedLoggedIn" , false);
-        newUserMap.put("score" , 0);
+        newUserMap.put("slogan", slogan);
+        newUserMap.put("number of security question", 0);
+        newUserMap.put("answer to security question", "");
+        newUserMap.put("isStayedLoggedIn", false);
+        newUserMap.put("score", 0);
+        newUserMap.put("image", image);
 
         JSONObject newUser = new JSONObject(newUserMap);
 
@@ -342,6 +336,7 @@ public class SignUpMenuController {
     }
 
     public String signup() throws Exception {
+        signupMenu.changeRand();
         if (signupMenu.getUsername().getText().matches("^ *$")) return "Please enter your username!";
         if (signupMenu.getNickname().getText().matches("^ *$")) return "Please enter your nickname!";
         if (signupMenu.getEmail().getText().matches("^ *$")) return "Please enter your email!";
@@ -353,9 +348,12 @@ public class SignUpMenuController {
         if (!signupMenu.getAnswerNickname().equals("Success")) return "Please enter your nickname correctly!";
         if (!signupMenu.getAnswerEmail().equals("Success")) return "Please enter email correctly!";
         if (!signupMenu.getAnswerPassword().equals("Success")) return "Please enter your password correctly!";
-        if (!signupMenu.getAnswerPasswordRecovery().equals("Success")) return "Please enter your password recovery correctly!";
+        if (!signupMenu.getAnswerPasswordRecovery().equals("Success"))
+            return "Please enter your password recovery correctly!";
         if (signupMenu.getChooseSlogan().isSelected() && !signupMenu.getAnswerSlogan().equals("Success"))
             return "Please enter your slogan correctly!";
+        if (!signupMenu.getCaptcha().getText().equals(Captcha.getCaptcha().get(signupMenu.getRand() - 1).substring(15, 19)))
+            return "Please enter your captcha correctly!";
         register();
         return "Success";
     }

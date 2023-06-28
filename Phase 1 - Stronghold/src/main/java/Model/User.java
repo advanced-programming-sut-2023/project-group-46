@@ -25,6 +25,7 @@ public class User {
     private int numberOfSecurityQuestion;
     private String answerToSecurityQuestion;
     private boolean stayedLoggedIn;
+    private String image;
 
     public User(String username, String password, String nickname, String email) {
         this.username = username;
@@ -35,6 +36,7 @@ public class User {
         this.numberOfSecurityQuestion = 0;
         this.answerToSecurityQuestion = null;
         this.stayedLoggedIn = false;
+        image= "/Image/Avatar/10.png";
     }
 
     public static User getUserByUsername(String username) throws Exception {
@@ -168,5 +170,11 @@ public class User {
         return encryptedPassword.equals(this.password);
     }
 
+    public String getImage() {
+        return image;
+    }
 
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

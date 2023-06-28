@@ -12,10 +12,6 @@ module Stronghold {
     opens Controller to javafx.fxml, com.google.gson;
     exports Model;
     opens Model to javafx.fxml, com.google.gson;
-    exports Model.Goods;
-    opens Model.Goods to javafx.fxml, com.google.gson;
     exports Enums;
     opens Enums to javafx.fxml, com.google.gson;
-    exports Enums.Commands;
-    opens Enums.Commands to javafx.fxml, com.google.gson;
 }

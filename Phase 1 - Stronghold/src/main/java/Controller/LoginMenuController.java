@@ -1,6 +1,6 @@
 package Controller;
 
-import Enums.PreBuiltSecurityQuestions;
+import Model.Captcha;
 import Model.User;
 import View.LoginMenu;
 import View.SignupMenu;
@@ -36,26 +36,31 @@ public class LoginMenuController {
     public String login() throws Exception {
         String username = loginMenu.getUsername().getText();
         String password = loginMenu.getPassword().getText();
+        String recoveryPassword = loginMenu.getRecoveryPassword().getText();
 
         if (User.getUserByUsername(username) == null)
             return "No user with this username found!";
 
         User user = User.getUserByUsername(username);
-        if (!user.isPasswordCorrect(password))
-            return "Username and password did not match!";
+        if (recoveryPassword == null || recoveryPassword.equals("")) {
+            if (!user.isPasswordCorrect(password))
+                return "Username and password did not match!";
+        } else {
+            //System.out.println(recoveryPassword);
+            if(!recoveryPassword.equals(User.getUserByUsername(username).getAnswerToSecurityQuestion()))
+                return "Username and recoveryPassword did not match!";
+        }
+        loginMenu.changeRand();
+        if (!loginMenu.getCaptcha().getText().equals(Captcha.getCaptcha().get(loginMenu.getRand() - 1).substring(15, 19)))
+            return "Please enter your captcha correctly!";
 
         loggedInUser = user;
-//        if (loginMenu.getStayLogin().isSelected()) handleStayLoggedIn();
 
         return "Information were correct!";
     }
 
-    public String forgetPassword() throws Exception {
-        System.out.println(User.getUserByUsername(loginMenu.getUsername().getText()).getUsername());
-        if (User.getUserByUsername(loginMenu.getUsername().getText()) == null)
-            return "No user with this username found!";
-        User user = User.getUserByUsername(loginMenu.getUsername().getText());
-        return "Please answer your security question to reset password.\nYour security question: " + PreBuiltSecurityQuestions.getSecurityQuestionByNumber(user.getNumberOfSecurityQuestion());
+    public String forgetPassword() {
+        return "Please answer your security question to reset password.\nYour security question: What is your favorite color?";
     }
 
     public String setANewPassword(Matcher matcher, String newPassword) throws Exception {

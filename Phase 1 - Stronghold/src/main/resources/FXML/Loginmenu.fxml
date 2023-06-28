@@ -1,53 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
-
-<Pane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.LoginMenu">
-    <TextField fx:id="username" layoutX="1323.0" layoutY="255.0" promptText="username" />
-    <PasswordField fx:id="password" layoutX="1323.0" layoutY="388.0" promptText="password" />
+<?import javafx.scene.text.*?>
+<Pane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="View.LoginMenu">
+    <TextField fx:id="captcha" layoutX="375.0" layoutY="715.0" promptText="enter captcha" text=""/>
+    <TextField fx:id="username" layoutX="1323.0" layoutY="255.0" promptText="username"/>
+    <PasswordField fx:id="password" layoutX="1323.0" layoutY="388.0" promptText="password"/>
     <Label layoutX="1077.0" layoutY="250.0" text="Username">
         <font>
-            <Font size="25.0" />
+            <Font size="25.0"/>
         </font>
     </Label>
     <Label layoutX="1083.0" layoutY="382.0" text="Password">
         <font>
-            <Font size="25.0" />
+            <Font size="25.0"/>
         </font>
     </Label>
     <Label fx:id="error" layoutX="796.0" layoutY="666.0" textFill="RED">
         <font>
-            <Font size="15.0" />
+            <Font size="15.0"/>
         </font>
     </Label>
     <CheckBox fx:id="visibility" layoutX="913.0" layoutY="390.0" mnemonicParsing="false" text="visibility">
         <font>
-            <Font size="15.0" />
+            <Font size="15.0"/>
         </font>
     </CheckBox>
-    <Button layoutX="1412.0" layoutY="800.0" mnemonicParsing="false" onMouseClicked="#login" prefHeight="25.0" prefWidth="55.0" text="Login" />
-    <Label layoutX="675.0" layoutY="49.0" text="Login Manu">
+    <Button layoutX="1417.0" layoutY="736.0" mnemonicParsing="false" onMouseClicked="#login" prefHeight="25.0"
+            prefWidth="55.0" text="Login"/>
+    <Label layoutX="675.0" layoutY="49.0" text="Login Menu">
         <font>
-            <Font name="System Bold" size="40.0" />
+            <Font name="System Bold" size="40.0"/>
         </font>
     </Label>
-<!--    <Button layoutX="1075.0" layoutY="478.0" mnemonicParsing="false" onMouseClicked="#recoveryPassword" text="recovery password" />-->
-    <Button layoutX="1323.0" layoutY="800.0" mnemonicParsing="false" onMouseClicked="#signup" text="signup!" />
-    <CheckBox fx:id="stayLogin" layoutX="1203.0" layoutY="802.0" mnemonicParsing="false" text="stay login">
+    <!--    <Button layoutX="1075.0" layoutY="478.0" mnemonicParsing="false" onMouseClicked="#recoveryPassword" text="recovery password" />-->
+    <Button layoutX="1323.0" layoutY="736.0" mnemonicParsing="false" onMouseClicked="#signup" text="signup!"/>
+    <!--    <CheckBox fx:id="stayLogin" layoutX="1203.0" layoutY="738.0" mnemonicParsing="false" text="stay login">-->
+    <!--        <font>-->
+    <!--            <Font size="15.0" />-->
+    <!--        </font>-->
+    <!--    </CheckBox>-->
+    <TextField fx:id="recoveryPassword" layoutX="1323.0" layoutY="478.0" promptText="recovery password"/>
+    <CheckBox fx:id="forgetPassword" layoutX="1068.0" layoutY="480.0" mnemonicParsing="false"
+              selected="true#recoveryPassword" text="forget password">
         <font>
-            <Font size="15.0" />
+            <Font size="15.0"/>
         </font>
     </CheckBox>
-   <TextField fx:id="recoveryPassword" layoutX="1323.0" layoutY="478.0" promptText="recovery password" />
-   <CheckBox fx:id="forgetPassword" layoutX="1068.0" layoutY="480.0" mnemonicParsing="false" selected="true#recoveryPassword" text="forget password">
-      <font>
-         <Font size="15.0" />
-      </font>
-   </CheckBox>
 </Pane>

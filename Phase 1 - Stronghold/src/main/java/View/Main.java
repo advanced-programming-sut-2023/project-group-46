@@ -17,8 +17,6 @@ public class Main extends Application {
         for(User user : User.getUsersFromJsonFile()) {
             if (user.isStayedLoggedIn()) {
                 LoginMenuController.setLoggedInUser(user);
-                MainMenu mainMenu = new MainMenu();
-                mainMenu.run();
                 break;
             }
         }

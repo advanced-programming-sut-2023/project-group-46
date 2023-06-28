@@ -1,7 +1,9 @@
 package Controller;
 
 import Enums.PreBuiltSecurityQuestions;
+import Model.Captcha;
 import Model.User;
+import View.ChangePassword;
 import View.LoginMenu;
 import View.ProfileMenu;
 import org.json.JSONArray;
@@ -21,8 +23,14 @@ import java.util.regex.Matcher;
 public class ProfileMenuController {
     private ProfileMenu profileMenu;
 
+    private ChangePassword changePassword;
+
     public ProfileMenuController(ProfileMenu profileMenu) {
         this.profileMenu = profileMenu;
+    }
+
+    public ProfileMenuController(ChangePassword changePassword) {
+        this.changePassword = changePassword;
     }
 
     public void updateUserInJsonFile(String newField, String fieldType, String filename) throws IOException {
@@ -83,7 +91,7 @@ public class ProfileMenuController {
         if(User.getUserByUsername(newUsername) != null)
             return "This username is already taken!";
 
-        return "Username was changed successfully.";
+        return "Success";
     }
 
     public String changeUsername() throws IOException {
@@ -91,7 +99,7 @@ public class ProfileMenuController {
         if(!profileMenu.getAnswerUsername().equals("Success")) return "Please enter your username correctly!";
         String newUsername = profileMenu.getUsername().getText();
         updateUserInJsonFile(newUsername ,"username", "users.json");
-        return "Success";
+        return "Username was changed successfully.";
     }
 
     public String nickname() throws IOException {
@@ -111,7 +119,7 @@ public class ProfileMenuController {
         }
 
 
-        return "Nickname was changed successfully.";
+        return "Success";
     }
 
     public String changeNickname() throws IOException {
@@ -119,12 +127,11 @@ public class ProfileMenuController {
         if(!profileMenu.getAnswerNickname().equals("Success")) return "Please enter your nickname correctly!";
         String nickName = profileMenu.getNickname().getText();
         updateUserInJsonFile(nickName ,"nickname", "users.json");
-        return "Success";
+        return "Nickname was changed successfully.";
     }
 
 
-    public static int checkStringForDoubleQuote(String input)
-    {
+    public static int checkStringForDoubleQuote(String input) {
         //"Only one double quote"   1
         //"Has two double quotes correctly which should be removed"    2
         //"Is not between double quotes and has whitespace"    3
@@ -158,9 +165,9 @@ public class ProfileMenuController {
 
     }
 
-    public String changePassword(Matcher matcher) throws IOException {
-        String oldPassword = matcher.group("oldPassword");
-        String newPassword = matcher.group("newPassword");
+    public String changePassword() throws IOException {
+        String oldPassword = changePassword.getOldPassword().getText();
+        String newPassword = changePassword.getNewPassword().getText();
 
         newPassword = newPassword.trim();
         if(newPassword.matches("^-n\\s.*$"))
@@ -188,20 +195,11 @@ public class ProfileMenuController {
         if(Objects.equals(oldPassword, newPassword))
             return "Please enter a new password!";
 
-        if(newPassword.length() < 6)
-            return "Weak password! Password length should be more than 5.";
+        changePassword.changeRand();
+        if (!changePassword.getCaptcha().getText().equals(Captcha.getCaptcha().get(changePassword.getRand() - 1).substring(15, 19)))
+            return "Please enter your captcha correctly!";
 
-        if(!newPassword.matches(".*[a-z].*"))
-            return "Weak password! Password should have at least one small English letter.";
-
-        if(!newPassword.matches(".*[A-Z].*"))
-            return "Weak password! Password should have at least one capital English letter.";
-
-        if(!newPassword.matches(".*[0-9].*"))
-            return "Weak password! Password should have at least one digit.";
-
-        if(!newPassword.matches(".*[^a-zA-Z0-9|_].*"))
-            return "Weak password! Password should have at least one character except english letters and digits.";
+        if(!changePassword.getAnswerPassword().equals("Success")) return "Please enter new password correctly!";
 
         String encryptedPassword = null;
         try {
@@ -234,7 +232,7 @@ public class ProfileMenuController {
         if(!newEmail.matches("^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$"))
             return "Invalid email format!";
 
-        return "Email was changed successfully.";
+        return "Success";
     }
 
     public String changeEmail() throws IOException {
@@ -242,7 +240,7 @@ public class ProfileMenuController {
         if(!profileMenu.getAnswerEmail().equals("Success")) return "Please enter your email correctly!";
         String newEmail = profileMenu.getEmail().getText();
         updateUserInJsonFile(newEmail , "email","users.json");
-        return "Success";
+        return "Email was changed successfully.";
     }
 
     public String slogan() throws IOException {
@@ -261,7 +259,7 @@ public class ProfileMenuController {
                 break;
         }
 
-        return "Slogan was changed successfully.";
+        return "Success";
     }
 
     public String changeSlogan() throws IOException {
@@ -269,7 +267,7 @@ public class ProfileMenuController {
         if(!profileMenu.getAnswerSlogan().equals("Success")) return "Please enter your slogan correctly!";
         String newSlogan = profileMenu.getSlogan().getText();
         updateUserInJsonFile(newSlogan , "slogan" ,"users.json");
-        return "Success";
+        return "Slogan was changed successfully.";
     }
 
     public String removeSlogan() throws IOException {
@@ -323,7 +321,7 @@ public class ProfileMenuController {
         sortedUsers.sort(comparator);
         ArrayList<String> result= new ArrayList<>();
         for(int i = 1 ; i <= sortedUsers.size() ; i++) {
-           result.add("Rank : " + i + "   Score : " + LoginMenuController.getLoggedInUser().getScore());
+           result.add("Rank : " + i + "   username : " + sortedUsers.get(i - 1).getUsername() + "   Score : " + sortedUsers.get(i - 1).getScore());
         }
         return result;
     }
@@ -356,7 +354,7 @@ public class ProfileMenuController {
         info += "Answer to security question: " + loggedInUser.getAnswerToSecurityQuestion();
 
         if(Objects.equals(loggedInUser.getSlogan(), ""))
-            return info;
+            info += "\nSlogan is ,empty";
 
         else
             info += "\nSlogan: " + loggedInUser.getSlogan();
@@ -364,4 +362,21 @@ public class ProfileMenuController {
         return info;
     }
 
+    public String newPassword(String newPassword){
+        if(newPassword.length() < 6)
+            return "Weak password! Password length should be more than 5.";
+
+        if(!newPassword.matches(".*[a-z].*"))
+            return "Weak password! Password should have at least one small English letter.";
+
+        if(!newPassword.matches(".*[A-Z].*"))
+            return "Weak password! Password should have at least one capital English letter.";
+
+        if(!newPassword.matches(".*[0-9].*"))
+            return "Weak password! Password should have at least one digit.";
+
+        if(!newPassword.matches(".*[^a-zA-Z0-9|_].*"))
+            return "Weak password! Password should have at least one character except english letters and digits.";
+        return "Success";
+    }
 }
