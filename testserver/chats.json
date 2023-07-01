@@ -1,0 +1,51 @@
+[
+  {
+    "usernames": [
+      "kia20",
+      "kia25",
+      "kia1",
+      "kia2",
+      "kia3",
+      "ali",
+      "ali2",
+      "kia111",
+      "kia112",
+      "sina",
+      "sina2",
+      "sina10",
+      "sian15",
+      "freydoon",
+      "daroongara",
+      "amir1",
+      "amir2",
+      "amir3",
+      "amir4"
+    ],
+    "messages": [],
+    "chatType": "PUBLIC_CHAT"
+  },
+  {
+    "usernames": [
+      "sina"
+    ],
+    "messages": [],
+    "name": "mmd",
+    "chatType": "ROOM"
+  },
+  {
+    "usernames": [
+      "amir1"
+    ],
+    "messages": [],
+    "name": "sdaf",
+    "chatType": "ROOM"
+  },
+  {
+    "usernames": [
+      "sina"
+    ],
+    "messages": [],
+    "name": "aaaaaaa",
+    "chatType": "ROOM"
+  }
+]

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Font?>
+<Pane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.ShareMapMenu">
+    <Label layoutX="675.0" layoutY="49.0" text="share Map">
+        <font>
+            <Font name="System Bold" size="40.0" />
+        </font>
+    </Label>
+    <TextField fx:id="enterUsername" layoutX="401.0" layoutY="584.0" promptText="enter username"/>
+    <Button layoutX="450.0" layoutY="646.0" mnemonicParsing="false" onMouseClicked="#enter" text="enter" />
+    <Button layoutX="430.0" layoutY="706.0" mnemonicParsing="false" onMouseClicked="#mapRequests" text="map request" />
+    <Button layoutX="1417.0" layoutY="736.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="25.0"
+            prefWidth="55.0" text="back"/>
+    <Label fx:id="error" layoutX="704.0" layoutY="713.0" textFill="RED">
+        <font>
+            <Font size="15.0" />
+        </font>
+    </Label>
+</Pane>
